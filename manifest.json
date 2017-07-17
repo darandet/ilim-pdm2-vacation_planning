@@ -19,6 +19,7 @@
       "tablet": true,
       "phone": true
     },
+    "fullWidth": true,
     "supportedThemes": [
       "sap_belize"
     ]
