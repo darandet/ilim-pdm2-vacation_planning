@@ -11,11 +11,11 @@
                 <tnt:NavigationListItem text="Контроль планирования" icon="sap-icon://approvals"/>
             </tnt:NavigationList>
         </tnt:item>
-        <tnt:footer>
+        <tnt:fixedItem>
             <tnt:NavigationList>
                 <tnt:NavigationListItem text="Свернуть" icon="sap-icon://menu2"/>
             </tnt:NavigationList>
-        </tnt:footer>
+        </tnt:fixedItem>
     </tnt:SideNavigation>
 
 </core:FragmentDefinition>

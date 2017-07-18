@@ -1,0 +1,52 @@
+<mvc:View
+        xmlns:mvc="sap.ui.core.mvc"
+        xmlns="sap.m"
+        xmlns:u="sap.ui.unified"
+        xmlns:l="sap.ui.layout"
+        displayBlock="true">
+
+    <l:Grid defaultSpan="L7 M12 S12" class="sapUiSmallMarginTop" hSpacing="0.5">
+        <l:content>
+            <u:Calendar
+                    id="calendar"
+                    intervalSelection="true"
+                    months="2">
+            </u:Calendar>
+            <Table fixedLayout="false">
+                <headerToolbar>
+                    <Toolbar>
+                        <DateRangeSelection />
+                        <ToolbarSpacer/>
+                        <Button	type="Emphasized" text="Запланировать"/>
+                    </Toolbar>
+                </headerToolbar>
+                <columns>
+                    <Column vAlign="Middle">
+                        <Text text="Дата начала" />
+                    </Column>
+                    <Column vAlign="Middle">
+                        <Text text="Дата конца" />
+                    </Column>
+                    <Column vAlign="Middle">
+                        <Text text="Статус" />
+                    </Column>
+                    <Column>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <Text text="01.01.2017"/>
+                            <Text text="31.01.2017"/>
+                            <Text text="черновик" />
+                            <Button icon="sap-icon://edit"/>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+                <layoutData>
+                    <l:GridData span="L5 M12 S12" />
+                </layoutData>
+            </Table>
+        </l:content>
+    </l:Grid>
+</mvc:View>

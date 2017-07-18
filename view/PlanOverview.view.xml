@@ -1,0 +1,61 @@
+<mvc:View
+        xmlns:mvc="sap.ui.core.mvc"
+        xmlns="sap.m"
+        xmlns:uxap="sap.uxap"
+        displayBlock="true">
+
+    <Page showHeader="false">
+        <content>
+            <uxap:ObjectPageLayout>
+                <uxap:headerTitle>
+                    <uxap:ObjectPageHeader id="headerForTest"
+                                           objectTitle="График отпусков на 2017 г."
+                                           showTitleSelector="true"/>
+                </uxap:headerTitle>
+                <uxap:headerContent>
+                    <FlexBox 	direction="Column"
+                                alignItems="End">
+                        <items>
+                            <NumericContent
+                                    value="2.5"
+                                    scale="Дн."
+                                    valueColor="Neutral"
+                                    indicator="None" state="Loaded"
+                                    withMargin="false" />
+                            <Label text = "Остаток за предыдущие периоды"/>
+                        </items>
+                    </FlexBox>
+                    <FlexBox 	direction="Column"
+                                alignItems="End">
+                        <items>
+                            <NumericContent
+                                    value="28"
+                                    scale="Дн."
+                                    valueColor="Neutral"
+                                    indicator="None" state="Loaded"
+                                    withMargin="false" />
+                            <Label text = "Право на отпуск 2017 г."/>
+                        </items>
+                    </FlexBox>
+                </uxap:headerContent>
+                <uxap:sections>
+                    <uxap:ObjectPageSection showTitle="false">
+                        <uxap:ObjectPageSubSection>
+                            <mvc:XMLView viewName="ilim.pdm2.vacation_planning.view.PlanCreate" height="100%"/>
+                        </uxap:ObjectPageSubSection>
+                    </uxap:ObjectPageSection>
+                </uxap:sections>
+            </uxap:ObjectPageLayout>
+        </content>
+        <footer>
+            <OverflowToolbar>
+                <Button text="Маршрут согласования"/>
+                <Button text="Комментарии к плану"/>
+                <Button text="График отпусков"/>
+                <Button text="История"/>
+                <ToolbarSpacer/>
+                <Button type="Accept" text="Отправить"/>
+            </OverflowToolbar>
+        </footer>
+    </Page>
+</mvc:View>
