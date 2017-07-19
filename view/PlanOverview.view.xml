@@ -1,10 +1,12 @@
 <mvc:View
+        controllerName="ilim.pdm2.vacation_planning.controller.PlanOverview"
         xmlns:mvc="sap.ui.core.mvc"
         xmlns="sap.m"
         xmlns:uxap="sap.uxap"
-        displayBlock="true">
+        displayBlock="true"
+        height="100%">
 
-    <Page showHeader="false">
+    <Page showHeader="false" height="100%">
         <content>
             <uxap:ObjectPageLayout>
                 <uxap:headerTitle>

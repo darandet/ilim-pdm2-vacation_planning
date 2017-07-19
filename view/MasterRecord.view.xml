@@ -1,0 +1,53 @@
+<mvc:View
+        xmlns:mvc="sap.ui.core.mvc"
+        xmlns="sap.m"
+        xmlns:l="sap.ui.layout"
+        displayBlock="true"
+        height="100%">
+
+    <FlexBox class="sapUiLargeMarginTop"
+             alignItems="Center"
+             justifyContent="Center">
+        <items>
+            <Table fixedLayout="false" class="sapUiTinyMarginTop">
+                <headerToolbar>
+                    <Toolbar>
+                        <ToolbarSpacer/>
+                        <Button	type="Emphasized" text="Создать период"/>
+                    </Toolbar>
+                </headerToolbar>
+                <columns>
+                    <Column vAlign="Middle" hAlign="Center">
+                        <Text text="Год планирования" />
+                    </Column>
+                    <Column vAlign="Middle" hAlign="Center">
+                        <Text text="БЕ" />
+                    </Column>
+                    <Column vAlign="Middle" hAlign="Center">
+                        <Text text="Статус планирования" />
+                    </Column>
+                    <Column hAlign="Center">
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <Text text="01.01.2017"/>
+                            <Text text="31.01.2017"/>
+                            <Text text="черновик" />
+                            <Button icon="sap-icon://edit" text="Открыть период" type="Accept"/>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </items>
+    </FlexBox>
+    <!--<l:BlockLayout id="BlockLayout" background="Dashboard" class="sapUiLargeMarginTop">-->
+        <!--<l:BlockLayoutRow>-->
+            <!--<l:BlockLayoutCell>-->
+                <!---->
+            <!--</l:BlockLayoutCell>-->
+        <!--</l:BlockLayoutRow>-->
+    <!--</l:BlockLayout>-->
+
+</mvc:View>

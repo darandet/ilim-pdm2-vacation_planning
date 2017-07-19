@@ -5,10 +5,10 @@
 
     <tnt:SideNavigation id="sideNavigation">
         <tnt:item>
-            <tnt:NavigationList>
-                <tnt:NavigationListItem text="Запланировать отпуск" icon="sap-icon://appointment"/>
-                <tnt:NavigationListItem text="Согласовать отпуск" icon="sap-icon://sap-box"/>
-                <tnt:NavigationListItem text="Контроль планирования" icon="sap-icon://approvals"/>
+            <tnt:NavigationList itemSelect="onSideNavigation">
+                <tnt:NavigationListItem key="NavToPlan" text="Запланировать отпуск" icon="sap-icon://appointment"/>
+                <tnt:NavigationListItem key="NavToApprov" text="Согласовать отпуск" icon="sap-icon://sap-box"/>
+                <tnt:NavigationListItem key="NavToControl" text="Контроль планирования" icon="sap-icon://approvals"/>
             </tnt:NavigationList>
         </tnt:item>
         <tnt:fixedItem>
