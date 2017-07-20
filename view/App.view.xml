@@ -1,4 +1,5 @@
 <mvc:View
+        controllerName="ilim.pdm2.vacation_planning.controller.App"
         xmlns:mvc="sap.ui.core.mvc"
         xmlns="sap.m"
         displayBlock="true">

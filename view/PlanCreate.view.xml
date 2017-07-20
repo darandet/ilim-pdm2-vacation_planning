@@ -7,7 +7,7 @@
 
     <l:Grid defaultSpan="L7 M12 S12" class="sapUiSmallMarginTop" hSpacing="0.5">
         <l:content>
-            <u:Calendar
+            <u:Calendar width="99%"
                     id="calendar"
                     intervalSelection="true"
                     months="2">
