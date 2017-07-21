@@ -42,12 +42,5 @@
             </Table>
         </items>
     </FlexBox>
-    <!--<l:BlockLayout id="BlockLayout" background="Dashboard" class="sapUiLargeMarginTop">-->
-        <!--<l:BlockLayoutRow>-->
-            <!--<l:BlockLayoutCell>-->
-                <!---->
-            <!--</l:BlockLayoutCell>-->
-        <!--</l:BlockLayoutRow>-->
-    <!--</l:BlockLayout>-->
 
 </mvc:View>

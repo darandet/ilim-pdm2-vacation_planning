@@ -1,0 +1,127 @@
+<mvc:View
+        xmlns:mvc="sap.ui.core.mvc"
+        xmlns="sap.m"
+        xmlns:f="sap.f"
+        displayBlock="true"
+        height="100%">
+
+    <f:DynamicPage height="100%" toggleHeaderOnTitleClick="false" showFooter="false">
+        <f:title>
+            <f:DynamicPageTitle>
+                <f:heading>
+                    <Title text="График отпусков на 2017 г."/>
+                </f:heading>
+                <f:actions>
+                    <SegmentedButton selectedKey="allEmployees">
+                        <items>
+                            <SegmentedButtonItem key="allEmployees" icon="sap-icon://manager"/>
+                            <SegmentedButtonItem key="directEmployees" icon="sap-icon://family-care" />
+                        </items>
+                    </SegmentedButton>
+                </f:actions>
+                <f:expandedContent>
+                    <Button icon="sap-icon://arrow-down"
+                            type="Transparent"/>
+                </f:expandedContent>
+            </f:DynamicPageTitle>
+        </f:title>
+        <f:header>
+            <f:DynamicPageHeader pinnable="false">
+                <f:content>
+                    <FlexBox 	direction="Row"
+                                alignItems="Center"
+                                justifyContent="Center"
+                                fitContainer="true">
+                        <items>
+                            <SegmentedButton selectedKey="approvalTab" width="18rem">
+                                <items>
+                                    <SegmentedButtonItem key="approvalTab" icon="sap-icon://hr-approval"
+                                                         text="Согласование"/>
+                                    <SegmentedButtonItem key="overviewTab" icon="sap-icon://bbyd-dashboard"
+                                                         text="Обзор"/>
+                                </items>
+                            </SegmentedButton>
+                        </items>
+                    </FlexBox>
+                </f:content>
+            </f:DynamicPageHeader>
+        </f:header>
+        <f:content>
+            <Table fixedLayout="false" class="sapUiMediumMarginTop" mode="MultiSelect">
+                <headerToolbar>
+                    <OverflowToolbar>
+                        <Title text="Ваши подчиненные" level="H2"/>
+                        <SearchField width="30%" placeholder="Введите ФИО или т/н сотрудника"/>
+                        <ToolbarSpacer/>
+                        <OverflowToolbarButton type="Transparent" icon="sap-icon://multiselect-all"/>
+                        <OverflowToolbarButton type="Transparent" icon="sap-icon://filter"/>
+                        <OverflowToolbarButton type="Transparent" icon="sap-icon://excel-attachment"/>
+                        <OverflowToolbarButton type="Transparent" icon="sap-icon://action-settings"/>
+                        <Button type="Emphasized" icon="sap-icon://display" text="Показать выбранных"/>
+                    </OverflowToolbar>
+                </headerToolbar>
+                <columns>
+                    <Column vAlign="Middle" hAlign="Center">
+                        <Text text="Сотрудник" />
+                    </Column>
+                    <Column vAlign="Middle" hAlign="Center">
+                        <Text text="Подразделение" />
+                    </Column>
+                    <Column vAlign="Middle" hAlign="Center">
+                        <Text text="Табельный номер" />
+                    </Column>
+                    <Column vAlign="Middle" hAlign="Center">
+                        <Text text="Линейный руководитель" />
+                    </Column>
+                    <Column vAlign="Middle" hAlign="Center">
+                        <Text text="Остаток/Доступно/Заплан." />
+                    </Column>
+                    <Column vAlign="Middle" hAlign="Center">
+                        <Text text="ЛК" />
+                    </Column>
+                    <Column vAlign="Middle" hAlign="Center">
+                        <Text text="Статус плана" />
+                    </Column>
+                    <Column hAlign="Center">
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem class="sapUiTinyPaddingTop">
+                        <cells>
+                            <FlexBox alignItems="Center">
+                                <items>
+                                    <f:Avatar displaySize="XS" class="sapUiTinyMargin"/>
+                                    <ObjectIdentifier
+                                            title="Петров Иван Иванович"
+                                            text="Ведущий инженер"/>
+                                </items>
+                            </FlexBox>
+                            <ObjectIdentifier
+                                    title="Проектный отдел"
+                                    text="РОП Братск Рук."/>
+                            <ObjectIdentifier
+                                    text="12345678"/>
+                            <Text   textAlign="Center"
+                                    text="Федосеев Иван Юрьевич"/>
+                            <ObjectNumber number="0/28/3" unit="дней"/>
+                            <CheckBox enabled="false" selected="true" />
+                            <ObjectStatus
+                                    text="Утвержден"
+                                    state="Success" />
+                            <FlexBox alignItems="Center" justifyContent="SpaceBetween">
+                                <items>
+                                    <Button type="Accept" icon="sap-icon://accept" enabled="false"/>
+                                    <Button type="Reject" icon="sap-icon://decline" enabled="false"/>
+                                    <Button icon="sap-icon://create-form" enabled="false"/>
+                                    <Button icon="sap-icon://comment" enabled="false"/>
+                                </items>
+                            </FlexBox>
+
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </f:content>
+    </f:DynamicPage>
+
+</mvc:View>

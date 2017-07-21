@@ -60,6 +60,11 @@
           "pattern": "control",
           "name": "MasterRecord",
           "target": "MasterRecord"
+        },
+        {
+          "pattern": "approval",
+          "name": "ApprovePlan",
+          "target": "ApprovePlan"
         }
       ],
       "targets": {
@@ -78,6 +83,11 @@
         "MasterRecord": {
           "parent": "HomePage",
           "viewName": "MasterRecord",
+          "viewLevel": 1
+        },
+        "ApprovePlan": {
+          "parent": "HomePage",
+          "viewName": "ApprovalOverview",
           "viewLevel": 1
         }
       }

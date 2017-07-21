@@ -12,8 +12,8 @@
             </tnt:NavigationList>
         </tnt:item>
         <tnt:fixedItem>
-            <tnt:NavigationList>
-                <tnt:NavigationListItem text="Свернуть" icon="sap-icon://menu2"/>
+            <tnt:NavigationList itemSelect="onSideNavigation">
+                <tnt:NavigationListItem key="switchState" text="Свернуть" icon="sap-icon://menu2"/>
             </tnt:NavigationList>
         </tnt:fixedItem>
     </tnt:SideNavigation>

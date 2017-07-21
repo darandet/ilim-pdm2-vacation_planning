@@ -48,6 +48,12 @@ sap.ui.define([
                 oRouter.navTo("PlanOverview");
             } else if (sKey === "NavToControl") {
                 oRouter.navTo("MasterRecord");
+            } else if (sKey === "NavToApprov") {
+                oRouter.navTo("ApprovePlan");
+            } else if (sKey === "switchState") {
+                var oToolPage = this.getView().byId("idAppContent");
+                oToolPage.toggleSideContentMode(!oToolPage.getSideExpanded());
+                oEvent.preventDefault();
             }
 
         }
