@@ -1,11 +1,12 @@
 <mvc:View
+        controllerName="ilim.pdm2.vacation_planning.controller.ApprovalOverview"
         xmlns:mvc="sap.ui.core.mvc"
         xmlns="sap.m"
         xmlns:f="sap.f"
         displayBlock="true"
         height="100%">
 
-    <f:DynamicPage height="100%" toggleHeaderOnTitleClick="false" showFooter="false">
+    <f:DynamicPage height="100%" toggleHeaderOnTitleClick="false" showFooter="false" id="ManagerSpaceId">
         <f:title>
             <f:DynamicPageTitle>
                 <f:heading>
@@ -14,7 +15,7 @@
                 <f:actions>
                     <SegmentedButton selectedKey="allEmployees">
                         <items>
-                            <SegmentedButtonItem key="allEmployees" icon="sap-icon://manager"/>
+                            <SegmentedButtonItem key="allEmployees" icon="sap-icon://manager" />
                             <SegmentedButtonItem key="directEmployees" icon="sap-icon://family-care" />
                         </items>
                     </SegmentedButton>
@@ -33,7 +34,7 @@
                                 justifyContent="Center"
                                 fitContainer="true">
                         <items>
-                            <SegmentedButton selectedKey="approvalTab" width="18rem">
+                            <SegmentedButton selectedKey="approvalTab" width="18rem" select="onViewChange">
                                 <items>
                                     <SegmentedButtonItem key="approvalTab" icon="sap-icon://hr-approval"
                                                          text="Согласование"/>
@@ -46,82 +47,9 @@
                 </f:content>
             </f:DynamicPageHeader>
         </f:header>
-        <f:content>
-            <Table fixedLayout="false" class="sapUiMediumMarginTop" mode="MultiSelect">
-                <headerToolbar>
-                    <OverflowToolbar>
-                        <Title text="Ваши подчиненные" level="H2"/>
-                        <SearchField width="30%" placeholder="Введите ФИО или т/н сотрудника"/>
-                        <ToolbarSpacer/>
-                        <OverflowToolbarButton type="Transparent" icon="sap-icon://multiselect-all"/>
-                        <OverflowToolbarButton type="Transparent" icon="sap-icon://filter"/>
-                        <OverflowToolbarButton type="Transparent" icon="sap-icon://excel-attachment"/>
-                        <OverflowToolbarButton type="Transparent" icon="sap-icon://action-settings"/>
-                        <Button type="Emphasized" icon="sap-icon://display" text="Показать выбранных"/>
-                    </OverflowToolbar>
-                </headerToolbar>
-                <columns>
-                    <Column vAlign="Middle" hAlign="Center">
-                        <Text text="Сотрудник" />
-                    </Column>
-                    <Column vAlign="Middle" hAlign="Center">
-                        <Text text="Подразделение" />
-                    </Column>
-                    <Column vAlign="Middle" hAlign="Center">
-                        <Text text="Табельный номер" />
-                    </Column>
-                    <Column vAlign="Middle" hAlign="Center">
-                        <Text text="Линейный руководитель" />
-                    </Column>
-                    <Column vAlign="Middle" hAlign="Center">
-                        <Text text="Остаток/Доступно/Заплан." />
-                    </Column>
-                    <Column vAlign="Middle" hAlign="Center">
-                        <Text text="ЛК" />
-                    </Column>
-                    <Column vAlign="Middle" hAlign="Center">
-                        <Text text="Статус плана" />
-                    </Column>
-                    <Column hAlign="Center">
-                    </Column>
-                </columns>
-                <items>
-                    <ColumnListItem class="sapUiTinyPaddingTop">
-                        <cells>
-                            <FlexBox alignItems="Center">
-                                <items>
-                                    <f:Avatar displaySize="XS" class="sapUiTinyMargin"/>
-                                    <ObjectIdentifier
-                                            title="Петров Иван Иванович"
-                                            text="Ведущий инженер"/>
-                                </items>
-                            </FlexBox>
-                            <ObjectIdentifier
-                                    title="Проектный отдел"
-                                    text="РОП Братск Рук."/>
-                            <ObjectIdentifier
-                                    text="12345678"/>
-                            <Text   textAlign="Center"
-                                    text="Федосеев Иван Юрьевич"/>
-                            <ObjectNumber number="0/28/3" unit="дней"/>
-                            <CheckBox enabled="false" selected="true" />
-                            <ObjectStatus
-                                    text="Утвержден"
-                                    state="Success" />
-                            <FlexBox alignItems="Center" justifyContent="SpaceBetween">
-                                <items>
-                                    <Button type="Accept" icon="sap-icon://accept" enabled="false"/>
-                                    <Button type="Reject" icon="sap-icon://decline" enabled="false"/>
-                                    <Button icon="sap-icon://create-form" enabled="false"/>
-                                    <Button icon="sap-icon://comment" enabled="false"/>
-                                </items>
-                            </FlexBox>
-
-                        </cells>
-                    </ColumnListItem>
-                </items>
-            </Table>
-        </f:content>
+        <!--<f:content>-->
+            <!--<mvc:XMLView viewName="ilim.pdm2.vacation_planning.view.ApprovalDashboard" height="100%"/>-->
+        <!--</f:content>-->
     </f:DynamicPage>
 
 </mvc:View>

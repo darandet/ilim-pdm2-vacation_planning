@@ -65,6 +65,16 @@
           "pattern": "approval",
           "name": "ApprovePlan",
           "target": "ApprovePlan"
+        },
+        {
+          "pattern": "approval/manage",
+          "name": "ManageApprovals",
+          "target": "ManageApprovals"
+        },
+        {
+          "pattern": "approval/dashboard",
+          "name": "ApprovalsDashboard",
+          "target": "ApprovalsDashboard"
         }
       ],
       "targets": {
@@ -89,6 +99,22 @@
           "parent": "HomePage",
           "viewName": "ApprovalOverview",
           "viewLevel": 1
+        },
+        "ManageApprovals": {
+          "controlId": "ManagerSpaceId",
+          "controlAggregation": "content",
+          "clearControlAggregation": false,
+          "parent": "ApprovePlan",
+          "viewName": "ApprovalManage",
+          "viewLevel": 2
+        },
+        "ApprovalsDashboard": {
+          "controlId": "ManagerSpaceId",
+          "controlAggregation": "content",
+          "clearControlAggregation": false,
+          "parent": "ApprovePlan",
+          "viewName": "ApprovalDashBoard",
+          "viewLevel": 2
         }
       }
     },

@@ -1,0 +1,25 @@
+<mvc:View
+        xmlns:mvc="sap.ui.core.mvc"
+        xmlns="sap.suite.ui.commons"
+        xmlns:m="sap.m"
+        displayBlock="true"
+        height="100%">
+
+    <ChartContainer
+            id="idChartContainer"
+            showFullScreen="true"
+            showPersonalization="true"
+            autoAdjustHeight="false"
+            showLegend="true"
+            title="Revenue">
+        <toolbar>
+            <m:OverflowToolbar id="appToolbar">
+                <m:Button id="btnAction1" text="CustomAction" type="Transparent" press="onCustomActionPress"/>
+                <m:ToolbarSpacer/>
+                <m:Button id="btnAction2" text="CustomAction" type="Transparent" press="onCustomActionPress"/>
+                <ChartContainerToolbarPlaceholder/>
+            </m:OverflowToolbar>
+        </toolbar>
+    </ChartContainer>
+
+</mvc:View>
