@@ -1,25 +1,142 @@
 <mvc:View
+        controllerName="ilim.pdm2.vacation_planning.controller.ApprovalDashboard"
         xmlns:mvc="sap.ui.core.mvc"
-        xmlns="sap.suite.ui.commons"
+        xmlns:l="sap.ui.layout"
         xmlns:m="sap.m"
+        xmlns:viz="sap.viz.ui5.controls"
+        xmlns:viz.data="sap.viz.ui5.data"
+        xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
         displayBlock="true"
         height="100%">
 
-    <ChartContainer
-            id="idChartContainer"
-            showFullScreen="true"
-            showPersonalization="true"
-            autoAdjustHeight="false"
-            showLegend="true"
-            title="Revenue">
-        <toolbar>
-            <m:OverflowToolbar id="appToolbar">
-                <m:Button id="btnAction1" text="CustomAction" type="Transparent" press="onCustomActionPress"/>
-                <m:ToolbarSpacer/>
-                <m:Button id="btnAction2" text="CustomAction" type="Transparent" press="onCustomActionPress"/>
-                <ChartContainerToolbarPlaceholder/>
-            </m:OverflowToolbar>
-        </toolbar>
-    </ChartContainer>
+
+
+    <m:FlexBox fitContainer="true" renderType="Bare" justifyContent="SpaceBetween">
+        <m:items>
+            <m:Panel width="45%" backgroundDesign="Solid">
+                <m:headerToolbar>
+                    <m:Toolbar height="3rem">
+                        <m:Title text="Сотрудники без доступа к ЛК"/>
+                        <m:ToolbarSpacer />
+                        <m:Button icon="sap-icon://excel-attachment" text="Форма Т-7"/>
+                    </m:Toolbar>
+                </m:headerToolbar>
+                <m:content>
+                    <m:Table fixedLayout="false">
+                        <m:columns>
+                            <m:Column vAlign="Middle" hAlign="Center">
+                                <m:Text text="№" />
+                            </m:Column>
+                            <m:Column vAlign="Middle" hAlign="Center">
+                                <m:Text text="Табельный номер" />
+                            </m:Column>
+                            <m:Column vAlign="Middle" hAlign="Center">
+                                <m:Text text="Сотрудник" />
+                            </m:Column>
+                            <m:Column vAlign="Middle" hAlign="Center">
+                                <m:Text text="Подразделение" />
+                            </m:Column>
+                        </m:columns>
+                        <m:items>
+                            <m:ColumnListItem class="sapUiTinyPaddingTop">
+                                <m:cells>
+                                    <m:ObjectIdentifier
+                                            text="1"/>
+                                    <m:ObjectIdentifier
+                                            text="12345678"/>
+                                    <m:ObjectIdentifier
+                                            title="Петров Иван Иванович"
+                                            text="Ведущий инженер"/>
+                                    <m:ObjectIdentifier
+                                            text="Проектный отдел"/>
+                                </m:cells>
+                            </m:ColumnListItem>
+                        </m:items>
+                    </m:Table>
+                </m:content>
+            </m:Panel>
+            <m:Panel width="45%" backgroundDesign="Solid" headerText="Процент отсутствия сотрудников" height="300px">
+                <viz:VizFrame id="idVizFrame" uiConfig="{applicationSet:'fiori'}"
+                              height='100%' width="100%" vizType='column'>
+                    <viz:dataset>
+                        <viz.data:FlattenedDataset data="{/milk}">
+                            <viz.data:dimensions>
+                                <viz.data:DimensionDefinition name="Week"
+                                                              value="{Week}" />
+                            </viz.data:dimensions>
+                            <viz.data:measures>
+                                <viz.data:MeasureDefinition name="Revenue"
+                                                            value="{Revenue}" />
+                                <viz.data:MeasureDefinition name="Cost"
+                                                            value="{Cost}" />
+                            </viz.data:measures>
+                        </viz.data:FlattenedDataset>
+                    </viz:dataset>
+
+                    <viz:feeds>
+                        <viz.feeds:FeedItem id='valueAxisFeed' uid="valueAxis" type="Measure"
+                                            values="Revenue" />
+                        <viz.feeds:FeedItem id='categoryAxisFeed' uid="categoryAxis" type="Dimension"
+                                            values="Week" />
+                    </viz:feeds>
+                </viz:VizFrame>
+            </m:Panel>
+
+        </m:items>
+    </m:FlexBox>
+
+    <m:FlexBox fitContainer="true" renderType="Bare" justifyContent="SpaceBetween" class="sapUiMediumMarginTop">
+        <m:Panel width="30%" backgroundDesign="Solid" headerText="Число согласованных сотрудников" height="300px">
+            <viz:VizFrame id="idVizFrame2" uiConfig="{applicationSet:'fiori'}"
+                          height='100%' width="100%" vizType='donut'>
+                <viz:dataset>
+                    <viz.data:FlattenedDataset data="{/milk}">
+                        <viz.data:dimensions>
+                            <viz.data:DimensionDefinition name="Store Name"
+                                                          value="{Store Name}" />
+                        </viz.data:dimensions>
+                        <viz.data:measures>
+                            <viz.data:MeasureDefinition name="Revenue"
+                                                        value="{Revenue}" />
+                        </viz.data:measures>
+                    </viz.data:FlattenedDataset>
+                </viz:dataset>
+
+                <viz:feeds>
+                    <viz.feeds:FeedItem uid="size" type="Measure"
+                                        values="Revenue" />
+                    <viz.feeds:FeedItem uid="color" type="Dimension"
+                                        values="Store Name" />
+                </viz:feeds>
+            </viz:VizFrame>
+        </m:Panel>
+        <m:Panel width="45%" backgroundDesign="Solid" headerText="Отпускных дней запланировано" height="300px">
+            <viz:VizFrame id="idVizFrame3" uiConfig="{applicationSet:'fiori'}"
+                          height='100%' width="100%" vizType='bar'>
+                <viz:dataset>
+                    <viz.data:FlattenedDataset data="{/milk}">
+                        <viz.data:dimensions>
+                            <viz.data:DimensionDefinition name="Store Name"
+                                                          value="{Store Name}" />
+                        </viz.data:dimensions>
+                        <viz.data:measures>
+                            <viz.data:MeasureDefinition name="Revenue"
+                                                        value="{Revenue}" />
+                            <viz.data:MeasureDefinition name="Cost"
+                                                        value="{Cost}" />
+                        </viz.data:measures>
+                    </viz.data:FlattenedDataset>
+                </viz:dataset>
+
+                <viz:feeds>
+                    <viz.feeds:FeedItem uid="valueAxis" type="Measure"
+                                        values="Revenue" />
+                    <viz.feeds:FeedItem uid="categoryAxis" type="Dimension"
+                                        values="Store Name" />
+                </viz:feeds>
+            </viz:VizFrame>
+        </m:Panel>
+
+    </m:FlexBox>
 
 </mvc:View>

@@ -34,12 +34,13 @@
                                 justifyContent="Center"
                                 fitContainer="true">
                         <items>
-                            <SegmentedButton selectedKey="approvalTab" width="18rem" select="onViewChange">
+                            <SegmentedButton selectedKey="{viewSync>/key}" width="18rem" select="onViewChange"
+                                             id="ViewChangeButton">
                                 <items>
                                     <SegmentedButtonItem key="approvalTab" icon="sap-icon://hr-approval"
-                                                         text="Согласование"/>
+                                                         text="Согласование" id="ApprovalManageViewButton"/>
                                     <SegmentedButtonItem key="overviewTab" icon="sap-icon://bbyd-dashboard"
-                                                         text="Обзор"/>
+                                                         text="Обзор" id="ApprovalDashboardViewButton"/>
                                 </items>
                             </SegmentedButton>
                         </items>
@@ -47,9 +48,6 @@
                 </f:content>
             </f:DynamicPageHeader>
         </f:header>
-        <!--<f:content>-->
-            <!--<mvc:XMLView viewName="ilim.pdm2.vacation_planning.view.ApprovalDashboard" height="100%"/>-->
-        <!--</f:content>-->
     </f:DynamicPage>
 
 </mvc:View>

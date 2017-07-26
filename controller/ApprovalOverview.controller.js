@@ -1,6 +1,7 @@
 sap.ui.define([
-    "ilim/pdm2/vacation_planning/controller/BaseController"
-], function (Controller) {
+    "ilim/pdm2/vacation_planning/controller/BaseController",
+    "sap/ui/model/json/JSONModel"
+], function (Controller, JSONModel) {
     "use strict";
 
     return Controller.extend("ilim.pdm2.vacation_planning.controller.ApprovalOverview", {
@@ -13,6 +14,12 @@ sap.ui.define([
         onInit: function() {
 
             this.getRouter().getRoute("ApprovePlan").attachPatternMatched(this._patternMatched, this);
+            var oEventBus = sap.ui.getCore().getEventBus();
+            oEventBus.subscribe("childNavigation", "syncViews", this._syncViews, this)
+
+
+            var oModel = new JSONModel({ key: "approvalTab" });
+            this.setModel(oModel, "viewSync");
             
         },
 
@@ -60,7 +67,19 @@ sap.ui.define([
             var oRouter = this.getRouter();
 
             oRouter.navTo('ManageApprovals');
+        },
+        
+        _syncViews: function (sChannel, sEvent, oData) {
+
+
+            if (sChannel === "childNavigation" && sEvent === "syncViews" ) {
+
+                var oModel = this.getModel("viewSync");
+                oModel.setProperty('/key', oData.key)
+            }
+
         }
+        
     });
 
 });
