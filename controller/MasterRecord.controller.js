@@ -3,9 +3,16 @@ sap.ui.define([
     "sap/m/Dialog",
     "sap/m/Button"
 ], function (Controller, Dialog, Button) {
-    "use strict";
+
+    /** Создаёт инстанцию контроллера для управляющей записи
+     * @class
+     */
 
     return Controller.extend("ilim.pdm2.vacation_planning.controller.MasterRecord", {
+        /**
+         * @namespace ilim.pdm2.vacation_planning.MasterRecord
+         */
+
 
         /**
          * Called when a controller is instantiated and its View controls (if available) are already created.
@@ -41,7 +48,12 @@ sap.ui.define([
         //	onExit: function() {
         //
         //	}
-        
+
+        /**
+         * Вызывается при нажатии на кнопку "Создать период". Метод проверяет наличие инстанции диалога.
+         * Если её нет, то она создётся и присваивается атрибуту createPeriodDialog
+         * @param oEvent
+         */
         onPeriodCreate: function (oEvent) {
             var that = this;
             if (!that.createPeriodDialog) {
@@ -75,6 +87,11 @@ sap.ui.define([
             that.createPeriodDialog.open();
         },
 
+        /**
+         * Обрабатывает событие при редактировании полей в ракурсе CreatePeriod.fragment.xml
+         * @param oEvent
+         * @memberOf ilim.pdm2.
+         */
         onRecordInput: function (oEvent) {
             //TODO добавить проверку на ввод. maxLength не работает с типом ввода Number
         }

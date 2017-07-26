@@ -6,6 +6,9 @@ sap.ui.define([
 
     return Controller.extend("ilim.pdm2.vacation_planning.controller.ApprovalDashboard", {
 
+        /**
+         * @namespace ilim.pdm2.vacation_planning.ApprovalDashboard
+         */
 
         sDataPath1: "https://sapui5.hana.ondemand.com/test-resources/sap/viz/demokit/dataset/milk_production_testing_data/revenue_cost_consume/betterMedium.json",
         sDataPath2: "https://sapui5.hana.ondemand.com/test-resources/sap/viz/demokit/dataset/milk_production_testing_data/revenue_cost_consume/small.json",
@@ -91,6 +94,11 @@ sap.ui.define([
 
         },
 
+        /**
+         * @event ApprovalDashboard#syncViews
+         * @property {string} key - передаёт ключ кнопки, которая должна быть активирована
+         * @private
+         */
         _patternMatched: function () {
             var oEventBus = sap.ui.getCore().getEventBus();
             oEventBus.publish("childNavigation", "syncViews", { key: "overviewTab" });
