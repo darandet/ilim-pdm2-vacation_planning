@@ -1,4 +1,5 @@
 <mvc:View
+        controllerName="ilim.pdm2.vacation_planning.controller.MasterRecord"
         xmlns:mvc="sap.ui.core.mvc"
         xmlns="sap.m"
         xmlns:l="sap.ui.layout"
@@ -13,7 +14,7 @@
                 <headerToolbar>
                     <Toolbar>
                         <ToolbarSpacer/>
-                        <Button	type="Emphasized" text="Создать период"/>
+                        <Button	type="Emphasized" text="Создать период" press="onPeriodCreate"/>
                     </Toolbar>
                 </headerToolbar>
                 <columns>

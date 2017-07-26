@@ -1,0 +1,49 @@
+<core:FragmentDefinition
+        xmlns="sap.m"
+        xmlns:f="sap.ui.layout.form"
+        xmlns:core="sap.ui.core">
+
+    <MessageStrip
+            text="Уведомления будут отправлены при открытии периода"
+            type="Information"
+            showIcon="true"
+            class="sapUiSmallMargin">
+    </MessageStrip>
+    <f:SimpleForm id="CreatePeriodForm"
+                  editable="true"
+                  layout="ResponsiveGridLayout"
+                  breakpointM="300"
+                  labelSpanXL="5"
+                  labelSpanL="5"
+                  labelSpanM="5"
+                  labelSpanS="12"
+                  adjustLabelSpan="false"
+                  emptySpanXL="0"
+                  emptySpanL="0"
+                  emptySpanM="0"
+                  emptySpanS="0"
+                  columnsXL="1"
+                  columnsL="1"
+                  columnsM="1"
+                  singleContainerFullSize="false" >
+        <f:content>
+            <Label text="БЕ"/>
+            <Select id="balanceUnit" forceSelection="false">
+                <items>
+                    <core:Item text="Центральный офис" key="CO"/>
+                    <core:Item text="Братск" key="BR"/>
+                    <core:Item text="Усть-Илимск" key="UI"/>
+                </items>
+            </Select>
+            <Label text="Год планирования"/>
+            <Input maxLength="4" type="Number" />
+            <Label text="Срок внесения данных"/>
+            <DatePicker valueFormat="yyyy-MM-dd" displayFormat="long"/>
+            <Label text="Макс. процент отсустствия"/>
+            <Input maxLength="2" type="Number" />
+            <Label/>
+            <CheckBox text="Отправить уведомления" selected="false"/>
+        </f:content>
+    </f:SimpleForm>
+
+</core:FragmentDefinition>
