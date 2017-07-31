@@ -1,6 +1,8 @@
 sap.ui.define([
-    "ilim/pdm2/vacation_planning/controller/BaseController"
-], function (Controller) {
+    "ilim/pdm2/vacation_planning/controller/BaseController",
+    "sap/m/Dialog",
+    "sap/m/Button"
+], function (Controller, Dialog, Button) {
     "use strict";
 
     return Controller.extend("ilim.pdm2.vacation_planning.controller.PlanOverview", {
@@ -23,26 +25,52 @@ sap.ui.define([
          * (NOT before the first rendering! onInit() is used for that one!).
          * @memberOf ilim.pdm2.vacation_planning.PlanOverview
          */
-        //	onBeforeRendering: function() {
-        //
-        //	},
+        onBeforeRendering: function() {
+
+        },
 
         /**
          * Called when the View has been rendered (so its HTML is part of the document). Post-rendering manipulations of the HTML could be done here.
          * This hook is the same one that SAPUI5 controls get after being rendered.
          * @memberOf ilim.pdm2.vacation_planning.PlanOverview
          */
-        //	onAfterRendering: function() {
-        //
-        //	},
+        onAfterRendering: function() {
+
+        },
 
         /**
          * Called when the Controller is destroyed. Use this one to free resources and finalize activities.
          * @memberOf ilim.pdm2.vacation_planning.PlanOverview
          */
-        //	onExit: function() {
-        //
-        //	}
+        onExit: function() {
+
+        },
+
+        onShowRoute: function () {
+            var that = this;
+            if (!that.routeDialog) {
+
+                var oFormFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.ApprovalRoute");
+
+                that.routeDialog = new Dialog({
+                    title: 'Маршрут согласования',
+                    contentWidth: "15%",
+                    draggable: true,
+                    content: oFormFragment,
+                    endButton: new Button({
+                        text: "Закрыть",
+                        press: function () {
+                            that.routeDialog.close();
+                        }
+                    })
+                });
+
+                //to get access to the global model
+                that.getView().addDependent(that.routeDialog);
+            }
+
+            that.routeDialog.open();
+        },
 
         _onObjectMatched: function () {
 

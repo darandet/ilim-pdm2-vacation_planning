@@ -1,4 +1,5 @@
 <mvc:View
+        controllerName="ilim.pdm2.vacation_planning.controller.PlanCreate"
         xmlns:mvc="sap.ui.core.mvc"
         xmlns="sap.m"
         xmlns:u="sap.ui.unified"
@@ -10,12 +11,13 @@
             <u:Calendar width="99%"
                     id="calendar"
                     intervalSelection="true"
-                    months="2">
+                    months="2"
+                    select="onDateRangeSelect">
             </u:Calendar>
             <Table fixedLayout="false">
                 <headerToolbar>
                     <Toolbar>
-                        <DateRangeSelection />
+                        <DateRangeSelection id="VacationRangeInput"/>
                         <ToolbarSpacer/>
                         <Button	type="Emphasized" text="Запланировать"/>
                     </Toolbar>

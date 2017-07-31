@@ -1,0 +1,30 @@
+<core:FragmentDefinition
+        xmlns:m="sap.m"
+        xmlns="sap.suite.ui.commons"
+        xmlns:core="sap.ui.core">
+
+    <Timeline
+            id="idTimeline"
+            axisOrientation="Vertical"
+            enableScroll="false"
+            enableDoubleSided="false"
+            lazyLoading="true"
+            textHeight="automatic"
+            sort="true"
+            showHeaderBar="false"
+            showIcons="false">
+        <content>
+            <TimelineItem
+                    userNameClickable="true"
+                    title="Руководитель 2"
+                    userName="Кожанова Н.Н.">
+            </TimelineItem>
+            <TimelineItem
+                    userNameClickable="true"
+                    title="Руководитель 1"
+                    userName="Самойлова Я.В.">
+            </TimelineItem>
+        </content>
+    </Timeline>
+
+</core:FragmentDefinition>
