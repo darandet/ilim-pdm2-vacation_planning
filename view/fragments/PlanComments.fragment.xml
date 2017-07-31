@@ -1,0 +1,21 @@
+<core:FragmentDefinition
+        xmlns="sap.m"
+        xmlns:core="sap.ui.core">
+
+    <List>
+        <FeedListItem
+                sender="Самойлова Я.В."
+                senderPress="onPress"
+                iconDensityAware="false"
+                info="Согласование"
+                timestamp="March 04 2013 16:40"
+                text="text2" />
+        <FeedListItem
+                sender="Кожанова Н.Н."
+                senderPress="onPress"
+                iconDensityAware="false"
+                info="Отклонение"
+                timestamp="March 04 2013 16:40"
+                text="text2" />
+    </List>
+</core:FragmentDefinition>

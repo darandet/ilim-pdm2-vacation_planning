@@ -52,7 +52,7 @@
         <footer>
             <OverflowToolbar>
                 <Button text="Маршрут согласования" press="onShowRoute"/>
-                <Button text="Комментарии к плану"/>
+                <Button text="Комментарии к плану" press="onShowComments"/>
                 <Button text="График отпусков"/>
                 <Button text="История"/>
                 <ToolbarSpacer/>

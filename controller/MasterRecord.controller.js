@@ -56,11 +56,11 @@ sap.ui.define([
          */
         onPeriodCreate: function (oEvent) {
             var that = this;
-            if (!that.routeDialog) {
+            if (!that.commentsDialog) {
 
                 var oFormFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.CreatePeriod");
 
-                that.routeDialog = new Dialog({
+                that.commentsDialog = new Dialog({
                     title: 'Создание периода планирования',
                     contentWidth: "35%",
                     draggable: true,
@@ -69,22 +69,22 @@ sap.ui.define([
                         text: "Создать",
                         type: "Accept",
                         press: function () {
-                            that.routeDialog.close();
+                            that.commentsDialog.close();
                         }
                     }),
                     endButton: new Button({
                         text: "Отмена",
                         press: function () {
-                            that.routeDialog.close();
+                            that.commentsDialog.close();
                         }
                     })
                 });
 
                 //to get access to the global model
-                that.getView().addDependent(that.routeDialog);
+                that.getView().addDependent(that.commentsDialog);
             }
 
-            that.routeDialog.open();
+            that.commentsDialog.open();
         },
 
         /**

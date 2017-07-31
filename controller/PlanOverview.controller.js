@@ -48,11 +48,11 @@ sap.ui.define([
 
         onShowRoute: function () {
             var that = this;
-            if (!that.routeDialog) {
+            if (!that.commentsDialog) {
 
                 var oFormFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.ApprovalRoute");
 
-                that.routeDialog = new Dialog({
+                that.commentsDialog = new Dialog({
                     title: 'Маршрут согласования',
                     contentWidth: "15%",
                     draggable: true,
@@ -60,16 +60,43 @@ sap.ui.define([
                     endButton: new Button({
                         text: "Закрыть",
                         press: function () {
-                            that.routeDialog.close();
+                            that.commentsDialog.close();
                         }
                     })
                 });
 
                 //to get access to the global model
-                that.getView().addDependent(that.routeDialog);
+                that.getView().addDependent(that.commentsDialog);
             }
 
-            that.routeDialog.open();
+            that.commentsDialog.open();
+        },
+
+        onShowComments: function () {
+            var that = this;
+            if (!that.commentsDialog) {
+
+                var oFormFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.PlanComments");
+
+                that.commentsDialog = new Dialog({
+                    title: 'Комментарии к плану',
+                    contentWidth: "35%",
+                    draggable: true,
+                    content: oFormFragment,
+                    endButton: new Button({
+                        text: "Закрыть",
+                        press: function () {
+                            that.commentsDialog.close();
+                        }
+                    })
+                });
+
+                //to get access to the global model
+                that.getView().addDependent(that.commentsDialog);
+
+            }
+
+            that.commentsDialog.open();
         },
 
         _onObjectMatched: function () {
