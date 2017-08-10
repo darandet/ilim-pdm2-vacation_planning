@@ -14,7 +14,7 @@
                     months="2"
                     select="onDateRangeSelect">
             </u:Calendar>
-            <Table fixedLayout="false">
+            <Table fixedLayout="false" items="{data>/vacations}">
                 <headerToolbar>
                     <Toolbar>
                         <DateRangeSelection id="VacationRangeInput"/>
@@ -38,9 +38,9 @@
                 <items>
                     <ColumnListItem>
                         <cells>
-                            <Text text="01.01.2017"/>
-                            <Text text="31.01.2017"/>
-                            <Text text="черновик" />
+                            <Text text="{data>begda}"/>
+                            <Text text="{data>endda}"/>
+                            <Text text="{data>status}" />
                             <Button icon="sap-icon://edit"/>
                         </cells>
                     </ColumnListItem>

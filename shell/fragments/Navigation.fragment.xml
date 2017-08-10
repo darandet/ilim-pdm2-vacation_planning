@@ -3,12 +3,15 @@
     xmlns:core="sap.ui.core"
     xmlns:tnt="sap.tnt">
 
-    <tnt:SideNavigation id="sideNavigation">
+    <tnt:SideNavigation id="sideNavigation" visible="false">
         <tnt:item>
             <tnt:NavigationList itemSelect="onSideNavigation">
-                <tnt:NavigationListItem key="NavToPlan" text="Запланировать отпуск" icon="sap-icon://appointment"/>
-                <tnt:NavigationListItem key="NavToApprov" text="Согласовать отпуск" icon="sap-icon://sap-box"/>
-                <tnt:NavigationListItem key="NavToControl" text="Контроль планирования" icon="sap-icon://approvals"/>
+                <tnt:NavigationListItem key="NavToPlan" text="Запланировать отпуск" icon="sap-icon://appointment"
+                                        id="planNavItem"/>
+                <tnt:NavigationListItem key="NavToApprov" text="Согласовать отпуск" icon="sap-icon://sap-box"
+                                        id="approveNavItem"/>
+                <tnt:NavigationListItem key="NavToControl" text="Контроль планирования" icon="sap-icon://approvals"
+                                        id="controlNavItem"/>
             </tnt:NavigationList>
         </tnt:item>
         <tnt:fixedItem>

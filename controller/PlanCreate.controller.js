@@ -1,6 +1,7 @@
 sap.ui.define([
-    "ilim/pdm2/vacation_planning/controller/BaseController"
-], function (Controller) {
+    "ilim/pdm2/vacation_planning/controller/BaseController",
+    "sap/ui/model/json/JSONModel"
+], function (Controller, JSONModel) {
     "use strict";
 
     return Controller.extend("ilim.pdm2.vacation_planning.controller.PlanCreate", {
@@ -12,6 +13,10 @@ sap.ui.define([
          */
         onInit: function() {
 
+            var oModel = new JSONModel();
+            oModel.loadData("http://localhost:3000/vacations");
+
+            this.setModel(oModel, "data");
         },
 
         /**

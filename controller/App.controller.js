@@ -18,8 +18,6 @@ sap.ui.define([
         onInit: function() {
 
             this.getView().addStyleClass(this.getOwnerComponent().getContentDensityClass());
-            this.getRouter().getRoute("HomePage").attachPatternMatched(this._patternMatched, this);
-
 
         },
 
@@ -47,15 +45,8 @@ sap.ui.define([
          */
         onExit: function() {
 
-        },
-
-        _patternMatched: function () {
-
-            var oRouter = this.getRouter();
-            oRouter.navTo("PlanOverview");
-            //TODO навигация в зависимости от роли?
-
         }
+
 
     });
 
