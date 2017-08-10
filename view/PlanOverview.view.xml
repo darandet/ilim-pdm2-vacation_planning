@@ -10,13 +10,14 @@
         <f:title>
             <f:DynamicPageTitle>
                 <f:heading>
-                    <Title text="График отпусков на 2017 г."/>
+                    <Title text="График отпусков на {period>/CurrentPeriod} г."/>
                 </f:heading>
                 <f:actions>
                 </f:actions>
                 <f:expandedContent>
                     <Button icon="sap-icon://arrow-down"
-                            type="Transparent"/>
+                    type="Transparent"
+                    press="onShowPeriods"/>
                 </f:expandedContent>
             </f:DynamicPageTitle>
         </f:title>
@@ -32,11 +33,12 @@
                                         class="sapUiLargeMarginEnd">
                                 <items>
                                     <NumericContent
-                                            value="2.5"
+                                            value="{header>/daysAccumulated}"
                                             scale="Дн."
                                             valueColor="Neutral"
                                             indicator="None" state="Loaded"
-                                            withMargin="false" />
+                                            withMargin="false"
+                                            busy="{headerState>/busy}"/>
                                     <Label text = "Остаток за предыдущие периоды"/>
                                 </items>
                             </FlexBox>
@@ -44,12 +46,13 @@
                                         alignItems="End">
                                 <items>
                                     <NumericContent
-                                            value="28"
+                                            value="{header>/daysProvided}"
                                             scale="Дн."
                                             valueColor="Neutral"
                                             indicator="None" state="Loaded"
-                                            withMargin="false" />
-                                    <Label text = "Право на отпуск 2017 г."/>
+                                            withMargin="false"
+                                            busy="{headerState>/busy}"/>
+                                    <Label text = "Право на отпуск {period>/CurrentPeriod} г."/>
                                 </items>
                             </FlexBox>
                         </items>

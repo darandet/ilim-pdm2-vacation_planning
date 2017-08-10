@@ -13,21 +13,37 @@ sap.ui.define([
          */
         onInit: function() {
 
+            var that = this;
+
             this.getRouter().getRoute("HomePage").attachPatternMatched(this._patternMatched, this);
 
-            var oModel = new JSONModel();
-            oModel.loadData("http://localhost:3000/users/current", undefined, false);
-            this.setModel(oModel, "user");
+
             
-            
+            this.getOwnerComponent().oUserLoaded = new Promise( function (fnResolve, fnReject) {
+
+                var oUserModel = new JSONModel();
+                that.setModel(oUserModel, "user");
+
+                oUserModel.attachRequestCompleted(function () {
+                    that.getOwnerComponent().current_user = that.getModel("user").getProperty("/user");
+                    fnResolve(that.getOwnerComponent().current_user);
+                });
+
+                oUserModel.loadData("http://localhost:3000/users/current", undefined, false);
+
+
+            });
             
             this.oRolesLoaded = new Promise( function (fnResolve, fnReject) {
-                var oRolesModel = new JSONModel();
 
-                oRolesModel.attachRequestCompleted(function (oEvent) {
-                    fnResolve(oRolesModel);
-                }, this);
-                oRolesModel.loadData("http://localhost:3000/roles/" + oModel.getProperty("/user"));
+                that.getOwnerComponent().oUserLoaded.then(function (sUser) {
+                    var oRolesModel = new JSONModel();
+
+                    oRolesModel.attachRequestCompleted(function () {
+                        fnResolve(oRolesModel);
+                    }, that);
+                    oRolesModel.loadData("http://localhost:3000/roles/" + sUser);
+                });
 
             });
 

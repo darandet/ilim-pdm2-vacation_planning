@@ -1,0 +1,14 @@
+<core:FragmentDefinition
+        xmlns="sap.m"
+        xmlns:core="sap.ui.core">
+
+    <ResponsivePopover title="Выберите период" class="sapUiPopupWithPadding"
+                       placement="Bottom" >
+        <content>
+            <SelectList
+                    items="{period>/PossiblePeriods}" itemPress="onYearSelect">
+                <core:Item key="{period>year}" text="{period>year}" />
+            </SelectList>
+        </content>
+    </ResponsivePopover>
+</core:FragmentDefinition>

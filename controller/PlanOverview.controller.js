@@ -1,8 +1,9 @@
 sap.ui.define([
     "ilim/pdm2/vacation_planning/controller/BaseController",
     "sap/m/Dialog",
-    "sap/m/Button"
-], function (Controller, Dialog, Button) {
+    "sap/m/Button",
+    "sap/ui/model/json/JSONModel"
+], function (Controller, Dialog, Button, JSONModel) {
     "use strict";
 
     return Controller.extend("ilim.pdm2.vacation_planning.controller.PlanOverview", {
@@ -17,6 +18,33 @@ sap.ui.define([
          * @memberOf ilim.pdm2.vacation_planning.PlanOverview
          */
         onInit: function() {
+
+            var that = this;
+
+            var oOverviewState = {
+                busy: true
+            };
+            var oStateModel= new JSONModel(oOverviewState);
+            this.setModel(oStateModel, "headerState");
+
+            var oModel = new JSONModel();
+            oModel.loadData("http://localhost:3000/periods");
+            this.setModel(oModel, "period");
+
+            oModel.attachRequestCompleted(function () {
+                var oHeaderModel = new JSONModel();
+
+                that.getOwnerComponent().oUserLoaded.then(function (sUser) {
+                    oHeaderModel.loadData("http://localhost:3000/available_days?employee=" + sUser + "&year="
+                        + oModel.getProperty("/CurrentPeriod"));
+                    that.setModel(oHeaderModel, "header");
+
+                    oHeaderModel.attachRequestCompleted(function () {
+                        oStateModel.setProperty("/busy", false);
+                    });
+                });
+
+            });
 
         },
 
@@ -97,6 +125,41 @@ sap.ui.define([
             }
 
             that.commentsDialog.open();
+        },
+
+        onShowPeriods: function (oEvent) {
+            if (! this._oPeriodsPopover) {
+                this._oPeriodsPopover = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.PeriodSelect", this);
+                this.getView().addDependent(this._oPeriodsPopover);
+            }
+
+            this._oPeriodsPopover.openBy(oEvent.getSource());
+        },
+
+        onYearSelect: function (oEvent) {
+
+            var sKey = oEvent.getParameter("item").getKey();
+            var oPeriodModel = this.getModel("period");
+
+            var sCurrentPeriod = oPeriodModel.getProperty("/CurrentPeriod");
+
+            if (sKey === sCurrentPeriod) {
+                this._oPeriodsPopover.close();
+                return;
+            }
+
+            this.getModel("headerState").setProperty("/busy", true);
+
+            var oHeaderModel = this.getModel("header");
+
+            var sUser = this.getOwnerComponent().current_user;
+
+            oPeriodModel.setProperty("/CurrentPeriod", sKey);
+
+            oHeaderModel.loadData("http://localhost:3000/available_days?employee=" + sUser + "&year=" + sKey);
+
+            this._oPeriodsPopover.close();
+
         },
 
         _onObjectMatched: function () {
