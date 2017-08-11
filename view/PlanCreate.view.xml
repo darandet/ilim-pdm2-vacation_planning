@@ -4,7 +4,8 @@
         xmlns="sap.m"
         xmlns:u="sap.ui.unified"
         xmlns:l="sap.ui.layout"
-        displayBlock="true">
+        displayBlock="true"
+        busy="{contentState>/busy}">
 
     <l:Grid defaultSpan="L7 M12 S12" class="sapUiSmallMarginTop" hSpacing="0.5">
         <l:content>
@@ -14,7 +15,7 @@
                     months="2"
                     select="onDateRangeSelect">
             </u:Calendar>
-            <Table fixedLayout="false" items="{data>/vacations}">
+            <Table fixedLayout="false" items="{data>/}">
                 <headerToolbar>
                     <Toolbar>
                         <DateRangeSelection id="VacationRangeInput"/>

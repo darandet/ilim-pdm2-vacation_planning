@@ -13,10 +13,19 @@ sap.ui.define([
          */
         onInit: function() {
 
-            var oModel = new JSONModel();
-            oModel.loadData("http://localhost:3000/vacations");
 
+            var oPlanCreateState = {
+                busy: true
+            };
+            var oStateModel= new JSONModel(oPlanCreateState);
+            this.setModel(oStateModel, "contentState");
+
+
+            var oModel = new JSONModel();
             this.setModel(oModel, "data");
+
+            var oEventBus = sap.ui.getCore().getEventBus();
+            oEventBus.subscribe("headerChanges", "yearSelection", this._updatePlan, this);
         },
 
         /**
@@ -68,6 +77,27 @@ sap.ui.define([
                 if (oDate) {
                     oDateRangeInput.setSecondDateValue(oDate);
                 }
+            }
+
+        },
+
+        _updatePlan: function (sChannel, sEvent, oData) {
+
+            if (sChannel === "headerChanges" && sEvent === "yearSelection") {
+
+                var oDataModel = this.getModel("data");
+                var oContentStateModel = this.getModel("contentState");
+
+                oContentStateModel.setProperty("/busy", true);
+
+                oDataModel.attachRequestCompleted(function () {
+                    oContentStateModel.setProperty("/busy", false);
+                });
+
+                oDataModel.loadData("http://localhost:3000/vacations/" + oData.key
+                                                    + "?employee=" + this.getOwnerComponent().current_user);
+
+
             }
 
         }

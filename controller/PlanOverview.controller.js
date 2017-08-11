@@ -34,6 +34,9 @@ sap.ui.define([
             oModel.attachRequestCompleted(function () {
                 var oHeaderModel = new JSONModel();
 
+                that._raiseYearSelectEvent(oModel.getProperty("/CurrentPeriod"));
+
+                // that.getOwnerComponent().current_period = oModel.getProperty("/CurrentPeriod");
                 that.getOwnerComponent().oUserLoaded.then(function (sUser) {
                     oHeaderModel.loadData("http://localhost:3000/available_days?employee=" + sUser + "&year="
                         + oModel.getProperty("/CurrentPeriod"));
@@ -150,6 +153,8 @@ sap.ui.define([
 
             this.getModel("headerState").setProperty("/busy", true);
 
+            this.getOwnerComponent().current_period = sKey;
+
             var oHeaderModel = this.getModel("header");
 
             var sUser = this.getOwnerComponent().current_user;
@@ -160,7 +165,17 @@ sap.ui.define([
 
             this._oPeriodsPopover.close();
 
+            this._raiseYearSelectEvent(sKey);
+
         },
+
+
+        _raiseYearSelectEvent: function (selectedYear) {
+
+            var oEventBus = sap.ui.getCore().getEventBus();
+            oEventBus.publish("headerChanges", "yearSelection", { key: selectedYear });
+        },
+
 
         _onObjectMatched: function () {
 
