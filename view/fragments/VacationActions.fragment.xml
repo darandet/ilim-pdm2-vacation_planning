@@ -1,0 +1,29 @@
+<core:FragmentDefinition
+        xmlns="sap.m"
+        xmlns:core="sap.ui.core">
+    <ActionSheet
+            title="{i18n>vacation.actions.title}"
+            showCancelButton="true"
+            placement="Bottom">
+        <buttons>
+            <Button text="{i18n>vacation.actions.delete}" icon="sap-icon://delete" press="onItemAction"
+                    enabled="{path: 'vacation>/status', formatter: '.formatter.deleteEnabled'}">
+                <customData>
+                    <core:CustomData key="function" value="delete"/>
+                </customData>
+            </Button>
+            <Button text="{i18n>vacation.actions.confirm}" icon="sap-icon://accept" press="onItemAction"
+                    enabled="{path: 'vacation>/status', formatter: '.formatter.confirmEnabled'}">
+                <customData>
+                    <core:CustomData key="function" value="confirm"/>
+                </customData>
+            </Button>
+            <Button text="{i18n>vacation.actions.transfer}" icon="sap-icon://workflow-tasks" press="onItemAction"
+                    enabled="{path: 'vacation>/status', formatter: '.formatter.transferEnabled'}">
+                <customData>
+                    <core:CustomData key="function" value="transfer"/>
+                </customData>
+            </Button>
+        </buttons>
+    </ActionSheet>
+</core:FragmentDefinition>

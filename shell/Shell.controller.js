@@ -22,10 +22,16 @@ sap.ui.define([
             this.getOwnerComponent().oUserLoaded = new Promise( function (fnResolve, fnReject) {
 
                 var oUserModel = new JSONModel();
+                var oCurrentUser = {};
+
                 that.setModel(oUserModel, "user");
 
                 oUserModel.attachRequestCompleted(function () {
-                    that.getOwnerComponent().current_user = that.getModel("user").getProperty("/user");
+
+                    oCurrentUser.user = that.getModel("user").getProperty("/user");
+                    oCurrentUser.pernr = that.getModel("user").getProperty("/pernr");
+                    that.getOwnerComponent().current_user = oCurrentUser;
+
                     fnResolve(that.getOwnerComponent().current_user);
                 });
 
@@ -36,13 +42,13 @@ sap.ui.define([
             
             this.oRolesLoaded = new Promise( function (fnResolve, fnReject) {
 
-                that.getOwnerComponent().oUserLoaded.then(function (sUser) {
+                that.getOwnerComponent().oUserLoaded.then(function (oUser) {
                     var oRolesModel = new JSONModel();
 
                     oRolesModel.attachRequestCompleted(function () {
                         fnResolve(oRolesModel);
                     }, that);
-                    oRolesModel.loadData("http://localhost:3000/roles/" + sUser);
+                    oRolesModel.loadData("http://localhost:3000/roles/" + oUser.user);
                 });
 
             });

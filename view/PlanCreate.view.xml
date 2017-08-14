@@ -15,23 +15,23 @@
                     months="2"
                     select="onDateRangeSelect">
             </u:Calendar>
-            <Table fixedLayout="false" items="{data>/}">
+            <Table fixedLayout="false" items="{data>/}" id="vacationsTable">
                 <headerToolbar>
                     <Toolbar>
                         <DateRangeSelection id="VacationRangeInput"/>
                         <ToolbarSpacer/>
-                        <Button	type="Emphasized" text="Запланировать"/>
+                        <Button	type="Emphasized" text="{i18n>vacation.addButton}" press="onAddVacation"/>
                     </Toolbar>
                 </headerToolbar>
                 <columns>
                     <Column vAlign="Middle">
-                        <Text text="Дата начала" />
+                        <Text text="{i18n>vacation.table.begda}" />
                     </Column>
                     <Column vAlign="Middle">
-                        <Text text="Дата конца" />
+                        <Text text="{i18n>vacation.table.endda}" />
                     </Column>
                     <Column vAlign="Middle">
-                        <Text text="Статус" />
+                        <Text text="{i18n>vacation.table.status}" />
                     </Column>
                     <Column>
                     </Column>
@@ -41,8 +41,9 @@
                         <cells>
                             <Text text="{data>begda}"/>
                             <Text text="{data>endda}"/>
-                            <Text text="{data>status}" />
-                            <Button icon="sap-icon://edit"/>
+                            <ObjectStatus text="{path: 'data>status', formatter: '.formatter.vacationStatus'}"
+                                          state="{path: 'data>status', formatter: '.formatter.vacationState'}"/>
+                            <Button icon="sap-icon://edit" press="onShowActions"/>
                         </cells>
                     </ColumnListItem>
                 </items>

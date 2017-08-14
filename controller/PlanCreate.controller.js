@@ -1,10 +1,20 @@
 sap.ui.define([
     "ilim/pdm2/vacation_planning/controller/BaseController",
-    "sap/ui/model/json/JSONModel"
-], function (Controller, JSONModel) {
+    "jquery.sap.global",
+    "sap/ui/model/json/JSONModel",
+    "sap/ui/model/odata/v2/ODataModel",
+    "ilim/pdm2/vacation_planning/model/formatter",
+    "sap/m/MessageBox"
+], function (Controller, $, JSONModel, ODataModel, Formatter, MessageBox) {
     "use strict";
 
     return Controller.extend("ilim.pdm2.vacation_planning.controller.PlanCreate", {
+
+
+        formatter: Formatter,
+
+        selectedPeriod: "",
+
 
         /**
          * Called when a controller is instantiated and its View controls (if available) are already created.
@@ -26,6 +36,7 @@ sap.ui.define([
 
             var oEventBus = sap.ui.getCore().getEventBus();
             oEventBus.subscribe("headerChanges", "yearSelection", this._updatePlan, this);
+
         },
 
         /**
@@ -63,6 +74,97 @@ sap.ui.define([
 
         },
 
+        onShowActions: function (oEvent) {
+
+            var oModel;
+            var oButton = oEvent.getSource();
+
+            this.onShowActions.timesCalled = 0;
+
+            if (!this._actionSheet) {
+                this._actionSheet = sap.ui.xmlfragment(
+                    "ilim.pdm2.vacation_planning.view.fragments.VacationActions",
+                    this
+                );
+                this.getView().addDependent(this._actionSheet);
+
+                oModel = new JSONModel();
+                this._actionSheet.setModel(oModel, "vacation");
+                this._actionSheet.timesCalled = 0;
+
+            }
+
+            var oVacation = this.getView().byId("vacationsTable")
+                .getModel("data").getObject(oButton.getParent().getBindingContextPath());
+
+
+            oModel = this._actionSheet.getModel("vacation");
+            oModel.setData(oVacation);
+
+            if (this._actionSheet.timesCalled === 0) {
+                var that = this;
+
+                //Because of a weird bug with rendering;
+                this._actionSheet.timesCalled++;
+                setTimeout(function () {
+                    that._actionSheet.openBy(oButton)
+                }, 100);
+            } else {
+                this._actionSheet.openBy(oButton);
+            }
+
+        },
+
+        onAddVacation: function (oEvent) {
+
+            var oDateRangeInput = this.getView().byId("VacationRangeInput");
+            var oCalendar       = this.getView().byId("calendar");
+
+            if (!oDateRangeInput.getDateValue()) {
+                MessageBox.error(
+                    this.getResourceBundle().getText("vacation.create.wrongDates"),
+                    {
+                        styleClass: this.getOwnerComponent().getContentDensityClass()
+                    }
+                );
+
+                return;
+            }
+
+            this._addVacationToPlan(
+                this.selectedPeriod, this.getOwnerComponent().current_user.pernr,
+                oDateRangeInput.getDateValue(), oDateRangeInput.getSecondDateValue()
+            );
+
+            oDateRangeInput.setDateValue();
+            oCalendar.removeAllSelectedDates();
+
+        },
+
+        onItemAction: function (oEvent) {
+
+            var oButton = oEvent.getSource();
+            var aCustomData = oButton.getCustomData();
+
+            var sFunction;
+
+            for (var i=0; i < aCustomData.length; i++) {
+
+                if (aCustomData[i].getKey() === "function") {
+
+                    sFunction = aCustomData[i].getValue();
+
+                }
+            }
+
+            if (sFunction === "delete") {
+                var oModel = this._actionSheet.getModel("vacation")
+                var oObjectToDelete = oModel.getData();
+                this._deleteItem(oObjectToDelete);
+            }
+
+        },
+
         _updateDateRangeInput: function (oCalendar, oDateRangeInput) {
 
             var oDate;
@@ -76,6 +178,8 @@ sap.ui.define([
                 oDate = aSelectedDates[0].getEndDate();
                 if (oDate) {
                     oDateRangeInput.setSecondDateValue(oDate);
+                } else {
+                    oDateRangeInput.setSecondDateValue();
                 }
             }
 
@@ -94,13 +198,81 @@ sap.ui.define([
                     oContentStateModel.setProperty("/busy", false);
                 });
 
+                this.selectedPeriod = oData.key;
                 oDataModel.loadData("http://localhost:3000/vacations/" + oData.key
-                                                    + "?employee=" + this.getOwnerComponent().current_user);
+                    + "?pernr=" + this.getOwnerComponent().current_user.pernr);
 
 
             }
 
+        },
+
+        _addVacationToPlan: function (Year, Pernr, BeginDate, EndDate) {
+
+            var that = this;
+
+            var sServiceUrl = "http://localhost:3000/vacations";
+            // var oDataModel = new ODataModel(sServiceUrl);
+            var endda;
+
+            if (EndDate) {
+                endda = EndDate;
+            } else {
+                endda = BeginDate;
+            }
+
+            $.post(sServiceUrl, {
+                data: {
+                    year: Year,
+                    pernr: Pernr,
+                    begda: BeginDate,
+                    endda: endda
+                },
+                contentType: "application/json; charset=utf-8"
+            })
+                .done(function (oData) {
+
+                    var oModel = that.getModel("data");
+
+                    var oResult = {};
+                    var dataIndex = oModel.getData().length;
+                    oResult[dataIndex] = {
+                        year: oData.year,
+                        pernr: oData.pernr,
+                        begda: oData.begda,
+                        endda: oData.endda,
+                        status: oData.status
+                    };
+
+                    oModel.setData(oResult, true);
+                    oModel.refresh();
+                });
+
+            // oDataModel.create("", {year: Year, pernr: Pernr, begda: BeginDate, endda: EndDate});
+
+
+        },
+
+        _deleteItem: function (oObject) {
+
+            var sServiceUrl = "http://localhost:3000/vacations";
+            var that = this;
+
+            $.ajax({
+                url: sServiceUrl,
+                type: 'DELETE',
+                data: oObject
+            })
+                .done(function (oDeletedObject) {
+
+                    that.getModel("data").loadData("http://localhost:3000/vacations/" + that.selectedPeriod
+                        + "?pernr=" + that.getOwnerComponent().current_user.pernr);
+
+                });
+
+
         }
+
     });
 
 });

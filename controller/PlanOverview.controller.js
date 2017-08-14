@@ -36,9 +36,8 @@ sap.ui.define([
 
                 that._raiseYearSelectEvent(oModel.getProperty("/CurrentPeriod"));
 
-                // that.getOwnerComponent().current_period = oModel.getProperty("/CurrentPeriod");
-                that.getOwnerComponent().oUserLoaded.then(function (sUser) {
-                    oHeaderModel.loadData("http://localhost:3000/available_days?employee=" + sUser + "&year="
+                that.getOwnerComponent().oUserLoaded.then(function (oUser) {
+                    oHeaderModel.loadData("http://localhost:3000/available_days?employee=" + oUser.user + "&year="
                         + oModel.getProperty("/CurrentPeriod"));
                     that.setModel(oHeaderModel, "header");
 
@@ -79,11 +78,11 @@ sap.ui.define([
 
         onShowRoute: function () {
             var that = this;
-            if (!that.commentsDialog) {
+            if (!that.routeDialog) {
 
                 var oFormFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.ApprovalRoute");
 
-                that.commentsDialog = new Dialog({
+                that.routeDialog = new Dialog({
                     title: 'Маршрут согласования',
                     contentWidth: "15%",
                     draggable: true,
@@ -91,16 +90,16 @@ sap.ui.define([
                     endButton: new Button({
                         text: "Закрыть",
                         press: function () {
-                            that.commentsDialog.close();
+                            that.routeDialog.close();
                         }
                     })
                 });
 
                 //to get access to the global model
-                that.getView().addDependent(that.commentsDialog);
+                that.getView().addDependent(that.routeDialog);
             }
 
-            that.commentsDialog.open();
+            that.routeDialog.open();
         },
 
         onShowComments: function () {
@@ -153,11 +152,9 @@ sap.ui.define([
 
             this.getModel("headerState").setProperty("/busy", true);
 
-            this.getOwnerComponent().current_period = sKey;
-
             var oHeaderModel = this.getModel("header");
 
-            var sUser = this.getOwnerComponent().current_user;
+            var sUser = this.getOwnerComponent().current_user.user;
 
             oPeriodModel.setProperty("/CurrentPeriod", sKey);
 
