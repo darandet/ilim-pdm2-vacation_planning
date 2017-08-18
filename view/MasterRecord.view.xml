@@ -10,7 +10,7 @@
              alignItems="Center"
              justifyContent="Center">
         <items>
-            <Table fixedLayout="false" class="sapUiTinyMarginTop">
+            <Table fixedLayout="false" class="sapUiTinyMarginTop" items="{data>/}">
                 <headerToolbar>
                     <Toolbar>
                         <ToolbarSpacer/>
@@ -19,13 +19,13 @@
                 </headerToolbar>
                 <columns>
                     <Column vAlign="Middle" hAlign="Center">
-                        <Text text="Год планирования" />
+                        <Text text="{i18n>masterRecord.table.year}" />
                     </Column>
                     <Column vAlign="Middle" hAlign="Center">
-                        <Text text="БЕ" />
+                        <Text text="{i18n>masterRecord.table.bukrs}" />
                     </Column>
                     <Column vAlign="Middle" hAlign="Center">
-                        <Text text="Статус планирования" />
+                        <Text text="{i18n>masterRecord.table.status}" />
                     </Column>
                     <Column hAlign="Center">
                     </Column>
@@ -33,10 +33,15 @@
                 <items>
                     <ColumnListItem>
                         <cells>
-                            <Text text="01.01.2017"/>
-                            <Text text="31.01.2017"/>
-                            <Text text="черновик" />
-                            <Button icon="sap-icon://edit" text="Открыть период" type="Accept"/>
+                            <Text text="{data>year}"/>
+                            <Text text="{data>bukrs_text}"/>
+                            <ObjectStatus text="{path: 'data>status', formatter: '.formatter.periodStatus'}"
+                                          state="{path: 'data>status', formatter: '.formatter.periodState'}"/>
+                            <Button icon="{path: 'data>status', formatter: '.formatter.periodActionIcon'}"
+                                    text="{path: 'data>status', formatter: '.formatter.periodAction'}"
+                                    type="{path: 'data>status', formatter: '.formatter.periodActionType'}"
+                                    enabled="{path: 'data>status', formatter: '.formatter.periodActionEnabled'}"
+                                    press="onUpdateMasterRecord"/>
                         </cells>
                     </ColumnListItem>
                 </items>

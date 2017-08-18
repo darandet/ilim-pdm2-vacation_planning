@@ -28,21 +28,19 @@
                   singleContainerFullSize="false" >
         <f:content>
             <Label text="БЕ"/>
-            <Select id="balanceUnit" forceSelection="false">
+            <Select id="balanceUnit" forceSelection="false" selectedKey="{masterRecord>/bukrs}" items="{bukrs>/}">
                 <items>
-                    <core:Item text="Центральный офис" key="CO"/>
-                    <core:Item text="Братск" key="BR"/>
-                    <core:Item text="Усть-Илимск" key="UI"/>
+                    <core:Item text="{bukrs>text}" key="{bukrs>bukrs}"/>
                 </items>
             </Select>
             <Label text="Год планирования"/>
-            <Input maxLength="4" type="Number" />
+            <Input maxLength="4" type="Number" value="{masterRecord>/year}"/>
             <Label text="Срок внесения данных"/>
-            <DatePicker valueFormat="yyyy-MM-dd" displayFormat="long"/>
+            <DatePicker valueFormat="dd.MM.yyyy" displayFormat="long" value="{masterRecord>/deadline}"/>
             <Label text="Макс. процент отсустствия"/>
-            <Input maxLength="2" type="Number" />
+            <Input maxLength="2" type="Number" value="{masterRecord>/absence}"/>
             <Label/>
-            <CheckBox text="Отправить уведомления" selected="false"/>
+            <CheckBox text="Отправить уведомления" selected="{masterRecord>/notify}"/>
         </f:content>
     </f:SimpleForm>
 
