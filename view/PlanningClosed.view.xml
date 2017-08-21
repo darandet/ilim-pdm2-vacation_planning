@@ -1,0 +1,10 @@
+<mvc:View
+        xmlns:mvc="sap.ui.core.mvc"
+        xmlns="sap.m"
+        displayBlock="true"
+        height="100%">
+
+    <MessagePage description="О старте планирования Вы будете оповещены отдельно"
+                 icon="sap-icon://locked"
+                 text="Планирование закрыто"/>
+</mvc:View>

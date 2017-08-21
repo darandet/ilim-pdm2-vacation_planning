@@ -6,8 +6,8 @@
                        placement="Bottom" >
         <content>
             <SelectList
-                    items="{period>/PossiblePeriods}" itemPress="onYearSelect">
-                <core:Item key="{period>year}" text="{period>year}" />
+                    items="{planYears>/periods}" itemPress="onYearSelect">
+                <core:Item key="{planYears>year}" text="{planYears>year}" />
             </SelectList>
         </content>
     </ResponsivePopover>

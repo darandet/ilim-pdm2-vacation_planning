@@ -164,10 +164,12 @@ sap.ui.define([
                     var oResult = {};
 
                     var dataIndex;
-                    for (keys in oModel.getData()) {
-                        dataIndex++;
+                    if (oModel.getData().length === undefined) {
+                        dataIndex = 0;
+                    } else {
+                        dataIndex = oModel.getData().length;
                     }
-                    // var dataIndex = oModel.getData().length;
+
                     oResult[dataIndex] = {
                         bukrs: oData.bukrs,
                         bukrs_text: oData.bukrs_text,

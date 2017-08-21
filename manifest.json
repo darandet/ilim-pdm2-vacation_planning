@@ -75,6 +75,11 @@
           "pattern": "approval/dashboard",
           "name": "ApprovalsDashboard",
           "target": "ApprovalsDashboard"
+        },
+        {
+          "pattern": "closed",
+          "name": "PlanningClosed",
+          "target": "PlanningClosed"
         }
       ],
       "targets": {
@@ -115,6 +120,11 @@
           "parent": "ApprovePlan",
           "viewName": "ApprovalDashBoard",
           "viewLevel": 2
+        },
+        "PlanningClosed": {
+          "parent": "HomePage",
+          "viewName": "PlanningClosed",
+          "viewLevel": 1
         }
       }
     },

@@ -24,29 +24,34 @@ sap.ui.define([
             var oOverviewState = {
                 busy: true
             };
+
+
+            this.getRouter().getRoute("PlanOverview").attachPatternMatched(this._patternMatched, this);
+
+
             var oStateModel= new JSONModel(oOverviewState);
             this.setModel(oStateModel, "headerState");
 
-            var oModel = new JSONModel();
-            oModel.loadData("http://localhost:3000/periods");
-            this.setModel(oModel, "period");
-
-            oModel.attachRequestCompleted(function () {
-                var oHeaderModel = new JSONModel();
-
-                that._raiseYearSelectEvent(oModel.getProperty("/CurrentPeriod"));
-
-                that.getOwnerComponent().oUserLoaded.then(function (oUser) {
-                    oHeaderModel.loadData("http://localhost:3000/available_days?employee=" + oUser.user + "&year="
-                        + oModel.getProperty("/CurrentPeriod"));
-                    that.setModel(oHeaderModel, "header");
-
-                    oHeaderModel.attachRequestCompleted(function () {
-                        oStateModel.setProperty("/busy", false);
-                    });
-                });
-
-            });
+            // var oModel = new JSONModel();
+            // oModel.loadData("http://localhost:3000/periods/current");
+            // this.setModel(oModel, "period");
+            //
+            // oModel.attachRequestCompleted(function () {
+            //     var oHeaderModel = new JSONModel();
+            //
+            //     that._raiseYearSelectEvent(oModel.getProperty("/year"));
+            //
+            //     that.getOwnerComponent().oUserLoaded.then(function (oUser) {
+            //         oHeaderModel.loadData("http://localhost:3000/available_days?employee=" + oUser.user + "&year="
+            //             + oModel.getProperty("/year"));
+            //         that.setModel(oHeaderModel, "header");
+            //
+            //         oHeaderModel.attachRequestCompleted(function () {
+            //             oStateModel.setProperty("/busy", false);
+            //         });
+            //     });
+            //
+            // });
 
         },
 
@@ -130,9 +135,14 @@ sap.ui.define([
         },
 
         onShowPeriods: function (oEvent) {
+
             if (! this._oPeriodsPopover) {
                 this._oPeriodsPopover = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.PeriodSelect", this);
                 this.getView().addDependent(this._oPeriodsPopover);
+
+                var oModel = new JSONModel("http://localhost:3000/periods?status=open");
+                this._oPeriodsPopover.setModel(oModel, "planYears");
+
             }
 
             this._oPeriodsPopover.openBy(oEvent.getSource());
@@ -143,7 +153,7 @@ sap.ui.define([
             var sKey = oEvent.getParameter("item").getKey();
             var oPeriodModel = this.getModel("period");
 
-            var sCurrentPeriod = oPeriodModel.getProperty("/CurrentPeriod");
+            var sCurrentPeriod = oPeriodModel.getProperty("/year");
 
             if (sKey === sCurrentPeriod) {
                 this._oPeriodsPopover.close();
@@ -174,8 +184,64 @@ sap.ui.define([
         },
 
 
-        _onObjectMatched: function () {
+        _patternMatched: function () {
 
+            var that = this;
+
+            if (!this.getModel("period")) {
+                var oModel = new JSONModel();
+                oModel.loadData("http://localhost:3000/periods/current");
+                this.setModel(oModel, "period");
+
+                oModel.attachRequestCompleted(function () {
+                    var oHeaderModel = new JSONModel();
+
+                    if (!that.getModel("period").getProperty("/year")) {
+                        that.getRouter().navTo("PlanningClosed");
+
+                        return;
+                    }
+
+
+                    that._raiseYearSelectEvent(oModel.getProperty("/year"));
+
+                    that.getOwnerComponent().oUserLoaded.then(function (oUser) {
+                        oHeaderModel.attachRequestCompleted(function () {
+                            that.getModel("headerState").setProperty("/busy", false);
+                        });
+                        oHeaderModel.loadData("http://localhost:3000/available_days?employee=" + oUser.user + "&year="
+                            + oModel.getProperty("/year"));
+                        that.setModel(oHeaderModel, "header");
+
+
+
+                    });
+                });
+
+                return;
+            }
+
+            if (!this.getModel("period").getProperty("/year")) {
+                this.getRouter().navTo("PlanningClosed");
+            }
+
+        },
+
+
+        _periodsLoaded: function () {
+            var oHeaderModel = new JSONModel();
+
+            that._raiseYearSelectEvent(oModel.getProperty("/year"));
+
+            that.getOwnerComponent().oUserLoaded.then(function (oUser) {
+                oHeaderModel.loadData("http://localhost:3000/available_days?employee=" + oUser.user + "&year="
+                    + oModel.getProperty("/year"));
+                that.setModel(oHeaderModel, "header");
+
+                oHeaderModel.attachRequestCompleted(function () {
+                    oStateModel.setProperty("/busy", false);
+                });
+            });
         }
     });
 

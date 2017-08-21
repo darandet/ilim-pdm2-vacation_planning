@@ -10,7 +10,7 @@
         <f:title>
             <f:DynamicPageTitle>
                 <f:heading>
-                    <Title text="График отпусков на {period>/CurrentPeriod} г."/>
+                    <Title text="График отпусков на {period>/year} г."/>
                 </f:heading>
                 <f:actions>
                 </f:actions>
@@ -52,7 +52,7 @@
                                             indicator="None" state="Loaded"
                                             withMargin="false"
                                             busy="{headerState>/busy}"/>
-                                    <Label text = "Право на отпуск {period>/CurrentPeriod} г."/>
+                                    <Label text = "Право на отпуск {period>/year} г."/>
                                 </items>
                             </FlexBox>
                         </items>
