@@ -166,7 +166,7 @@ sap.ui.define([
 
             var sUser = this.getOwnerComponent().current_user.user;
 
-            oPeriodModel.setProperty("/CurrentPeriod", sKey);
+            oPeriodModel.loadData("http://localhost:3000/periods/" + sKey);
 
             oHeaderModel.loadData("http://localhost:3000/available_days?employee=" + sUser + "&year=" + sKey);
 
@@ -225,24 +225,8 @@ sap.ui.define([
                 this.getRouter().navTo("PlanningClosed");
             }
 
-        },
-
-
-        _periodsLoaded: function () {
-            var oHeaderModel = new JSONModel();
-
-            that._raiseYearSelectEvent(oModel.getProperty("/year"));
-
-            that.getOwnerComponent().oUserLoaded.then(function (oUser) {
-                oHeaderModel.loadData("http://localhost:3000/available_days?employee=" + oUser.user + "&year="
-                    + oModel.getProperty("/year"));
-                that.setModel(oHeaderModel, "header");
-
-                oHeaderModel.attachRequestCompleted(function () {
-                    oStateModel.setProperty("/busy", false);
-                });
-            });
         }
+
     });
 
 });

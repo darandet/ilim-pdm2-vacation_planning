@@ -161,27 +161,14 @@ sap.ui.define([
 
                     var oModel = that.getModel("data");
 
-                    var oResult = {};
+                    var aData = [];
 
-                    var dataIndex;
-                    if (oModel.getData().length === undefined) {
-                        dataIndex = 0;
-                    } else {
-                        dataIndex = oModel.getData().length;
+                    if (!$.isEmptyObject(oModel.getData())) {
+                        aData = oModel.getData();
                     }
 
-                    oResult[dataIndex] = {
-                        bukrs: oData.bukrs,
-                        bukrs_text: oData.bukrs_text,
-                        year: oData.year,
-                        deadline: oData.deadline,
-                        absence: oData.absence,
-                        notify: oData.notify,
-                        status: oData.status
-                    };
-
-                    oModel.setData(oResult, true);
-                    // oModel.refresh();
+                    aData.push(oData);
+                    oModel.setData(aData);
                 });
 
 

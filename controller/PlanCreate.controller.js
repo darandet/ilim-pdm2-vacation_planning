@@ -34,6 +34,10 @@ sap.ui.define([
             var oModel = new JSONModel();
             this.setModel(oModel, "data");
 
+            var oCalModel = new JSONModel();
+            this.setModel(oCalModel, "calendar");
+
+
             var oEventBus = sap.ui.getCore().getEventBus();
             oEventBus.subscribe("headerChanges", "yearSelection", this._updatePlan, this);
 
@@ -201,6 +205,13 @@ sap.ui.define([
                 this.selectedPeriod = oData.key;
                 oDataModel.loadData("http://localhost:3000/vacations/" + oData.key
                     + "?pernr=" + this.getOwnerComponent().current_user.pernr);
+
+                var oCalModel = this.getModel("calendar");
+                var oCalData = {
+                    minDate: new Date(oData.key),
+                    maxDate: new Date(oData.key, "11", "31")
+                };
+                oCalModel.setData(oCalData);
 
 
             }

@@ -13,7 +13,8 @@
                     id="calendar"
                     intervalSelection="true"
                     months="2"
-                    select="onDateRangeSelect">
+                    select="onDateRangeSelect"
+                    maxDate="{calendar>/maxDate}" minDate="{calendar>/minDate}">
             </u:Calendar>
             <Table fixedLayout="false" items="{data>/}" id="vacationsTable">
                 <headerToolbar>
