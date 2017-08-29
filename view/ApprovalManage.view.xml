@@ -1,25 +1,28 @@
 <mvc:View
+        controllerName="ilim.pdm2.vacation_planning.controller.ApprovalManage"
         xmlns:mvc="sap.ui.core.mvc"
         xmlns="sap.m"
         xmlns:f="sap.f"
         displayBlock="true"
         height="100%">
 
-    <Table fixedLayout="false" class="sapUiMediumMarginTop" mode="MultiSelect">
+    <Table fixedLayout="false" class="sapUiMediumMarginTop" mode="MultiSelect" items="{inbox>/}"
+           selectionChange="onEmployeeSelect" rememberSelections="true"
+           id="inboxTable">
         <headerToolbar>
             <OverflowToolbar>
                 <Title text="Ваши подчиненные" level="H2"/>
-                <SearchField width="30%" placeholder="Введите ФИО или т/н сотрудника"/>
+                <SearchField width="30%" placeholder="Введите ФИО или т/н сотрудника" liveChange="onEmployeeSearch"/>
                 <ToolbarSpacer/>
                 <OverflowToolbarButton type="Transparent" icon="sap-icon://multiselect-all"/>
                 <OverflowToolbarButton type="Transparent" icon="sap-icon://filter"/>
                 <OverflowToolbarButton type="Transparent" icon="sap-icon://excel-attachment"/>
                 <OverflowToolbarButton type="Transparent" icon="sap-icon://action-settings"/>
-                <Button type="Emphasized" icon="sap-icon://display" text="Показать выбранных"/>
+                <Button type="Emphasized" icon="sap-icon://display" text="Показать выбранных" press="onShowSelected"/>
             </OverflowToolbar>
         </headerToolbar>
         <columns>
-            <Column vAlign="Middle" hAlign="Center">
+            <Column vAlign="Middle" hAlign="Begin">
                 <Text text="Сотрудник" />
             </Column>
             <Column vAlign="Middle" hAlign="Center">
@@ -44,21 +47,22 @@
             </Column>
         </columns>
         <items>
-            <ColumnListItem class="sapUiTinyPaddingTop">
+            <ColumnListItem class="sapUiTinyPaddingTop" highlight="{inbox>highlight}">
                 <cells>
                     <FlexBox alignItems="Center">
                         <items>
-                            <f:Avatar displaySize="XS" class="sapUiTinyMargin"/>
+                            <f:Avatar displaySize="XS" class="sapUiTinyMargin" src="{inbox>picture/medium}"/>
                             <ObjectIdentifier
-                                    title="Петров Иван Иванович"
-                                    text="Ведущий инженер"/>
+                                    title="{inbox>name/last}"
+                                    text="{inbox>gender}"/>
                         </items>
                     </FlexBox>
+                    <VBox>
+                        <Label text="{inbox>location/city}" />
+                        <Label text="{inbox>location/state}" />
+                    </VBox>
                     <ObjectIdentifier
-                            title="Проектный отдел"
-                            text="РОП Братск Рук."/>
-                    <ObjectIdentifier
-                            text="12345678"/>
+                            text="{inbox>id/value}"/>
                     <Text   textAlign="Center"
                             text="Федосеев Иван Юрьевич"/>
                     <ObjectNumber number="0/28/3" unit="дней"/>

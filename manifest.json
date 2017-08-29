@@ -80,6 +80,11 @@
           "pattern": "closed",
           "name": "PlanningClosed",
           "target": "PlanningClosed"
+        },
+        {
+          "pattern": "approval/manage/{selectedEmployees}",
+          "name": "ApprovalDetails",
+          "target": "ApprovalDetails"
         }
       ],
       "targets": {
@@ -125,6 +130,14 @@
           "parent": "HomePage",
           "viewName": "PlanningClosed",
           "viewLevel": 1
+        },
+        "ApprovalDetails": {
+          "controlId": "ManagerSpaceId",
+          "controlAggregation": "content",
+          "clearControlAggregation": false,
+          "parent": "ApprovePlan",
+          "viewName": "ApprovalDetails",
+          "viewLevel": 3
         }
       }
     },

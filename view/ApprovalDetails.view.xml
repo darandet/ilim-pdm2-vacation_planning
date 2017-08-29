@@ -1,0 +1,55 @@
+<mvc:View
+        controllerName="ilim.pdm2.vacation_planning.controller.ApprovalDetails"
+        xmlns:mvc="sap.ui.core.mvc"
+        xmlns="sap.m"
+        xmlns:f="sap.f"
+        displayBlock="true"
+        height="100%"
+        id="ApprovalDetails">
+
+    <Panel backgroundDesign="Transparent">
+        <headerToolbar>
+            <Toolbar>
+                <content>
+                    <Button type="Back"/>
+                    <ToolbarSpacer/>
+                    <Title text="{i18n>details.header}" level="H2"/>
+                    <ToolbarSpacer/>
+                    <SegmentedButton select="onDataViewChange" id="dataViewChangeButton">
+                        <items>
+                            <SegmentedButtonItem key="tableView" icon="sap-icon://table-view"
+                                                 id="tableViewButton"/>
+                            <SegmentedButtonItem key="timelineView" icon="sap-icon://accelerated"
+                                                 id="timelineViewButton"/>
+                        </items>
+                    </SegmentedButton>
+                </content>
+            </Toolbar>
+        </headerToolbar>
+        <content>
+            <Table fixedLayout="false" id="vacationsTable" class="sapUiSmallMarginTop">
+                <columns>
+                    <Column vAlign="Middle" hAlign="Center">
+                        <Text text="{i18n>details.table.employee}" />
+                    </Column>
+                    <Column vAlign="Middle" hAlign="Center">
+                        <Text text="{i18n>details.table.period}" />
+                    </Column>
+                    <Column vAlign="Middle" hAlign="Center">
+                        <Text text="{i18n>details.table.operation}" />
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem class="sapUiTinyPaddingTop">
+                        <cells>
+                            <ObjectIdentifier title="Петров Роман Юрьевич"/>
+                            <Text   textAlign="Center"
+                                    text="01.01.2017 - 31.01.2017"/>
+                            <ObjectStatus text="Утвержден" state="Success" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+    </Panel>
+</mvc:View>
