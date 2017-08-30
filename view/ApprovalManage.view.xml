@@ -11,37 +11,37 @@
            id="inboxTable">
         <headerToolbar>
             <OverflowToolbar>
-                <Title text="Ваши подчиненные" level="H2"/>
-                <SearchField width="30%" placeholder="Введите ФИО или т/н сотрудника" liveChange="onEmployeeSearch"/>
+                <Title text="{i18n>main.toolbar.title}" level="H2"/>
+                <SearchField width="30%" placeholder="{i18n>main.toolbar.searchPlaceholder}" liveChange="onEmployeeSearch"/>
                 <ToolbarSpacer/>
                 <OverflowToolbarButton type="Transparent" icon="sap-icon://multiselect-all"/>
                 <OverflowToolbarButton type="Transparent" icon="sap-icon://filter"/>
                 <OverflowToolbarButton type="Transparent" icon="sap-icon://excel-attachment"/>
                 <OverflowToolbarButton type="Transparent" icon="sap-icon://action-settings"/>
-                <Button type="Emphasized" icon="sap-icon://display" text="Показать выбранных" press="onShowSelected"/>
+                <Button icon="sap-icon://display" text="{i18n>main.toolbar.showSelected}" press="onShowSelected"/>
             </OverflowToolbar>
         </headerToolbar>
         <columns>
             <Column vAlign="Middle" hAlign="Begin">
-                <Text text="Сотрудник" />
+                <Text text="{i18n>main.table.employee}" />
             </Column>
             <Column vAlign="Middle" hAlign="Center">
-                <Text text="Подразделение" />
+                <Text text="{i18n>main.table.department}" />
             </Column>
             <Column vAlign="Middle" hAlign="Center">
-                <Text text="Табельный номер" />
+                <Text text="{i18n>main.table.employeeId}" />
             </Column>
             <Column vAlign="Middle" hAlign="Center">
-                <Text text="Линейный руководитель" />
+                <Text text="{i18n>main.table.lineManager}" />
             </Column>
             <Column vAlign="Middle" hAlign="Center">
-                <Text text="Остаток/Доступно/Заплан." />
+                <Text text="{i18n>main.table.daysStats}" />
             </Column>
             <Column vAlign="Middle" hAlign="Center">
-                <Text text="ЛК" />
+                <Text text="{i18n>main.table.hasAccess}" />
             </Column>
             <Column vAlign="Middle" hAlign="Center">
-                <Text text="Статус плана" />
+                <Text text="{i18n>main.table.status}" />
             </Column>
             <Column hAlign="Center">
             </Column>
@@ -53,22 +53,23 @@
                         <items>
                             <f:Avatar displaySize="XS" class="sapUiTinyMargin" src="{inbox>picture/medium}"/>
                             <ObjectIdentifier
-                                    title="{inbox>name/last}"
-                                    text="{inbox>gender}"/>
+                                    title="{inbox>name}"
+                                    text="{inbox>position}"/>
                         </items>
                     </FlexBox>
                     <VBox>
-                        <Label text="{inbox>location/city}" />
-                        <Label text="{inbox>location/state}" />
+                        <Label text="{inbox>department}" />
+                        <Label text="{inbox>location}" />
                     </VBox>
                     <ObjectIdentifier
-                            text="{inbox>id/value}"/>
+                            text="{inbox>employeeId}"/>
                     <Text   textAlign="Center"
-                            text="Федосеев Иван Юрьевич"/>
-                    <ObjectNumber number="0/28/3" unit="дней"/>
-                    <CheckBox enabled="false" selected="true" />
+                            text="{inbox>lineManager}"/>
+                    <ObjectNumber number="{inbox>daysBalance}/{inbox>availableDays}/{inbox>plannedDays}"
+                                  unit="{i18n>main.table.units}"/>
+                    <CheckBox enabled="false" selected="{inbox>hasAccess}" />
                     <ObjectStatus
-                            text="Утвержден"
+                            text="{inbox>planStatus}"
                             state="Success" />
                     <FlexBox alignItems="Center" justifyContent="SpaceBetween">
                         <items>

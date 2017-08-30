@@ -61,7 +61,7 @@ sap.ui.define([
 
             for (var i=0; i < oList.getSelectedContexts().length; i++) {
                 var oObject = oModel.getObject(oList.getSelectedContexts()[i].sPath);
-                this.selectedEmployees.push(oObject.login.username)
+                this.selectedEmployees.push(oObject.employeeId)
             }
         },
 
@@ -70,9 +70,9 @@ sap.ui.define([
             var aFilters = [];
             var sQuery = oEvent.getSource().getValue();
             if (sQuery && sQuery.length > 0) {
-                var filter = new Filter("name/last", sap.ui.model.FilterOperator.Contains, sQuery);
+                var filter = new Filter("name", sap.ui.model.FilterOperator.Contains, sQuery);
                 aFilters.push(filter);
-                filter = new Filter("id/value", sap.ui.model.FilterOperator.Contains, sQuery);
+                filter = new Filter("employeeId", sap.ui.model.FilterOperator.Contains, sQuery);
                 aFilters.push(filter);
 
                 filter = new Filter({filters: aFilters, and: false});

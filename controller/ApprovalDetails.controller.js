@@ -1,6 +1,7 @@
 sap.ui.define([
-    "ilim/pdm2/vacation_planning/controller/BaseController"
-], function (Controller) {
+    "ilim/pdm2/vacation_planning/controller/BaseController",
+    "sap/ui/model/json/JSONModel"
+], function (Controller, JSONModel) {
     "use strict";
 
     return Controller.extend("ilim.pdm2.vacation_planning.controller.ApprovalDetails", {
@@ -17,14 +18,31 @@ sap.ui.define([
 
             this.getRouter().getRoute("ApprovalDetails").attachPatternMatched(this._patternMatched, this);
 
+        },
+
+        onBackToInbox: function (oEvent) {
+
+            this.getRouter().navTo("ManageApprovals");
 
         },
 
         _patternMatched: function (oEvent) {
 
+            var oModel, sFilter;
             var oArgs = oEvent.getParameter("arguments");
 
             this.selectedEmployees = JSON.parse(oArgs.selectedEmployees);
+
+            if (this.getModel("vacations")) {
+                oModel = this.getModel("vacations");
+            } else {
+                oModel = new JSONModel();
+                this.setModel(oModel, "vacations");
+            }
+
+            sFilter = this.selectedEmployees.join();
+
+            oModel.loadData("http://localhost:3000/employees/vacations?filter=" + sFilter);
 
         }
 

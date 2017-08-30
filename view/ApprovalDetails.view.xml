@@ -11,7 +11,7 @@
         <headerToolbar>
             <Toolbar>
                 <content>
-                    <Button type="Back"/>
+                    <Button type="Back" press="onBackToInbox"/>
                     <ToolbarSpacer/>
                     <Title text="{i18n>details.header}" level="H2"/>
                     <ToolbarSpacer/>
@@ -27,7 +27,8 @@
             </Toolbar>
         </headerToolbar>
         <content>
-            <Table fixedLayout="false" id="vacationsTable" class="sapUiSmallMarginTop">
+            <Table fixedLayout="false" id="vacationsTable" class="sapUiSmallMarginTop"
+                   items="{path: 'vacations>/results', sorter: {path : 'pernr'} }">
                 <columns>
                     <Column vAlign="Middle" hAlign="Center">
                         <Text text="{i18n>details.table.employee}" />
@@ -42,10 +43,10 @@
                 <items>
                     <ColumnListItem class="sapUiTinyPaddingTop">
                         <cells>
-                            <ObjectIdentifier title="Петров Роман Юрьевич"/>
+                            <ObjectIdentifier title="{vacations>pernr}"/>
                             <Text   textAlign="Center"
-                                    text="01.01.2017 - 31.01.2017"/>
-                            <ObjectStatus text="Утвержден" state="Success" />
+                                    text="{vacations>begda} - {vacations>endda}"/>
+                            <ObjectStatus text="{vacations>status}" state="Success" />
                         </cells>
                     </ColumnListItem>
                 </items>

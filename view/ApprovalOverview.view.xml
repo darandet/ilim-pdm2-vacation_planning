@@ -13,12 +13,7 @@
                     <Title text="График отпусков на 2017 г."/>
                 </f:heading>
                 <f:actions>
-                    <SegmentedButton selectedKey="allEmployees">
-                        <items>
-                            <SegmentedButtonItem key="allEmployees" icon="sap-icon://manager" />
-                            <SegmentedButtonItem key="directEmployees" icon="sap-icon://family-care" />
-                        </items>
-                    </SegmentedButton>
+                    <ToggleButton icon="sap-icon://manager" text="Только подчиненных"/>
                 </f:actions>
                 <f:expandedContent>
                     <Button icon="sap-icon://arrow-down"
