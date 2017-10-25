@@ -10,9 +10,9 @@
     "applicationVersion": {
       "version": "1.0.0"
     },
-    "dataSource": {
+    "dataSources": {
       "MainService": {
-        "uri": "/sap/opu/odata/sap/ZHR_PDM_VACATION_PLANNING",
+        "uri": "/sap/opu/odata/sap/ZHR_PDM_VACATION_PLANNING_SRV",
         "type": "OData",
         "settings": {
           "odataVersion": "2.0"
