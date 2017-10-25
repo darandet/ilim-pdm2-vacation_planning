@@ -26,16 +26,16 @@ sap.ui.define([
          */
         onInit: function() {
 
-            var sServiceUrl = "http://localhost:3000/master_records";
-            var sBUServiceUrl = "http://localhost:3000/balance_units";
+            // var sServiceUrl = "http://localhost:3000/master_records";
+            // var sBUServiceUrl = "http://localhost:3000/balance_units";
 
             var oModel = new JSONModel();
-            oModel.loadData(sServiceUrl);
+            // oModel.loadData(sServiceUrl);
 
             this.setModel(oModel, "data");
 
             var oBUModel = new JSONModel();
-            oBUModel.loadData(sBUServiceUrl);
+            // oBUModel.loadData(sBUServiceUrl);
             this.setModel(oBUModel, "bukrs");
 
         },
@@ -78,12 +78,12 @@ sap.ui.define([
                 var oFormFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.CreatePeriod");
 
                 that._mRecordCreateDialog = new Dialog({
-                    title: 'Создание периода планирования',
+                    title: this.getResourceBundle().getText("masterRecord.createDialog.Title"),
                     contentWidth: "35%",
                     draggable: true,
                     content: oFormFragment,
                     beginButton: new Button({
-                        text: "Создать",
+                        text: this.getResourceBundle().getText("masterRecord.createDialog.createButton"),
                         type: "Accept",
                         press: function () {
                             that._postMasterRecord();
@@ -91,7 +91,7 @@ sap.ui.define([
                         }
                     }),
                     endButton: new Button({
-                        text: "Отмена",
+                        text: this.getResourceBundle().getText("masterRecord.createDialog.CancelButton"),
                         press: function () {
                             that._mRecordCreateDialog.close();
                         }

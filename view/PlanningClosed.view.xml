@@ -4,7 +4,7 @@
         displayBlock="true"
         height="100%">
 
-    <MessagePage description="О старте планирования Вы будете оповещены отдельно"
+    <MessagePage description="{i18n>vacation.planningClosed.description}"
                  icon="sap-icon://locked"
-                 text="Планирование закрыто"/>
+                 text="{i18n>vacation.planningClosed.text}"/>
 </mvc:View>
