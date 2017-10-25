@@ -9,6 +9,15 @@
     "description": "{{appDescription}}",
     "applicationVersion": {
       "version": "1.0.0"
+    },
+    "dataSource": {
+      "MainService": {
+        "uri": "/sap/opu/odata/sap/ZHR_PDM_VACATION_PLANNING",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "2.0"
+        }
+      }
     }
   },
   "sap.ui": {
@@ -147,6 +156,9 @@
         "settings": {
           "bundleName": "ilim.pdm2.vacation_planning.i18n.i18n"
         }
+      },
+      "oData": {
+        "dataSource": "MainService"
       }
     }
   }
