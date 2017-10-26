@@ -83,7 +83,7 @@ sap.ui.define([
                     draggable: true,
                     content: oFormFragment,
                     beginButton: new Button({
-                        text: this.getResourceBundle().getText("masterRecord.createDialog.createButton"),
+                        text: this.getResourceBundle().getText("masterRecord.createDialog.CreateButton"),
                         type: "Accept",
                         press: function () {
                             that._postMasterRecord();
