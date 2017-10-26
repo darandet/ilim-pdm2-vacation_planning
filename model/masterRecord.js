@@ -7,11 +7,11 @@ sap.ui.define([],
 
             var oResourceBundle = this.getResourceBundle();
 
-            if (sStatus === "UNOPENED") {
+            if (sStatus === "CRTD") {
                 return oResourceBundle.getText("masterRecord.actions.open");
             }
 
-            if (sStatus === "OPENED" || sStatus === "CLOSED") {
+            if (sStatus === "OPEN" || sStatus === "CLSD") {
                 return oResourceBundle.getText("masterRecord.actions.close");
             }
 
@@ -20,11 +20,11 @@ sap.ui.define([],
 
         oFormatter.periodActionType = function (sStatus) {
 
-            if (sStatus === "UNOPENED") {
+            if (sStatus === "CRTD") {
                 return sap.m.ButtonType.Accept;
             }
 
-            if (sStatus === "OPENED" || sStatus === "CLOSED") {
+            if (sStatus === "OPEN" || sStatus === "CLSD") {
                 return sap.m.ButtonType.Reject;
             }
 
@@ -33,8 +33,8 @@ sap.ui.define([],
 
         oFormatter.periodActionIcon = function (sStatus) {
 
-            if (sStatus === "UNOPENED") return "sap-icon://unlocked";
-            if (sStatus === "OPENED" || sStatus === "CLOSED") return "sap-icon://locked";
+            if (sStatus === "CRTD") return "sap-icon://unlocked";
+            if (sStatus === "OPEN" || sStatus === "CLSD") return "sap-icon://locked";
         };
         
         
@@ -43,18 +43,18 @@ sap.ui.define([],
             var oResourceBundle = this.getResourceBundle();
 
 
-            if (sStatus === "UNOPENED") return oResourceBundle.getText("masterRecord.status.unopened");
-            if (sStatus === "OPENED") return oResourceBundle.getText("masterRecord.status.opened");
-            if (sStatus === "CLOSED") return oResourceBundle.getText("masterRecord.status.closed");
+            if (sStatus === "CRTD") return oResourceBundle.getText("masterRecord.status.unopened");
+            if (sStatus === "OPEN") return oResourceBundle.getText("masterRecord.status.opened");
+            if (sStatus === "CLSD") return oResourceBundle.getText("masterRecord.status.closed");
         };
 
         oFormatter.periodState = function (sStatus) {
 
-            if (sStatus === "UNOPENED") {
+            if (sStatus === "CRTD") {
                 return sap.ui.core.ValueState.Warning;
-            } else if (sStatus === "OPENED") {
+            } else if (sStatus === "OPEN") {
                 return sap.ui.core.ValueState.Success;
-            } else if (sStatus === "CLOSED") {
+            } else if (sStatus === "CLSD") {
                 return sap.ui.core.ValueState.Error;
             }
 
@@ -62,7 +62,7 @@ sap.ui.define([],
 
         oFormatter.periodActionEnabled = function (sStatus) {
 
-            return sStatus !== "CLOSED"
+            return sStatus !== "CLSD"
 
         };
 

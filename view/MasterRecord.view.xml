@@ -10,7 +10,7 @@
              alignItems="Center"
              justifyContent="Center">
         <items>
-            <Table fixedLayout="false" class="sapUiTinyMarginTop" items="{data>/}">
+            <Table fixedLayout="false" class="sapUiTinyMarginTop" items="{oData>/MasterRecordSet}">
                 <headerToolbar>
                     <Toolbar>
                         <ToolbarSpacer/>
@@ -33,14 +33,14 @@
                 <items>
                     <ColumnListItem>
                         <cells>
-                            <Text text="{data>year}"/>
-                            <Text text="{data>bukrs_text}"/>
-                            <ObjectStatus text="{path: 'data>status', formatter: '.formatter.periodStatus'}"
-                                          state="{path: 'data>status', formatter: '.formatter.periodState'}"/>
-                            <Button icon="{path: 'data>status', formatter: '.formatter.periodActionIcon'}"
-                                    text="{path: 'data>status', formatter: '.formatter.periodAction'}"
-                                    type="{path: 'data>status', formatter: '.formatter.periodActionType'}"
-                                    enabled="{path: 'data>status', formatter: '.formatter.periodActionEnabled'}"
+                            <Text text="{oData>PlanYear}"/>
+                            <Text text="{oData>Bukrs}"/>
+                            <ObjectStatus text="{path: 'oData>VpStatus', formatter: '.formatter.periodStatus'}"
+                                          state="{path: 'oData>VpStatus', formatter: '.formatter.periodState'}"/>
+                            <Button icon="{path: 'oData>VpStatus', formatter: '.formatter.periodActionIcon'}"
+                                    text="{path: 'oData>VpStatus', formatter: '.formatter.periodAction'}"
+                                    type="{path: 'oData>VpStatus', formatter: '.formatter.periodActionType'}"
+                                    enabled="{path: 'oData>VpStatus', formatter: '.formatter.periodActionEnabled'}"
                                     press="onUpdateMasterRecord"/>
                         </cells>
                     </ColumnListItem>
