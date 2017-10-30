@@ -1,7 +1,8 @@
 sap.ui.define([
     "ilim/pdm2/vacation_planning/controller/BaseController",
-    "sap/ui/model/json/JSONModel"
-], function (Controller, JSONModel) {
+    "sap/ui/model/json/JSONModel",
+    "sap/m/MessageBox"
+], function (Controller, JSONModel, MessageBox) {
     "use strict";
 
     return Controller.extend("ilim.pdm2.vacation_planning.shell.Shell", {
@@ -18,38 +19,14 @@ sap.ui.define([
             this.getRouter().getRoute("HomePage").attachPatternMatched(this._patternMatched, this);
 
 
-            
-            this.getOwnerComponent().oUserLoaded = new Promise( function (fnResolve, fnReject) {
+            this.getOwnerComponent().oRolesLoaded = new Promise( function (fnResolve, fnReject) {
 
-                var oUserModel = new JSONModel();
-                var oCurrentUser = {};
+                    var oDataModel = that.getOwnerComponent().getModel("oData");
 
-                that.setModel(oUserModel, "user");
-
-                oUserModel.attachRequestCompleted(function () {
-
-                    oCurrentUser.user = that.getModel("user").getProperty("/user");
-                    oCurrentUser.pernr = that.getModel("user").getProperty("/pernr");
-                    that.getOwnerComponent().current_user = oCurrentUser;
-
-                    fnResolve(that.getOwnerComponent().current_user);
-                });
-
-                oUserModel.loadData("http://localhost:3000/users/current", undefined, false);
-
-
-            });
-            
-            this.oRolesLoaded = new Promise( function (fnResolve, fnReject) {
-
-                that.getOwnerComponent().oUserLoaded.then(function (oUser) {
-                    var oRolesModel = new JSONModel();
-
-                    oRolesModel.attachRequestCompleted(function () {
-                        fnResolve(oRolesModel);
-                    }, that);
-                    oRolesModel.loadData("http://localhost:3000/roles/" + oUser.user);
-                });
+                    oDataModel.read("/BusinessRolesSet('')", {
+                        success: fnResolve(oData, response),
+                        error: fnReject(oError)
+                    });
 
             });
 
@@ -64,28 +41,40 @@ sap.ui.define([
 
             var that = this;
 
-            this.oRolesLoaded.then(function (oModel) {
-
+            var fnDataReceived = function (oData, response) {
                 var oSideNavigation = that.getView().byId('sideNavigation');
                 var oItemAggregation = oSideNavigation.getItem();
                 var aItems = oItemAggregation.getItems();
 
                 for (var i = 0; i < 3; i++) {
-                    var sId = aItems[i].getId();
-                    if (sId.indexOf("planNavItem") > 0 && !oModel.getProperty("/can_plan")) {
-                        oItemAggregation.removeItem(sId);
-                    }
-                    if (sId.indexOf("approveNavItem") > 0 && !oModel.getProperty("/can_approve")) {
-                        oItemAggregation.removeItem(sId);
-                    }
-                    if (sId.indexOf("controlNavItem") > 0 && !oModel.getProperty("/can_control")) {
-                        oItemAggregation.removeItem(sId);
+                    if (aItems[i]) {
+                        var sId = aItems[i].getId();
+                        if (sId.indexOf("planNavItem") > 0 && !oData.CanPlan) {
+                            oItemAggregation.removeItem(sId);
+                        }
+                        if (sId.indexOf("approveNavItem") > 0 && !oData.CanApprove) {
+                            oItemAggregation.removeItem(sId);
+                        }
+                        if (sId.indexOf("controlNavItem") > 0 && !oData.CanControl) {
+                            oItemAggregation.removeItem(sId);
+                        }
                     }
                 }
 
                 oSideNavigation.setVisible(true);
+            };
 
-            })
+            var fnConnectionError = function (oError) {
+
+                console.log(oError);
+                MessageBox.error(oError.message, {
+                    title: oError.statusText,
+                    details: oError.responseText
+                });
+
+            };
+
+            this.getOwnerComponent().oRolesLoaded.then(fnDataReceived, fnConnectionError);
 
         },
 
@@ -127,14 +116,15 @@ sap.ui.define([
 
         _patternMatched: function () {
 
-            var oModel = this.getModel("user");
-            if (oModel) {
-                var user = oModel.getProperty("/user");
-            }
+            // var oModel = this.getModel("user");
+            // if (oModel) {
+            //     var user = oModel.getProperty("/user");
+            // }
 
             var oRouter = this.getRouter();
             oRouter.navTo("PlanOverview");
             //TODO дыра в безопасности, если вводить путь напрямую
+            //TODO сделать навигацию в зависимости от полученных ролей
 
         }
 

@@ -177,10 +177,23 @@ sap.ui.define([
         },
 
 
-        _raiseYearSelectEvent: function (selectedYear) {
+        _raiseYearSelectEvent: function (selectedYear, Bukrs) {
 
+            var that = this;
             var oEventBus = sap.ui.getCore().getEventBus();
-            oEventBus.publish("headerChanges", "yearSelection", { key: selectedYear });
+            this.getOwnerComponent().oRolesLoaded.then(function (oData) {
+                var sPlanPath = "/MasterRecord(PlanYear='" + selectedYear + "',Bukrs='" + Bukrs + "')";
+                that.getView().bindElement({
+                    path: sPlanPath,
+                    events: {
+                        dataReceived: function () {
+                            that.getModel("headerState").setProperty("/busy", false);
+                        }
+                    }
+                });
+
+                oEventBus.publish("headerChanges", "yearSelection", { key: selectedYear });
+            });
         },
 
 
@@ -188,42 +201,58 @@ sap.ui.define([
 
             var that = this;
 
-            if (!this.getModel("period")) {
-                var oModel = new JSONModel();
-                oModel.loadData("http://localhost:3000/periods/current");
-                this.setModel(oModel, "period");
+            var oDataModel = this.getOwnerComponent().getModel("oData");
 
-                oModel.attachRequestCompleted(function () {
-                    var oHeaderModel = new JSONModel();
+            var fnDataReceived = function (oData, response) {
 
-                    if (!that.getModel("period").getProperty("/year")) {
-                        that.getRouter().navTo("PlanningClosed");
+                if (!oData.PlanYear) {
+                    that.getRouter().navTo("PlanningClosed");
+                    return;
+                }
 
-                        return;
-                    }
+                that._raiseYearSelectEvent(oData.PlanYear, oData.Bukrs);
+            };
 
+            oDataModel.read("/MasterRecordSet(PlanYear='',Bukrs='')", {
+                success:fnDataReceived
+            });
 
-                    that._raiseYearSelectEvent(oModel.getProperty("/year"));
-
-                    that.getOwnerComponent().oUserLoaded.then(function (oUser) {
-                        oHeaderModel.attachRequestCompleted(function () {
-                            that.getModel("headerState").setProperty("/busy", false);
-                        });
-                        oHeaderModel.loadData("http://localhost:3000/available_days?employee=" + oUser.user + "&year="
-                            + oModel.getProperty("/year"));
-                        that.setModel(oHeaderModel, "header");
-
-
-
-                    });
-                });
-
-                return;
-            }
-
-            if (!this.getModel("period").getProperty("/year")) {
-                this.getRouter().navTo("PlanningClosed");
-            }
+            // if (!this.getModel("period")) {
+            //     var oModel = new JSONModel();
+            //     oModel.loadData("http://localhost:3000/periods/current");
+            //     this.setModel(oModel, "period");
+            //
+            //     oModel.attachRequestCompleted(function () {
+            //         var oHeaderModel = new JSONModel();
+            //
+            //         if (!that.getModel("period").getProperty("/year")) {
+            //             that.getRouter().navTo("PlanningClosed");
+            //
+            //             return;
+            //         }
+            //
+            //
+            //         that._raiseYearSelectEvent(oModel.getProperty("/year"));
+            //
+            //         that.getOwnerComponent().oUserLoaded.then(function (oUser) {
+            //             oHeaderModel.attachRequestCompleted(function () {
+            //                 that.getModel("headerState").setProperty("/busy", false);
+            //             });
+            //             oHeaderModel.loadData("http://localhost:3000/available_days?employee=" + oUser.user + "&year="
+            //                 + oModel.getProperty("/year"));
+            //             that.setModel(oHeaderModel, "header");
+            //
+            //
+            //
+            //         });
+            //     });
+            //
+            //     return;
+            // }
+            //
+            // if (!this.getModel("period").getProperty("/year")) {
+            //     this.getRouter().navTo("PlanningClosed");
+            // }
 
         }
 

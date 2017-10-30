@@ -36,7 +36,9 @@
             <Label text="{i18n>masterRecord.createDialog.planningYear}"/>
             <Input maxLength="4" type="Number" value="{masterRecord>/year}"/>
             <Label text="{i18n>masterRecord.createDialog.planningDeadline}"/>
-            <DatePicker valueFormat="dd.MM.yyyy" displayFormat="long" value="{masterRecord>/deadline}"/>
+            <DatePicker valueFormat="dd.MM.yyyy"
+                        displayFormat="long"
+                        value="{path: 'masterRecord>/deadline', type:'sap.ui.model.type.Date'}"/>
             <Label text="{i18n>masterRecord.createDialog.absencePercent}"/>
             <Input maxLength="2" type="Number" value="{masterRecord>/absence}"/>
             <Label/>

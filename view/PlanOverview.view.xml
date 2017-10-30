@@ -10,7 +10,7 @@
         <f:title>
             <f:DynamicPageTitle>
                 <f:heading>
-                    <Title text="График отпусков на {period>/year} г."/>
+                    <Title text="График отпусков на {oData>/PlanYear} г."/>
                 </f:heading>
                 <f:actions>
                 </f:actions>
