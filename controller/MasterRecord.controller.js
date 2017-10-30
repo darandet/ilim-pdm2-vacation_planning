@@ -120,20 +120,18 @@ sap.ui.define([
 
         onUpdateMasterRecord: function (oEvent) {
             var oButton = oEvent.getSource();
-            var oModel = this.getModel("data");
+            var oDataModel = this.getModel("oData");
             var sPath = oButton.getParent().getBindingContextPath();
 
-            var oMasterRecord = oModel.getObject(sPath);
+            var oMasterRecord = oDataModel.getObject(sPath);
 
-            if (oMasterRecord.status === "UNOPENED") {
-                oMasterRecord.action = "open"
-            } else if (oMasterRecord.status === "OPENED") {
-                oMasterRecord.action = "close"
+            if (oMasterRecord.VpStatus === "CRTD") {
+                oMasterRecord.Action = "OPEN"
+            } else if (oMasterRecord.VpStatus === "OPEN") {
+                oMasterRecord.Action = "CLOSE"
             }
 
-            // oModel.setProperty(oButton.getParent().getBindingContextPath() + "/bukrs", "CO2");
-
-            this._updateMasterRecord(oMasterRecord, oModel, sPath)
+            this._updateMasterRecord(oMasterRecord, oDataModel, sPath)
 
         },
 
@@ -148,52 +146,36 @@ sap.ui.define([
 
         _postMasterRecord: function () {
             var oData = this._mRecordCreateDialog.getModel("masterRecord").getData();
-
-            var sServiceUrl = "http://localhost:3000/master_records";
-
             var that = this;
 
-            $.post(sServiceUrl, {
-                data: oData,
-                contentType: "application/json; charset=utf-8"
-            })
-                .done(function (oData) {
+            var oDataModel = this.getModel("oData");
 
-                    var oModel = that.getModel("data");
+            var oNewMasterRecord = {
+                Action: "",
+                PlanYear: oData.year,
+                Bukrs: oData.bukrs,
+                VpStatus: "",
+                DueDate: oData.deadline,
+                MaxPercent: oData.absence,
+                Announce: oData.notify,
+                RecordId: "",
+                DoCommit: "X"
+            };
 
-                    var aData = [];
-
-                    if (!$.isEmptyObject(oModel.getData())) {
-                        aData = oModel.getData();
-                    }
-
-                    aData.push(oData);
-                    oModel.setData(aData);
-                });
-
+            oDataModel.create("/MasterRecordSet", oNewMasterRecord, {
+                success: function () {
+                    that._mRecordCreateDialog.close();
+                }
+            });
 
         },
 
         _updateMasterRecord: function (oObject, oModel, sPath) {
 
-            var sServiceUrl = "http://localhost:3000/master_records";
-
-
-            $.ajax({
-                url: sServiceUrl,
-                method: "PUT",
-                data: oObject
-            })
-                .done(function (oNewObject) {
-
-                   for (key in oNewObject) {
-                       if (oNewObject.hasOwnProperty(key)) {
-                           oModel.setProperty(sPath + "/" + key, oNewObject[key])
-                       }
-                   }
-
-                });
-
+            oModel.update(
+                "/MasterRecordSet(PlanYear='" + oObject.PlanYear + "',Bukrs='" + oObject.Bukrs + "')",
+                oObject
+            );
 
         }
 

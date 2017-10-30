@@ -188,42 +188,58 @@ sap.ui.define([
 
             var that = this;
 
-            if (!this.getModel("period")) {
-                var oModel = new JSONModel();
-                oModel.loadData("http://localhost:3000/periods/current");
-                this.setModel(oModel, "period");
+            var oDataModel = this.getOwnerComponent().getModel("oData");
 
-                oModel.attachRequestCompleted(function () {
-                    var oHeaderModel = new JSONModel();
+            oDataModel.read("/MasterRecordSet(PlanYear='',Bukrs='')", {
+                success:fnDataReceived
+            });
 
-                    if (!that.getModel("period").getProperty("/year")) {
-                        that.getRouter().navTo("PlanningClosed");
+            var fnDataReceived = function (oData, response) {
 
-                        return;
-                    }
+                if (!oData.PlanYear) {
+                    that.getRouter().navTo("PlanningClosed");
+                    return;
+                }
 
+                that._raiseYearSelectEvent(oData.PlanYear);
+            };
 
-                    that._raiseYearSelectEvent(oModel.getProperty("/year"));
-
-                    that.getOwnerComponent().oUserLoaded.then(function (oUser) {
-                        oHeaderModel.attachRequestCompleted(function () {
-                            that.getModel("headerState").setProperty("/busy", false);
-                        });
-                        oHeaderModel.loadData("http://localhost:3000/available_days?employee=" + oUser.user + "&year="
-                            + oModel.getProperty("/year"));
-                        that.setModel(oHeaderModel, "header");
-
-
-
-                    });
-                });
-
-                return;
-            }
-
-            if (!this.getModel("period").getProperty("/year")) {
-                this.getRouter().navTo("PlanningClosed");
-            }
+            // if (!this.getModel("period")) {
+            //     var oModel = new JSONModel();
+            //     oModel.loadData("http://localhost:3000/periods/current");
+            //     this.setModel(oModel, "period");
+            //
+            //     oModel.attachRequestCompleted(function () {
+            //         var oHeaderModel = new JSONModel();
+            //
+            //         if (!that.getModel("period").getProperty("/year")) {
+            //             that.getRouter().navTo("PlanningClosed");
+            //
+            //             return;
+            //         }
+            //
+            //
+            //         that._raiseYearSelectEvent(oModel.getProperty("/year"));
+            //
+            //         that.getOwnerComponent().oUserLoaded.then(function (oUser) {
+            //             oHeaderModel.attachRequestCompleted(function () {
+            //                 that.getModel("headerState").setProperty("/busy", false);
+            //             });
+            //             oHeaderModel.loadData("http://localhost:3000/available_days?employee=" + oUser.user + "&year="
+            //                 + oModel.getProperty("/year"));
+            //             that.setModel(oHeaderModel, "header");
+            //
+            //
+            //
+            //         });
+            //     });
+            //
+            //     return;
+            // }
+            //
+            // if (!this.getModel("period").getProperty("/year")) {
+            //     this.getRouter().navTo("PlanningClosed");
+            // }
 
         }
 
