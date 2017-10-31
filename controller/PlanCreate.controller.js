@@ -96,7 +96,7 @@ sap.ui.define([
             }
 
             var oVacation = this.getView().byId("vacationsTable")
-                .getModel("data").getObject(oButton.getParent().getBindingContextPath());
+                .getModel("oData").getObject(oButton.getParent().getBindingContextPath());
 
 
             oModel = this._actionSheet.getModel("vacation");
@@ -132,8 +132,10 @@ sap.ui.define([
                 return;
             }
 
+            var sBindingPath = this.getView().getBindingContext("oData").getPath();
+            var oContextObj = this.getModel("oData").getObject(sBindingPath);
             this._addVacationToPlan(
-                this.selectedPeriod, this.getOwnerComponent().current_user.pernr,
+                oContextObj.PlanYear, oContextObj.Pernr,
                 oDateRangeInput.getDateValue(), oDateRangeInput.getSecondDateValue()
             );
 
@@ -206,8 +208,8 @@ sap.ui.define([
 
             var that = this;
 
-            var sServiceUrl = "http://localhost:3000/vacations";
-            // var oDataModel = new ODataModel(sServiceUrl);
+            // var sServiceUrl = "http://localhost:3000/vacations";
+            var oDataModel = this.getOwnerComponent().getModel("oData");
             var endda;
 
             if (EndDate) {
@@ -216,35 +218,19 @@ sap.ui.define([
                 endda = BeginDate;
             }
 
-            $.post(sServiceUrl, {
-                data: {
-                    year: Year,
-                    pernr: Pernr,
-                    begda: BeginDate,
-                    endda: endda
-                },
-                contentType: "application/json; charset=utf-8"
-            })
-                .done(function (oData) {
+            var oNewVacation = {
+                PlanYear: Year,
+                Pernr: Pernr,
+                BeginDate: BeginDate,
+                EndDate: endda,
+                VpProc: "",
+                VpStatus: "",
+                PlanGuid: "",
+                Action: "",
+                DoCommit: true
+            };
 
-                    var oModel = that.getModel("data");
-
-                    var oResult = {};
-                    var dataIndex = oModel.getData().length;
-                    oResult[dataIndex] = {
-                        year: oData.year,
-                        pernr: oData.pernr,
-                        begda: oData.begda,
-                        endda: oData.endda,
-                        status: oData.status
-                    };
-
-                    oModel.setData(oResult, true);
-                    oModel.refresh();
-                });
-
-            // oDataModel.create("", {year: Year, pernr: Pernr, begda: BeginDate, endda: EndDate});
-
+            oDataModel.create("/VacationPlanPosSet", oNewVacation);
 
         },
 
