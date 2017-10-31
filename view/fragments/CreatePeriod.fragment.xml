@@ -28,9 +28,9 @@
                   singleContainerFullSize="false" >
         <f:content>
             <Label text="{i18n>masterRecord.createDialog.balanceUnit}"/>
-            <Select id="balanceUnit" forceSelection="false" selectedKey="{masterRecord>/bukrs}" items="{bukrs>/}">
+            <Select id="balanceUnit" forceSelection="false" selectedKey="{masterRecord>/bukrs}" items="{oData>/BukrsListSet}">
                 <items>
-                    <core:Item text="{bukrs>text}" key="{bukrs>bukrs}"/>
+                    <core:Item text="{oData>Butxt}" key="{oData>Bukrs}"/>
                 </items>
             </Select>
             <Label text="{i18n>masterRecord.createDialog.planningYear}"/>

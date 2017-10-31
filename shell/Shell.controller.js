@@ -24,8 +24,8 @@ sap.ui.define([
                     var oDataModel = that.getOwnerComponent().getModel("oData");
 
                     oDataModel.read("/BusinessRolesSet('')", {
-                        success: fnResolve(oData, response),
-                        error: fnReject(oError)
+                        success: fnResolve,
+                        error: fnReject
                     });
 
             });

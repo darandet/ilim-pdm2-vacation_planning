@@ -16,7 +16,7 @@
                     select="onDateRangeSelect"
                     maxDate="{calendar>/maxDate}" minDate="{calendar>/minDate}">
             </u:Calendar>
-            <Table fixedLayout="false" items="{data>/}" id="vacationsTable">
+            <Table fixedLayout="false" items="{oData>ToVacations}" id="vacationsTable">
                 <headerToolbar>
                     <Toolbar>
                         <DateRangeSelection id="VacationRangeInput"/>
@@ -40,10 +40,24 @@
                 <items>
                     <ColumnListItem>
                         <cells>
-                            <Text text="{data>begda}"/>
-                            <Text text="{data>endda}"/>
-                            <ObjectStatus text="{path: 'data>status', formatter: '.formatter.vacationStatus'}"
-                                          state="{path: 'data>status', formatter: '.formatter.vacationState'}"/>
+                            <Text text="{
+                                            path: 'oData>BeginDate',
+                                            type: 'sap.ui.model.type.Date',
+                                            formatOptions: {
+                                                style: 'medium'
+                                            }
+                                    }"
+                            />
+                            <Text text="{
+                                            path: 'oData>EndDate',
+                                            type: 'sap.ui.model.type.Date',
+                                            formatOptions: {
+                                                style: 'medium'
+                                            }
+                                        }"
+                            />
+                            <ObjectStatus text="{path: 'oData>VpStatus', formatter: '.formatter.vacationStatus'}"
+                                          state="{path: 'oData>VpStatus', formatter: '.formatter.vacationState'}"/>
                             <Button icon="sap-icon://edit" press="onShowActions"/>
                         </cells>
                     </ColumnListItem>

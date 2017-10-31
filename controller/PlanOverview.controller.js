@@ -32,27 +32,6 @@ sap.ui.define([
             var oStateModel= new JSONModel(oOverviewState);
             this.setModel(oStateModel, "headerState");
 
-            // var oModel = new JSONModel();
-            // oModel.loadData("http://localhost:3000/periods/current");
-            // this.setModel(oModel, "period");
-            //
-            // oModel.attachRequestCompleted(function () {
-            //     var oHeaderModel = new JSONModel();
-            //
-            //     that._raiseYearSelectEvent(oModel.getProperty("/year"));
-            //
-            //     that.getOwnerComponent().oUserLoaded.then(function (oUser) {
-            //         oHeaderModel.loadData("http://localhost:3000/available_days?employee=" + oUser.user + "&year="
-            //             + oModel.getProperty("/year"));
-            //         that.setModel(oHeaderModel, "header");
-            //
-            //         oHeaderModel.attachRequestCompleted(function () {
-            //             oStateModel.setProperty("/busy", false);
-            //         });
-            //     });
-            //
-            // });
-
         },
 
         /**
@@ -177,14 +156,18 @@ sap.ui.define([
         },
 
 
-        _raiseYearSelectEvent: function (selectedYear, Bukrs) {
+        _raiseYearSelectEvent: function (selectedYear) {
 
             var that = this;
             var oEventBus = sap.ui.getCore().getEventBus();
             this.getOwnerComponent().oRolesLoaded.then(function (oData) {
-                var sPlanPath = "/MasterRecord(PlanYear='" + selectedYear + "',Bukrs='" + Bukrs + "')";
+                var sPlanPath = "/VacationPlanHdrSet(PlanYear='" + selectedYear + "',Pernr='" + oData.EmployeeId + "')";
                 that.getView().bindElement({
                     path: sPlanPath,
+                    parameters: {
+                        expand: "ToVacations"
+                    },
+                    model: "oData",
                     events: {
                         dataReceived: function () {
                             that.getModel("headerState").setProperty("/busy", false);
@@ -192,7 +175,7 @@ sap.ui.define([
                     }
                 });
 
-                oEventBus.publish("headerChanges", "yearSelection", { key: selectedYear });
+                oEventBus.publish("headerChanges", "yearSelection", { key: selectedYear, EmployeeId: oData.EmployeeId });
             });
         },
 
@@ -210,49 +193,24 @@ sap.ui.define([
                     return;
                 }
 
-                that._raiseYearSelectEvent(oData.PlanYear, oData.Bukrs);
+                that._raiseYearSelectEvent(oData.PlanYear);
             };
 
-            oDataModel.read("/MasterRecordSet(PlanYear='',Bukrs='')", {
-                success:fnDataReceived
-            });
+            var fnRequestError = function (oError) {
 
-            // if (!this.getModel("period")) {
-            //     var oModel = new JSONModel();
-            //     oModel.loadData("http://localhost:3000/periods/current");
-            //     this.setModel(oModel, "period");
-            //
-            //     oModel.attachRequestCompleted(function () {
-            //         var oHeaderModel = new JSONModel();
-            //
-            //         if (!that.getModel("period").getProperty("/year")) {
-            //             that.getRouter().navTo("PlanningClosed");
-            //
-            //             return;
-            //         }
-            //
-            //
-            //         that._raiseYearSelectEvent(oModel.getProperty("/year"));
-            //
-            //         that.getOwnerComponent().oUserLoaded.then(function (oUser) {
-            //             oHeaderModel.attachRequestCompleted(function () {
-            //                 that.getModel("headerState").setProperty("/busy", false);
-            //             });
-            //             oHeaderModel.loadData("http://localhost:3000/available_days?employee=" + oUser.user + "&year="
-            //                 + oModel.getProperty("/year"));
-            //             that.setModel(oHeaderModel, "header");
-            //
-            //
-            //
-            //         });
-            //     });
-            //
-            //     return;
-            // }
-            //
-            // if (!this.getModel("period").getProperty("/year")) {
-            //     this.getRouter().navTo("PlanningClosed");
-            // }
+                if (oError.statusCode === "404") {
+                    that.getRouter().navTo("PlanningClosed");
+                }
+            };
+
+            this.getOwnerComponent().oRolesLoaded.then(function (oData) {
+
+                oDataModel.read("/MasterRecordSet(PlanYear='',Bukrs='')", {
+                    success:fnDataReceived,
+                    error: fnRequestError
+                });
+
+            });
 
         }
 

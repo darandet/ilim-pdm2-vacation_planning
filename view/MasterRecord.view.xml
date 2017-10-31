@@ -10,7 +10,14 @@
              alignItems="Center"
              justifyContent="Center">
         <items>
-            <Table fixedLayout="false" class="sapUiTinyMarginTop" items="{oData>/MasterRecordSet}">
+            <Table fixedLayout="false" class="sapUiTinyMarginTop"
+                   items="{ path: 'oData>/MasterRecordSet',
+                            filters: [{
+                                path: 'Context',
+                                operator: 'EQ',
+                                value1: 'CNTRL'
+                            }]
+                        }">
                 <headerToolbar>
                     <Toolbar>
                         <ToolbarSpacer/>
