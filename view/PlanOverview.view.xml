@@ -10,7 +10,7 @@
         <f:title>
             <f:DynamicPageTitle>
                 <f:heading>
-                    <Title text="График отпусков на {oData>PlanYear} г."/>
+                    <Title text="{i18n>vacation.header.title.part1} {oData>PlanYear} {i18n>vacation.header.title.part2}"/>
                 </f:heading>
                 <f:actions>
                 </f:actions>
@@ -34,12 +34,12 @@
                                 <items>
                                     <NumericContent
                                             value="{header>/daysAccumulated}"
-                                            scale="Дн."
+                                            scale="{i18n>vacation.header.numeric.scale}"
                                             valueColor="Neutral"
                                             indicator="None" state="Loaded"
                                             withMargin="false"
                                             busy="{headerState>/busy}"/>
-                                    <Label text = "Остаток за предыдущие периоды"/>
+                                    <Label text = "{i18n>vacation.header.numeric.saldo}"/>
                                 </items>
                             </FlexBox>
                             <FlexBox 	direction="Column"
@@ -47,12 +47,12 @@
                                 <items>
                                     <NumericContent
                                             value="{header>/daysProvided}"
-                                            scale="Дн."
+                                            scale="{i18n>vacation.header.numeric.scale}"
                                             valueColor="Neutral"
                                             indicator="None" state="Loaded"
                                             withMargin="false"
                                             busy="{headerState>/busy}"/>
-                                    <Label text = "Право на отпуск {oData>PlanYear} г."/>
+                                    <Label text = "{i18n>vacation.header.numeric.availableDays} {oData>PlanYear} {i18n>vacation.header.title.part2}"/>
                                 </items>
                             </FlexBox>
                         </items>
@@ -66,12 +66,12 @@
         </f:content>
         <f:footer>
             <OverflowToolbar>
-                <Button text="Маршрут согласования" press="onShowRoute"/>
-                <Button text="Комментарии к плану" press="onShowComments"/>
-                <Button text="График отпусков"/>
-                <Button text="История"/>
+                <Button text="{i18n>vacation.footer.button.route}" press="onShowRoute"/>
+                <Button text="{i18n>vacation.footer.button.comments}" press="onShowComments"/>
+                <Button text="{i18n>vacation.footer.button.vacationPlan}"/>
+                <Button text="{i18n>vacation.footer.button.history}"/>
                 <ToolbarSpacer/>
-                <Button type="Accept" text="Отправить"/>
+                <Button type="Accept" text="{i18n>vacation.footer.button.sendPlan}"/>
             </OverflowToolbar>
         </f:footer>
     </f:DynamicPage>
