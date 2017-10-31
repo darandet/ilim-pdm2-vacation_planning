@@ -6,16 +6,16 @@ sap.ui.define([
         var planningActions = {};
 
         planningActions.statusActions = {
-            draft: {
+            VP01: {
                 functions: ["delete"]
             },
 
-            approved: {
-                functions: ["confirm", "transfer"]
+            VP04: {
+                functions: ["delete"]
             },
 
-            pending: {
-                functions: []
+            VP09: {
+                functions: ["confirm", "transfer"]
             }
 
         };
@@ -28,7 +28,7 @@ sap.ui.define([
             }
 
             for (key in planningActions.statusActions) {
-                if(planningActions.statusActions.hasOwnProperty(key) && key === sStatus.toLowerCase()) {
+                if(planningActions.statusActions.hasOwnProperty(key) && key === sStatus.toUpperCase()) {
                     var oStatus = planningActions.statusActions[key];
                 }
             }

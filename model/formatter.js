@@ -8,12 +8,14 @@ sap.ui.define(["ilim/pdm2/vacation_planning/model/planningActions"],
 
             switch (sStatus) {
 
-                case "DRAFT":
-                    return oResourceBundle.getText("vacation.status.draft");
-                case "APPROVED":
-                    return oResourceBundle.getText("vacation.status.approved");
-                case "PENDING":
-                    return oResourceBundle.getText("vacation.status.pending");
+                case "VP01":
+                    return oResourceBundle.getText("vacation.employee.status.draft");
+                case "VP04":
+                    return oResourceBundle.getText("vacation.employee.status.Rejected");
+                case "VP09":
+                    return oResourceBundle.getText("vacation.employee.status.Approved");
+                default:
+                    return oResourceBundle.getText("vacation.employee.status.onApproval");
             }
 
         };
@@ -21,12 +23,15 @@ sap.ui.define(["ilim/pdm2/vacation_planning/model/planningActions"],
         oFormatter.vacationState = function (sStatus) {
 
             switch (sStatus) {
-                case "DRAFT":
+                case "VP01":
                     return sap.ui.core.ValueState.None;
-                case "APPROVED":
+                case "VP04":
+                    return sap.ui.core.ValueState.Error;
+                case "VP09":
                     return sap.ui.core.ValueState.Success;
-                case "PENDING":
+                default:
                     return sap.ui.core.ValueState.Warning;
+
             }
 
         };

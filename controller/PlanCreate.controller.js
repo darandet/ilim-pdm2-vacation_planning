@@ -193,11 +193,13 @@ sap.ui.define([
             if (sChannel === "headerChanges" && sEvent === "yearSelection") {
 
                 var oCalModel = this.getModel("calendar");
+                var oContentStateModel = this.getModel("contentState");
                 var oCalData = {
                     minDate: new Date(oData.key),
                     maxDate: new Date(oData.key, "11", "31")
                 };
                 oCalModel.setData(oCalData);
+                oContentStateModel.setProperty("/busy", false);
 
 
             }
@@ -221,6 +223,7 @@ sap.ui.define([
             var oNewVacation = {
                 PlanYear: Year,
                 Pernr: Pernr,
+                ItemGuid: "",
                 BeginDate: BeginDate,
                 EndDate: endda,
                 VpProc: "",
