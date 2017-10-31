@@ -6,8 +6,16 @@
                        placement="Bottom" >
         <content>
             <SelectList
-                    items="{planYears>/periods}" itemPress="onYearSelect">
-                <core:Item key="{planYears>year}" text="{planYears>year}" />
+                    items="{
+                        path: 'oData>/MasterRecordSet',
+                        filters: [{
+                            path: 'Context',
+                            operator: 'EQ',
+                            value1: 'PLAN'
+                        }]
+                    }"
+                    itemPress="onYearSelect">
+                <core:Item key="{oData>PlanYear}" text="{oData>PlanYear}" />
             </SelectList>
         </content>
     </ResponsivePopover>

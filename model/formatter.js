@@ -39,7 +39,7 @@ sap.ui.define(["ilim/pdm2/vacation_planning/model/planningActions"],
         oFormatter.deleteEnabled = function (sStatus) {
 
             if (sStatus === undefined) {
-                return;
+                return false;
             }
 
             return oPlanningActions.checkActionEnabled(sStatus, "delete");
@@ -48,7 +48,7 @@ sap.ui.define(["ilim/pdm2/vacation_planning/model/planningActions"],
 
         oFormatter.confirmEnabled = function (sStatus) {
             if (sStatus === undefined) {
-                return;
+                return false;
             }
 
             return oPlanningActions.checkActionEnabled(sStatus, "confirm");
@@ -57,7 +57,7 @@ sap.ui.define(["ilim/pdm2/vacation_planning/model/planningActions"],
 
         oFormatter.transferEnabled = function (sStatus) {
             if (sStatus === undefined) {
-                return;
+                return false;
             }
 
             return oPlanningActions.checkActionEnabled(sStatus, "transfer");

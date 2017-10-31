@@ -119,9 +119,6 @@ sap.ui.define([
                 this._oPeriodsPopover = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.PeriodSelect", this);
                 this.getView().addDependent(this._oPeriodsPopover);
 
-                var oModel = new JSONModel("http://localhost:3000/periods?status=open");
-                this._oPeriodsPopover.setModel(oModel, "planYears");
-
             }
 
             this._oPeriodsPopover.openBy(oEvent.getSource());
@@ -130,24 +127,16 @@ sap.ui.define([
         onYearSelect: function (oEvent) {
 
             var sKey = oEvent.getParameter("item").getKey();
-            var oPeriodModel = this.getModel("period");
 
-            var sCurrentPeriod = oPeriodModel.getProperty("/year");
+            var sCurrentBindingPath = this.getView().getBindingContext("oData").getPath();
+            var oCtxObject = this.getModel("oData").getObject(sCurrentBindingPath);
 
-            if (sKey === sCurrentPeriod) {
+            if (sKey === oCtxObject.PlanYear) {
                 this._oPeriodsPopover.close();
                 return;
             }
 
             this.getModel("headerState").setProperty("/busy", true);
-
-            var oHeaderModel = this.getModel("header");
-
-            var sUser = this.getOwnerComponent().current_user.user;
-
-            oPeriodModel.loadData("http://localhost:3000/periods/" + sKey);
-
-            oHeaderModel.loadData("http://localhost:3000/available_days?employee=" + sUser + "&year=" + sKey);
 
             this._oPeriodsPopover.close();
 
