@@ -13,8 +13,7 @@ sap.ui.define([
 
         formatter: Formatter,
 
-        selectedPeriod: "",
-
+        sVacationItemsPath: "/VacationPlanPosSet",
 
         /**
          * Called when a controller is instantiated and its View controls (if available) are already created.
@@ -161,7 +160,7 @@ sap.ui.define([
             }
 
             if (sFunction === "delete") {
-                var oModel = this._actionSheet.getModel("vacation")
+                var oModel = this._actionSheet.getModel("vacation");
                 var oObjectToDelete = oModel.getData();
                 this._deleteItem(oObjectToDelete);
             }
@@ -233,28 +232,24 @@ sap.ui.define([
                 DoCommit: true
             };
 
-            oDataModel.create("/VacationPlanPosSet", oNewVacation);
+            oDataModel.create(this.sVacationItemsPath, oNewVacation);
 
         },
 
         _deleteItem: function (oObject) {
 
-            var sServiceUrl = "http://localhost:3000/vacations";
             var that = this;
+            var oDataModel = this.getModel("oData");
 
-            $.ajax({
-                url: sServiceUrl,
-                type: 'DELETE',
-                data: oObject
-            })
-                .done(function (oDeletedObject) {
+            var sCurrentContextPath = this.getView().getBindingContext("oData").getPath();
+            var oCtxObject = oDataModel.getObject(sCurrentContextPath);
 
-                    that.getModel("data").loadData("http://localhost:3000/vacations/" + that.selectedPeriod
-                        + "?pernr=" + that.getOwnerComponent().current_user.pernr);
+            var sObjectKey = "";
+            sObjectKey = sObjectKey + "(PlanYear='" + oCtxObject.PlanYear + "',";
+            sObjectKey = sObjectKey + "Pernr='" + oCtxObject.Pernr + "',";
+            sObjectKey = sObjectKey + "ItemGuid=guid'" + oObject.ItemGuid + "')";
 
-                });
-
-
+            oDataModel.remove(this.sVacationItemsPath + sObjectKey);
         }
 
     });
