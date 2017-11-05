@@ -36,6 +36,7 @@ sap.ui.define([
 
             var oEventBus = sap.ui.getCore().getEventBus();
             oEventBus.subscribe("headerChanges", "yearSelection", this._updatePlan, this);
+            oEventBus.subscribe("footerActions", "sendPlan", this.handleSendEvent, this);
 
         },
 
@@ -209,7 +210,7 @@ sap.ui.define([
 
             var that = this;
 
-            // var sServiceUrl = "http://localhost:3000/vacations";
+            var sDummyGUID = "12345678-aaaa-bbbb-cccc-ddddeeeeffff";
             var oDataModel = this.getOwnerComponent().getModel("oData");
             var endda;
 
@@ -222,7 +223,7 @@ sap.ui.define([
             var oNewVacation = {
                 PlanYear: Year,
                 Pernr: Pernr,
-                ItemGuid: "",
+                ItemGuid: sDummyGUID,
                 BeginDate: BeginDate,
                 EndDate: endda,
                 VpProc: "",

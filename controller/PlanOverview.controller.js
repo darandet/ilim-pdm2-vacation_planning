@@ -144,6 +144,33 @@ sap.ui.define([
 
         },
 
+        onSendPlan: function () {
+
+            var oDataModel = this.getModel("oData");
+            var sCurrentCtxPath = this.getView().getBindingContext("oData").getPath();
+            var oCurrentCtxObj = oDataModel.getObject(sCurrentCtxObj);
+
+
+            var fnHandleSuccess = function (oData, response) {
+                console.log(oData);
+            };
+
+            var fnHandleError = function (oError) {
+                console.log(oError);
+            };
+
+            oDataModel.callFunction("SendVacationPlan", {
+                method: "POST",
+                urlParameters: {
+                    EmployeeId: oCurrentCtxObj.Pernr,
+                    PlanYear:   oCurrentCtxObj.PlanYear
+                },
+                success: fnHandleSuccess,
+                error: fnHandleError
+            });
+
+        },
+
 
         _raiseYearSelectEvent: function (selectedYear) {
 
@@ -154,7 +181,7 @@ sap.ui.define([
                 that.getView().bindElement({
                     path: sPlanPath,
                     parameters: {
-                        expand: "ToVacations"
+                        expand: "ToVacations,ToAbsenceRight"
                     },
                     model: "oData",
                     events: {

@@ -33,7 +33,7 @@
                                         class="sapUiLargeMarginEnd">
                                 <items>
                                     <NumericContent
-                                            value="{header>/daysAccumulated}"
+                                            value="{oData>ToAbsenceRight/AbsenceRightSaldo}"
                                             scale="{i18n>vacation.header.numeric.scale}"
                                             valueColor="Neutral"
                                             indicator="None" state="Loaded"
@@ -46,7 +46,7 @@
                                         alignItems="End">
                                 <items>
                                     <NumericContent
-                                            value="{header>/daysProvided}"
+                                            value="{oData>ToAbsenceRight/AbsenceRight}"
                                             scale="{i18n>vacation.header.numeric.scale}"
                                             valueColor="Neutral"
                                             indicator="None" state="Loaded"
@@ -71,7 +71,7 @@
                 <Button text="{i18n>vacation.footer.button.vacationPlan}"/>
                 <Button text="{i18n>vacation.footer.button.history}"/>
                 <ToolbarSpacer/>
-                <Button type="Accept" text="{i18n>vacation.footer.button.sendPlan}"/>
+                <Button type="Accept" text="{i18n>vacation.footer.button.sendPlan}" press="onSendPlan"/>
             </OverflowToolbar>
         </f:footer>
     </f:DynamicPage>

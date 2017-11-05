@@ -131,6 +131,7 @@ sap.ui.define([
                 oMasterRecord.Action = "CLOSE"
             }
 
+            oMasterRecord.DoCommit = true;
             this._updateMasterRecord(oMasterRecord, oDataModel, sPath)
 
         },
