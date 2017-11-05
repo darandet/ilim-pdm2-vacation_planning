@@ -165,9 +165,16 @@ sap.ui.define([
 
             var fnHandleError = function (oError) {
                 var oErrorResponse = JSON.parse(oError.responseText);
-                if (oError.statusCode === 400) {
+                if (oError.statusCode === "400") {
                     MessageBox.error(
-                        oErrorResponse.message.value,
+                        oErrorResponse.error.message.value,
+                        {
+                            styleClass: bCompact ? "sapUiSizeCompact" : ""
+                        }
+                    );
+                } else {
+                    MessageBox.error(
+                        this.getResourceBundle().getText("vacation.create.sendUnknownError"),
                         {
                             styleClass: bCompact ? "sapUiSizeCompact" : ""
                         }
