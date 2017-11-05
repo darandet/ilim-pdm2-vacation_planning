@@ -2,8 +2,9 @@ sap.ui.define([
     "ilim/pdm2/vacation_planning/controller/BaseController",
     "sap/m/Dialog",
     "sap/m/Button",
-    "sap/ui/model/json/JSONModel"
-], function (Controller, Dialog, Button, JSONModel) {
+    "sap/ui/model/json/JSONModel",
+    'sap/m/MessageBox'
+], function (Controller, Dialog, Button, JSONModel, MessageBox) {
     "use strict";
 
     return Controller.extend("ilim.pdm2.vacation_planning.controller.PlanOverview", {
@@ -148,18 +149,33 @@ sap.ui.define([
 
             var oDataModel = this.getModel("oData");
             var sCurrentCtxPath = this.getView().getBindingContext("oData").getPath();
-            var oCurrentCtxObj = oDataModel.getObject(sCurrentCtxObj);
+            var oCurrentCtxObj = oDataModel.getObject(sCurrentCtxPath);
 
+            var that = this;
 
             var fnHandleSuccess = function (oData, response) {
-                console.log(oData);
+                var bCompact = !!that.getView().$().closest(".sapUiSizeCompact").length;
+                MessageBox.success(
+                    oData.MessageText,
+                    {
+                        styleClass: bCompact ? "sapUiSizeCompact" : ""
+                    }
+                );
             };
 
             var fnHandleError = function (oError) {
-                console.log(oError);
+                var oErrorResponse = JSON.parse(oError.responseText);
+                if (oError.statusCode === 400) {
+                    MessageBox.error(
+                        oErrorResponse.message.value,
+                        {
+                            styleClass: bCompact ? "sapUiSizeCompact" : ""
+                        }
+                    );
+                }
             };
 
-            oDataModel.callFunction("SendVacationPlan", {
+            oDataModel.callFunction("/SendVacationPlan", {
                 method: "POST",
                 urlParameters: {
                     EmployeeId: oCurrentCtxObj.Pernr,
