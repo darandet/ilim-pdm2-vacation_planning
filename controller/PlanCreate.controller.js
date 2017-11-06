@@ -36,7 +36,6 @@ sap.ui.define([
 
             var oEventBus = sap.ui.getCore().getEventBus();
             oEventBus.subscribe("headerChanges", "yearSelection", this._updatePlan, this);
-            oEventBus.subscribe("footerActions", "sendPlan", this.handleSendEvent, this);
 
         },
 
@@ -228,7 +227,7 @@ sap.ui.define([
                 EndDate: endda,
                 VpProc: "",
                 VpStatus: "",
-                PlanGuid: "",
+                PlanGuid: sDummyGUID,
                 Action: "",
                 DoCommit: true
             };

@@ -164,6 +164,7 @@ sap.ui.define([
             };
 
             var fnHandleError = function (oError) {
+                var bCompact = !!that.getView().$().closest(".sapUiSizeCompact").length;
                 var oErrorResponse = JSON.parse(oError.responseText);
                 if (oError.statusCode === "400") {
                     MessageBox.error(

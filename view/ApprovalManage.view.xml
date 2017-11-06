@@ -6,7 +6,7 @@
         displayBlock="true"
         height="100%">
 
-    <Table fixedLayout="false" class="sapUiMediumMarginTop" mode="MultiSelect" items="{inbox>/}"
+    <Table fixedLayout="false" class="sapUiMediumMarginTop" mode="MultiSelect" items="{oData>/ApprovalInboxSet}"
            selectionChange="onEmployeeSelect" rememberSelections="true"
            id="inboxTable">
         <headerToolbar>
@@ -49,28 +49,22 @@
         <items>
             <ColumnListItem class="sapUiTinyPaddingTop" highlight="{inbox>highlight}">
                 <cells>
-                    <FlexBox alignItems="Center">
-                        <items>
-                            <f:Avatar displaySize="XS" class="sapUiTinyMargin" src="{inbox>picture/medium}"/>
-                            <ObjectIdentifier
-                                    title="{inbox>name}"
-                                    text="{inbox>position}"/>
-                        </items>
-                    </FlexBox>
+                    <ObjectIdentifier
+                            title="{oData>EmployeeName}"
+                            text="{oData>PositionText}"/>
                     <VBox>
-                        <Label text="{inbox>department}" />
-                        <Label text="{inbox>location}" />
+                        <Label text="{oData>OrgunitText}" />
+                        <Label text="{inbox>Pbtxt}" />
                     </VBox>
                     <ObjectIdentifier
-                            text="{inbox>employeeId}"/>
+                            text="{oData>EmployeeId}"/>
                     <Text   textAlign="Center"
-                            text="{inbox>lineManager}"/>
-                    <ObjectNumber number="{inbox>daysBalance}/{inbox>availableDays}/{inbox>plannedDays}"
+                            text="{oData>ChperEname}"/>
+                    <ObjectNumber number="{oData>AbsRightSaldo}/{oData>AbsRightTotal}/{oData>AbsRightPlanned}"
                                   unit="{i18n>main.table.units}"/>
-                    <CheckBox enabled="false" selected="{inbox>hasAccess}" />
+                    <CheckBox enabled="false" selected="{oData>HasAccess}" />
                     <ObjectStatus
-                            text="{inbox>planStatus}"
-                            state="Success" />
+                            text="{oData>PlanStatus}" />
                     <FlexBox alignItems="Center" justifyContent="SpaceBetween">
                         <items>
                             <Button type="Accept" icon="sap-icon://accept" enabled="false"/>

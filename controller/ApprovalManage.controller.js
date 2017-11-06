@@ -18,31 +18,7 @@ sap.ui.define([
 
         onInit: function() {
 
-            var that = this;
-
-            var oSourceModel = new JSONModel("http://localhost:3000/employees");
-            var oInboxModel = new JSONModel();
-            this.setModel(oInboxModel, "inbox");
-
-            oSourceModel.attachRequestCompleted(function () {
-
-
-                var aSource = oSourceModel.getData().results;
-                var aTarget = [];
-                var oObjectExtend = {
-                    highlight: sap.ui.core.MessageType.None
-                };
-                var oScreenObject = {};
-
-                for (var i=0; i < aSource.length; i++ ) {
-                    oScreenObject = $.extend({}, oObjectExtend, aSource[i]);
-
-                    aTarget.push(oScreenObject);
-
-                }
-                oInboxModel.setData(aTarget);
-
-            });
+            oEventBus.subscribe("managerHeaderChanges", "yearSelection", this._filterInboxByYear, this);
 
         },
 
@@ -85,6 +61,20 @@ sap.ui.define([
             var list = this.getView().byId("inboxTable");
             var binding = list.getBinding("items");
             binding.filter(filter);
+        },
+
+        _filterInboxByYear: function (Year) {
+
+            var aFilters = [];
+            var filter = new Filter("PlanYear", sap.ui.model.FilterOperator.EQ, sQuery);
+
+            aFilters.push(filter);
+
+            // update list binding
+            var list = this.getView().byId("inboxTable");
+            var binding = list.getBinding("items");
+            binding.filter(filter);
+
         }
 
         /**

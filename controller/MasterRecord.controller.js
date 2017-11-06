@@ -160,7 +160,7 @@ sap.ui.define([
                 MaxPercent: oData.absence,
                 Announce: oData.notify,
                 RecordId: "",
-                DoCommit: "X"
+                DoCommit: true
             };
 
             oDataModel.create("/MasterRecordSet", oNewMasterRecord, {

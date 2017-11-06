@@ -79,7 +79,35 @@ sap.ui.define([
          */
         _patternMatched: function () {
 
+            var that = this;
             var oRouter = this.getRouter();
+            var oDataModel = this.getOwnerComponent().getModel("oData");
+
+            var fnDataReceived = function (oData, response) {
+
+                if (!oData.PlanYear) {
+                    that.getRouter().navTo("PlanningClosed");
+                    return;
+                }
+
+                that._raiseYearSelectEvent(oData.PlanYear);
+            };
+
+            var fnRequestError = function (oError) {
+
+                if (oError.statusCode === "404") {
+                    that.getRouter().navTo("PlanningClosed");
+                }
+            };
+
+            this.getOwnerComponent().oRolesLoaded.then(function (oData) {
+
+                oDataModel.read("/MasterRecordSet(PlanYear='',Bukrs='')", {
+                    success:fnDataReceived,
+                    error: fnRequestError
+                });
+
+            });
 
             oRouter.navTo('ManageApprovals');
         },
@@ -102,7 +130,17 @@ sap.ui.define([
                 oModel.setProperty('/key', oData.key)
             }
 
-        }
+        },
+
+        _raiseYearSelectEvent: function (selectedYear) {
+
+            var that = this;
+            var oEventBus = sap.ui.getCore().getEventBus();
+            this.getOwnerComponent().oRolesLoaded.then(function (oData) {
+
+                oEventBus.publish("managerHeaderChanges", "yearSelection", { key: selectedYear });
+            });
+        },
         
     });
 
