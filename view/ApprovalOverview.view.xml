@@ -10,10 +10,10 @@
         <f:title>
             <f:DynamicPageTitle>
                 <f:heading>
-                    <Title text="График отпусков на 2017 г."/>
+                    <Title text="{i18n>vacation.header.title.part1} 2017 {i18n>vacation.header.title.part2}"/>
                 </f:heading>
                 <f:actions>
-                    <ToggleButton icon="sap-icon://manager" text="Только подчиненных"/>
+                    <ToggleButton icon="sap-icon://manager" text="{i18n>main.header.orgLevelToggle}"/>
                 </f:actions>
                 <f:expandedContent>
                     <Button icon="sap-icon://arrow-down"
@@ -33,9 +33,11 @@
                                              id="ViewChangeButton">
                                 <items>
                                     <SegmentedButtonItem key="approvalTab" icon="sap-icon://hr-approval"
-                                                         text="Согласование" id="ApprovalManageViewButton"/>
+                                                         text="{i18n>main.header.switch.ApprovalView}"
+                                                         id="ApprovalManageViewButton"/>
                                     <SegmentedButtonItem key="overviewTab" icon="sap-icon://bbyd-dashboard"
-                                                         text="Обзор" id="ApprovalDashboardViewButton"/>
+                                                         text="{i18n>main.header.switch.DashboardView"
+                                                         id="ApprovalDashboardViewButton"/>
                                 </items>
                             </SegmentedButton>
                         </items>
