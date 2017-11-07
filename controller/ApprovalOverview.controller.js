@@ -16,6 +16,9 @@ sap.ui.define([
          * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
          * @memberOf ilim.pdm2.vacation_planning.ApprovalOverview
          */
+
+        oManagerController: new managerController(),
+
         onInit: function() {
 
             this.getRouter().getRoute("ApprovePlan").attachPatternMatched(this._patternMatched, this);
@@ -26,9 +29,9 @@ sap.ui.define([
             var oModel = new JSONModel({ key: "approvalTab" });
             this.setModel(oModel, "viewSync");
 
-            managerController.setModel(this.getOwnerComponent().getModel("oData"));
+            this.oManagerController.setModel(this.getOwnerComponent().getModel("oData"));
 
-            managerController.getManagerDefaultPeriod("/MasterRecordSet(PlanYear='',Bukrs='')");
+            this.oManagerController.getManagerDefaultPeriod("/MasterRecordSet(PlanYear='',Bukrs='')");
             
         },
 
@@ -105,7 +108,7 @@ sap.ui.define([
                 }
             };
 
-            managerController.oWhenPeriodIsLoaded.then( fnDataReceived, fnRequestError );
+            this.oManagerController.oWhenPeriodIsLoaded.then( fnDataReceived, fnRequestError );
             oRouter.navTo('ManageApprovals');
         },
 
@@ -135,7 +138,7 @@ sap.ui.define([
             var oEventBus = sap.ui.getCore().getEventBus();
             this.getOwnerComponent().oRolesLoaded.then(function (oData) {
 
-                managerController.setCurrentYear(selectedYear);
+                that.oManagerController.setCurrentYear(selectedYear);
                 oEventBus.publish("managerHeaderChanges", "yearSelection", { key: selectedYear });
             });
         },

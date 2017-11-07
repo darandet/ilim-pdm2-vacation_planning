@@ -1,5 +1,7 @@
-sap.ui.define([],
-    function () {
+sap.ui.define([
+        "sap/ui/base/Object"
+    ],
+    function (BaseObject) {
 
         oManagerController = {
 
@@ -17,9 +19,10 @@ sap.ui.define([],
             },
 
             getManagerDefaultPeriod: function (sPath) {
+                var that = this;
 
                 this.oWhenPeriodIsLoaded = new Promise( function (fnResolve, fnReject) {
-                    var oModel = this.getModel();
+                    var oModel = that.getModel();
 
                     oModel.read(sPath, {
                         success:fnResolve,
@@ -36,7 +39,7 @@ sap.ui.define([],
         };
 
 
-        return BaseObject.extend("ilim.pdm2.vacation_planning.utils.managerController");
+        return BaseObject.extend("ilim.pdm2.vacation_planning.utils.managerController", oManagerController);
 
     }
 );

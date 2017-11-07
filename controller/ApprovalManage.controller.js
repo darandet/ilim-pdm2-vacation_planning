@@ -16,6 +16,7 @@ sap.ui.define([
          */
 
         selectedEmployees: [],
+        oManagerController: new managerController,
 
         onInit: function() {
 
@@ -83,7 +84,7 @@ sap.ui.define([
 
         _patternMatched: function () {
 
-            managerController.oWhenPeriodIsLoaded.then( function (oData) {
+            this.oManagerController.oWhenPeriodIsLoaded.then( function (oData) {
 
                 this._filterInboxByYear(null, null, oData);
 
