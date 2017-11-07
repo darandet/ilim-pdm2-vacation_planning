@@ -1,7 +1,8 @@
 sap.ui.define([
     "ilim/pdm2/vacation_planning/controller/BaseController",
-    "sap/ui/model/json/JSONModel"
-], function (Controller, JSONModel) {
+    "sap/ui/model/json/JSONModel",
+    "ilim/pdm2/vacation_planning/utils/managerController"
+], function (Controller, JSONModel, managerController) {
     "use strict";
 
     return Controller.extend("ilim.pdm2.vacation_planning.controller.ApprovalOverview", {
@@ -24,6 +25,10 @@ sap.ui.define([
 
             var oModel = new JSONModel({ key: "approvalTab" });
             this.setModel(oModel, "viewSync");
+
+            managerController.setModel(this.getOwnerComponent().getModel("oData"));
+
+            managerController.getManagerDefaultPeriod("/MasterRecordSet(PlanYear='',Bukrs='')");
             
         },
 
@@ -100,15 +105,7 @@ sap.ui.define([
                 }
             };
 
-            this.getOwnerComponent().oRolesLoaded.then(function (oData) {
-
-                oDataModel.read("/MasterRecordSet(PlanYear='',Bukrs='')", {
-                    success:fnDataReceived,
-                    error: fnRequestError
-                });
-
-            });
-
+            managerController.oWhenPeriodIsLoaded.then( fnDataReceived, fnRequestError );
             oRouter.navTo('ManageApprovals');
         },
 
@@ -138,6 +135,7 @@ sap.ui.define([
             var oEventBus = sap.ui.getCore().getEventBus();
             this.getOwnerComponent().oRolesLoaded.then(function (oData) {
 
+                managerController.setCurrentYear(selectedYear);
                 oEventBus.publish("managerHeaderChanges", "yearSelection", { key: selectedYear });
             });
         },

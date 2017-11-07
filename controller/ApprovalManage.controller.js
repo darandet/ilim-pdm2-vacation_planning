@@ -2,8 +2,9 @@ sap.ui.define([
     "ilim/pdm2/vacation_planning/controller/BaseController",
     "sap/ui/model/json/JSONModel",
     "jquery.sap.global",
-    'sap/ui/model/Filter'
-], function (Controller, JSONModel, $, Filter) {
+    "sap/ui/model/Filter",
+    "ilim/pdm2/vacation_planning/utils/managerController"
+], function (Controller, JSONModel, $, Filter, managerController) {
     "use strict";
 
     return Controller.extend("ilim.pdm2.vacation_planning.controller.ApprovalManage", {
@@ -18,7 +19,10 @@ sap.ui.define([
 
         onInit: function() {
 
+            var oEventBus = sap.ui.getCore().getEventBus();
             oEventBus.subscribe("managerHeaderChanges", "yearSelection", this._filterInboxByYear, this);
+
+            this.getRouter().getRoute("ManageApprovals").attachPatternMatched(this._patternMatched, this);
 
         },
 
@@ -46,9 +50,9 @@ sap.ui.define([
             var aFilters = [];
             var sQuery = oEvent.getSource().getValue();
             if (sQuery && sQuery.length > 0) {
-                var filter = new Filter("name", sap.ui.model.FilterOperator.Contains, sQuery);
+                var filter = new Filter("EmployeeName", sap.ui.model.FilterOperator.Contains, sQuery);
                 aFilters.push(filter);
-                filter = new Filter("employeeId", sap.ui.model.FilterOperator.Contains, sQuery);
+                filter = new Filter("EmployeeId", sap.ui.model.FilterOperator.Contains, sQuery);
                 aFilters.push(filter);
 
                 filter = new Filter({filters: aFilters, and: false});
@@ -63,10 +67,10 @@ sap.ui.define([
             binding.filter(filter);
         },
 
-        _filterInboxByYear: function (Year) {
+        _filterInboxByYear: function (sChannel, sEvent, oData) {
 
             var aFilters = [];
-            var filter = new Filter("PlanYear", sap.ui.model.FilterOperator.EQ, sQuery);
+            var filter = new Filter("PlanYear", sap.ui.model.FilterOperator.EQ, oData.PlanYear);
 
             aFilters.push(filter);
 
@@ -74,6 +78,16 @@ sap.ui.define([
             var list = this.getView().byId("inboxTable");
             var binding = list.getBinding("items");
             binding.filter(filter);
+
+        },
+
+        _patternMatched: function () {
+
+            managerController.oWhenPeriodIsLoaded.then( function (oData) {
+
+                this._filterInboxByYear(null, null, oData);
+
+            });
 
         }
 
