@@ -16,7 +16,7 @@ sap.ui.define([
          */
 
         selectedEmployees: [],
-        oManagerController: new managerController,
+        oManagerController: {},
 
         onInit: function() {
 
@@ -24,6 +24,8 @@ sap.ui.define([
             oEventBus.subscribe("managerHeaderChanges", "yearSelection", this._filterInboxByYear, this);
 
             this.getRouter().getRoute("ManageApprovals").attachPatternMatched(this._patternMatched, this);
+
+            this.oManagerController = this.getOwnerComponent().oManagerController;
 
         },
 
@@ -84,9 +86,10 @@ sap.ui.define([
 
         _patternMatched: function () {
 
+            var that = this;
             this.oManagerController.oWhenPeriodIsLoaded.then( function (oData) {
 
-                this._filterInboxByYear(null, null, oData);
+                that._filterInboxByYear(null, null, oData);
 
             });
 

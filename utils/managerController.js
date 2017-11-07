@@ -5,10 +5,13 @@ sap.ui.define([
 
         oManagerController = {
 
-            selectedYear: "",
-            aSelectionFilters: [],
-            oModel: {},
-            oWhenPeriodIsLoaded: {},
+
+            constructor: function () {
+                this.selectedYear = "";
+                this.aSelectionFilters = [];
+                this.oModel = {};
+                this.oWhenPeriodIsLoaded = {};
+            },
 
             setCurrentYear: function (sYear) {
                 this.selectedYear = sYear;
@@ -34,6 +37,10 @@ sap.ui.define([
 
             setModel: function (oModel) {
                 this.oModel = oModel;
+            },
+
+            getModel: function () {
+                return this.oModel;
             }
 
         };

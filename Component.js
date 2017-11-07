@@ -1,7 +1,8 @@
 sap.ui.define([
-        "sap/ui/core/UIComponent"
+        "sap/ui/core/UIComponent",
+        "ilim/pdm2/vacation_planning/utils/managerController"
     ],
-    function (UIComponent) {
+    function (UIComponent, managerController) {
 
         return UIComponent.extend("ilim.pdm2.vacation_planning.Component", {
 
@@ -10,6 +11,8 @@ sap.ui.define([
             },
 
             init: function () {
+
+                this.oManagerController = new managerController();
 
                 UIComponent.prototype.init.apply(this, arguments);
 

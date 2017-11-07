@@ -17,7 +17,7 @@ sap.ui.define([
          * @memberOf ilim.pdm2.vacation_planning.ApprovalOverview
          */
 
-        oManagerController: new managerController(),
+        oManagerController: {},
 
         onInit: function() {
 
@@ -29,8 +29,8 @@ sap.ui.define([
             var oModel = new JSONModel({ key: "approvalTab" });
             this.setModel(oModel, "viewSync");
 
+            this.oManagerController = this.getOwnerComponent().oManagerController;
             this.oManagerController.setModel(this.getOwnerComponent().getModel("oData"));
-
             this.oManagerController.getManagerDefaultPeriod("/MasterRecordSet(PlanYear='',Bukrs='')");
             
         },
