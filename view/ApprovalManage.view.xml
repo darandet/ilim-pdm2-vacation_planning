@@ -12,7 +12,10 @@
         <headerToolbar>
             <OverflowToolbar>
                 <Title text="{i18n>main.toolbar.title}" level="H2"/>
-                <SearchField width="30%" placeholder="{i18n>main.toolbar.searchPlaceholder}" liveChange="onEmployeeSearch"/>
+                <SearchField width="30%"
+                             placeholder="{i18n>main.toolbar.searchPlaceholder}"
+                             id="inboxEmployeeSearchField"
+                             liveChange="onEmployeeSearch"/>
                 <ToolbarSpacer/>
                 <OverflowToolbarButton type="Transparent" icon="sap-icon://multiselect-all"/>
                 <OverflowToolbarButton type="Transparent" icon="sap-icon://filter"/>

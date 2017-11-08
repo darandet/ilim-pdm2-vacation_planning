@@ -53,15 +53,9 @@ sap.ui.define([
             var aFilters = [];
             var sQuery = oEvent.getSource().getValue();
             if (sQuery && sQuery.length > 0) {
-                var filter = new Filter("EmployeeName", sap.ui.model.FilterOperator.Contains, sQuery);
-                aFilters.push(filter);
-                filter = new Filter("EmployeeId", sap.ui.model.FilterOperator.Contains, sQuery);
-                aFilters.push(filter);
 
-                filter = new Filter({filters: aFilters, and: false});
-
-
-
+                aFilters = this.oManagerController.getComplexFilter(sQuery);
+                filter = new Filter({filters: aFilters, and: true});
             }
 
             // update list binding
@@ -71,6 +65,10 @@ sap.ui.define([
         },
 
         _filterInboxByYear: function (sChannel, sEvent, oData) {
+
+            //Очистить поле поиска сотрудника
+            var oSearchField = this.getView().byId("inboxEmployeeSearchField");
+            oSearchField.setValue("");
 
             var aFilters = [];
             var filter = new Filter("PlanYear", sap.ui.model.FilterOperator.EQ, oData.PlanYear);

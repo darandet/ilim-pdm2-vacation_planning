@@ -10,14 +10,15 @@
         <f:title>
             <f:DynamicPageTitle>
                 <f:heading>
-                    <Title text="{i18n>vacation.header.title.part1} 2017 {i18n>vacation.header.title.part2}"/>
+                    <Title text="{i18n>vacation.header.title.part1} {oData>PlanYear} {i18n>vacation.header.title.part2}"/>
                 </f:heading>
                 <f:actions>
                     <ToggleButton icon="sap-icon://manager" text="{i18n>main.header.orgLevelToggle}"/>
                 </f:actions>
                 <f:expandedContent>
                     <Button icon="sap-icon://arrow-down"
-                            type="Transparent"/>
+                            type="Transparent"
+                            press="onShowPeriods"/>
                 </f:expandedContent>
             </f:DynamicPageTitle>
         </f:title>

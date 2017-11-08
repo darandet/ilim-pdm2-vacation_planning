@@ -1,7 +1,8 @@
 sap.ui.define([
-        "sap/ui/base/Object"
+        "sap/ui/base/Object",
+        "sap/ui/model/Filter"
     ],
-    function (BaseObject) {
+    function (BaseObject, Filter) {
 
         oManagerController = {
 
@@ -19,6 +20,23 @@ sap.ui.define([
 
             getCurrentYear: function () {
                 return this.selectedYear;
+            },
+
+            getComplexFilter: function (sEmployee) {
+                var aFilters = [];
+                var EmployeeFilter;
+                var YearFilter = new Filter("PlanYear", sap.ui.model.FilterOperator.EQ, this.getCurrentYear());
+
+                if (isNaN(sEmployee)) {
+                    EmployeeFilter = new Filter("EmployeeName", sap.ui.model.FilterOperator.Contains, sEmployee);
+                } else {
+                    EmployeeFilter = new Filter("EmployeeId", sap.ui.model.FilterOperator.EQ, sEmployee);
+                }
+
+                aFilters.push(YearFilter);
+                aFilters.push(EmployeeFilter);
+                return aFilters;
+
             },
 
             getManagerDefaultPeriod: function (sPath) {
