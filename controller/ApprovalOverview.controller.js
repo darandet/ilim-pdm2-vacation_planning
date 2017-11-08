@@ -21,6 +21,7 @@ sap.ui.define([
 
         onInit: function() {
 
+            var that = this;
             this.getRouter().getRoute("ApprovePlan").attachPatternMatched(this._patternMatched, this);
             var oEventBus = sap.ui.getCore().getEventBus();
             oEventBus.subscribe("childNavigation", "syncViews", this._syncViews, this);
@@ -29,9 +30,24 @@ sap.ui.define([
             var oModel = new JSONModel({ key: "approvalTab" });
             this.setModel(oModel, "viewSync");
 
+
+            var fnDataReceived = function (oData, response) {
+
+                if (!oData.PlanYear) {
+                    that.getRouter().navTo("PlanningClosed");
+                }
+            };
+
+            var fnRequestError = function (oError) {
+
+                if (oError.statusCode === "404") {
+                    that.getRouter().navTo("PlanningClosed");
+                }
+            };
+
             this.oManagerController = this.getOwnerComponent().oManagerController;
             this.oManagerController.setModel(this.getOwnerComponent().getModel("oData"));
-            this.oManagerController.getManagerDefaultPeriod("/ManagingPeriodsSet('')");
+            this.oManagerController.getManagerDefaultPeriod("/ManagingPeriodsSet('')", fnDataReceived, fnRequestError);
             
         },
 
@@ -120,23 +136,20 @@ sap.ui.define([
 
             var fnDataReceived = function (oData, response) {
 
-                if (!oData.PlanYear) {
-                    that.getRouter().navTo("PlanningClosed");
-                    return;
-                }
-
-                that._raiseYearSelectEvent(oData.PlanYear);
-            };
-
-            var fnRequestError = function (oError) {
-
-                if (oError.statusCode === "404") {
-                    that.getRouter().navTo("PlanningClosed");
+                if (oData.PlanYear) {
+                    that._raiseYearSelectEvent(oData.PlanYear);
                 }
             };
 
-            this.oManagerController.oWhenPeriodIsLoaded.then( fnDataReceived, fnRequestError );
-            oRouter.navTo('ManageApprovals');
+            this.getOwnerComponent().oRolesLoaded.then( function (oData) {
+                if (!oData.canApprove) {
+                    oRouter.navTo("NoAuthorization");
+                } else {
+                    that.oManagerController.oWhenPeriodIsLoaded.then( fnDataReceived );
+                    oRouter.navTo('ManageApprovals');
+                }
+            });
+
         },
 
         /**

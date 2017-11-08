@@ -39,17 +39,19 @@ sap.ui.define([
 
             },
 
-            getManagerDefaultPeriod: function (sPath) {
+            getManagerDefaultPeriod: function (sPath, fnResolve, fnReject) {
                 var that = this;
 
-                this.oWhenPeriodIsLoaded = new Promise( function (fnResolve, fnReject) {
+                this.oWhenPeriodIsLoaded = new Promise( function (resolve, reject) {
                     var oModel = that.getModel();
 
                     oModel.read(sPath, {
-                        success:fnResolve,
-                        error: fnReject
+                        success:resolve,
+                        error: reject
                     });
                 });
+
+                this.oWhenPeriodIsLoaded.then(fnResolve, fnReject);
 
             },
 

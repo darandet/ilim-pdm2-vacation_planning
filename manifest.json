@@ -94,6 +94,11 @@
           "pattern": "approval/manage/{selectedEmployees}",
           "name": "ApprovalDetails",
           "target": "ApprovalDetails"
+        },
+        {
+          "pattern": "no_auth",
+          "name": "NoAuthorization",
+          "target": "NoAuthorization"
         }
       ],
       "targets": {
@@ -147,6 +152,11 @@
           "parent": "ApprovePlan",
           "viewName": "ApprovalDetails",
           "viewLevel": 3
+        },
+        "NoAuthorization": {
+          "parent": "HomePage",
+          "viewName": "NoAuthorization",
+          "viewLevel": 1
         }
       }
     },

@@ -37,7 +37,7 @@
                                                          text="{i18n>main.header.switch.ApprovalView}"
                                                          id="ApprovalManageViewButton"/>
                                     <SegmentedButtonItem key="overviewTab" icon="sap-icon://bbyd-dashboard"
-                                                         text="{i18n>main.header.switch.DashboardView"
+                                                         text="{i18n>main.header.switch.DashboardView}"
                                                          id="ApprovalDashboardViewButton"/>
                                 </items>
                             </SegmentedButton>

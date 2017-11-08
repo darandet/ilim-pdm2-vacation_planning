@@ -85,12 +85,18 @@ sap.ui.define([
         _patternMatched: function () {
 
             var that = this;
-            this.oManagerController.oWhenPeriodIsLoaded.then( function (oData) {
 
-                that._filterInboxByYear(null, null, oData);
+            this.getOwnerComponent().oRolesLoaded.then( function (oData) {
+                if (!oData.canApprove) {
+                    oRouter.navTo("NoAuthorization");
+                } else {
+                    that.oManagerController.oWhenPeriodIsLoaded.then( function (oData) {
 
+                        that._filterInboxByYear(null, null, oData);
+
+                    });
+                }
             });
-
         }
 
         /**
