@@ -3,7 +3,7 @@ sap.ui.define([
     "sap/m/Dialog",
     "sap/m/Button",
     "sap/ui/model/json/JSONModel",
-    'sap/m/MessageBox'
+    "sap/m/MessageBox"
 ], function (Controller, Dialog, Button, JSONModel, MessageBox) {
     "use strict";
 

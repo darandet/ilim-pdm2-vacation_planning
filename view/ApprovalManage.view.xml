@@ -70,10 +70,12 @@
                             text="{oData>PlanStatus}" />
                     <FlexBox alignItems="Center" justifyContent="SpaceBetween">
                         <items>
-                            <Button type="Accept" icon="sap-icon://accept" enabled="false"/>
-                            <Button type="Reject" icon="sap-icon://decline" enabled="false"/>
-                            <Button icon="sap-icon://create-form" enabled="false"/>
-                            <Button icon="sap-icon://comment" enabled="false"/>
+                            <Button type="Accept" icon="sap-icon://accept" enabled="{oData>canApprove}"
+                                    press="onApprovePlan"
+                            />
+                            <Button type="Reject" icon="sap-icon://decline" enabled="{oData>canReject}"/>
+                            <Button icon="sap-icon://create-form" enabled="{oData>canCreate}"/>
+                            <Button icon="sap-icon://comment" enabled="{oData>canComment}"/>
                         </items>
                     </FlexBox>
 

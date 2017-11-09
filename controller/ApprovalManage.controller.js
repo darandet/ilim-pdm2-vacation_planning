@@ -3,8 +3,9 @@ sap.ui.define([
     "sap/ui/model/json/JSONModel",
     "jquery.sap.global",
     "sap/ui/model/Filter",
-    "ilim/pdm2/vacation_planning/utils/managerController"
-], function (Controller, JSONModel, $, Filter, managerController) {
+    "ilim/pdm2/vacation_planning/utils/managerController",
+    "sap/m/MessageBox"
+], function (Controller, JSONModel, $, Filter, managerController, MessageBox) {
     "use strict";
 
     return Controller.extend("ilim.pdm2.vacation_planning.controller.ApprovalManage", {
@@ -64,6 +65,53 @@ sap.ui.define([
             binding.filter(filter);
         },
 
+        onApprovePlan: function (oEvent) {
+
+            var oSource         = oEvent.getSource();
+            var sCtxPath        = oSource.getContextBindingPath("oData");
+            var oCurrentCtxObj  = this.getModel("oData").getObject(sCtxPath);
+
+            var fnHandleSuccess = function (oData, response) {
+                var bCompact = !!that.getView().$().closest(".sapUiSizeCompact").length;
+                MessageBox.success(
+                    oData.MessageText,
+                    {
+                        styleClass: bCompact ? "sapUiSizeCompact" : ""
+                    }
+                );
+            };
+
+            var fnHandleError = function (oError) {
+                var bCompact = !!that.getView().$().closest(".sapUiSizeCompact").length;
+                var oErrorResponse = JSON.parse(oError.responseText);
+                if (oError.statusCode === "400") {
+                    MessageBox.error(
+                        oErrorResponse.error.message.value,
+                        {
+                            styleClass: bCompact ? "sapUiSizeCompact" : ""
+                        }
+                    );
+                } else {
+                    MessageBox.error(
+                        this.getResourceBundle().getText("vacation.create.sendUnknownError"),
+                        {
+                            styleClass: bCompact ? "sapUiSizeCompact" : ""
+                        }
+                    );
+                }
+            };
+
+            oDataModel.callFunction("/ApproveVacationPlan", {
+                method: "POST",
+                urlParameters: {
+                    EmployeeId: oCurrentCtxObj.Pernr,
+                    PlanYear:   oCurrentCtxObj.PlanYear
+                },
+                success: fnHandleSuccess,
+                error: fnHandleError
+            });
+        },
+
         _filterInboxByYear: function (sChannel, sEvent, oData) {
 
             //Очистить поле поиска сотрудника
@@ -88,7 +136,7 @@ sap.ui.define([
 
             this.getOwnerComponent().oRolesLoaded.then( function (oData) {
                 if (!oData.canApprove) {
-                    oRouter.navTo("NoAuthorization");
+                    that.getRouter().navTo("NoAuthorization");
                 } else {
                     that.oManagerController.oWhenPeriodIsLoaded.then( function (oData) {
 
