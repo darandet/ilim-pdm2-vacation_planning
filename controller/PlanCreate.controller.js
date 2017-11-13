@@ -121,12 +121,7 @@ sap.ui.define([
             var oCalendar       = this.getView().byId("calendar");
 
             if (!oDateRangeInput.getDateValue()) {
-                MessageBox.error(
-                    this.getResourceBundle().getText("vacation.create.wrongDates"),
-                    {
-                        styleClass: this.getOwnerComponent().getContentDensityClass()
-                    }
-                );
+                this._showErrorInContainer(this.getResourceBundle().getText("vacation.create.wrongDates"));
 
                 return;
             }
@@ -232,7 +227,9 @@ sap.ui.define([
                 DoCommit: true
             };
 
-            oDataModel.create(this.sVacationItemsPath, oNewVacation);
+            oDataModel.create(this.sVacationItemsPath, oNewVacation, {
+                error: this._showErrorInContainer.bind(this)
+            });
 
         },
 
@@ -250,6 +247,32 @@ sap.ui.define([
             sObjectKey = sObjectKey + "ItemGuid=guid'" + oObject.ItemGuid + "')";
 
             oDataModel.remove(this.sVacationItemsPath + sObjectKey);
+        },
+
+        _showErrorInContainer: function (Error) {
+
+            var oMessageContainer = this.getView().byId("MessageContainer");
+            var sText;
+
+            if (typeof Error === Object) {
+                var oErrorResponse = JSON.parse(oError.responseText);
+                if (oError.statusCode === "400") {
+                    sText = oErrorResponse.error.message.value;
+                } else {
+                    sText = this.getResourceBundle().getText("vacation.create.sendUnknownError");
+                }
+            } else if (typeof Error === String) {
+                sText = Error;
+            }
+
+            oMessageContainer.setText(sText);
+            oMessageContainer.setVisible(true);
+
+            var hideMessage = function () {
+                oMessageContainer.close();
+            };
+
+            setTimeout(hideMessage, 3000); //CSS delay doesn't work
         }
 
     });

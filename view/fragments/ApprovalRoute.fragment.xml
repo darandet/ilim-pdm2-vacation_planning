@@ -4,25 +4,21 @@
         xmlns:core="sap.ui.core">
 
     <Timeline
-            id="idTimeline"
+            id="idRouteTimeline"
             axisOrientation="Vertical"
             enableScroll="false"
             enableDoubleSided="false"
             lazyLoading="true"
             textHeight="automatic"
-            sort="true"
+            sort="false"
             showHeaderBar="false"
-            showIcons="false">
+            showIcons="false"
+            content="{oData>ToApprRoute}">
         <content>
             <TimelineItem
                     userNameClickable="true"
-                    title="Руководитель 2"
-                    userName="Кожанова Н.Н.">
-            </TimelineItem>
-            <TimelineItem
-                    userNameClickable="true"
-                    title="Руководитель 1"
-                    userName="Самойлова Я.В.">
+                    title="{oData>ApproverRoleText}"
+                    userName="{oData>ApproverName}">
             </TimelineItem>
         </content>
     </Timeline>

@@ -142,7 +142,7 @@ sap.ui.define([
             };
 
             this.getOwnerComponent().oRolesLoaded.then( function (oData) {
-                if (!oData.canApprove) {
+                if (!oData.CanApprove) {
                     oRouter.navTo("NoAuthorization");
                 } else {
                     that.oManagerController.oWhenPeriodIsLoaded.then( fnDataReceived );

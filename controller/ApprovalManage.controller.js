@@ -135,7 +135,7 @@ sap.ui.define([
             var that = this;
 
             this.getOwnerComponent().oRolesLoaded.then( function (oData) {
-                if (!oData.canApprove) {
+                if (!oData.CanApprove) {
                     that.getRouter().navTo("NoAuthorization");
                 } else {
                     that.oManagerController.oWhenPeriodIsLoaded.then( function (oData) {

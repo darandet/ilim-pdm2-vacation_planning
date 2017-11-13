@@ -7,6 +7,13 @@
         displayBlock="true"
         busy="{contentState>/busy}">
 
+
+    <FlexBox height="3rem" alignItems="Center" justifyContent="Center">
+        <items>
+            <MessageStrip id="MessageContainer" showIcon="true" visible="false"/>
+        </items>
+    </FlexBox>
+
     <l:Grid defaultSpan="L7 M12 S12" class="sapUiSmallMarginTop" hSpacing="0.5">
         <l:content>
             <u:Calendar width="99%"

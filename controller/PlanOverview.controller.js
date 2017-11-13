@@ -68,12 +68,12 @@ sap.ui.define([
                 var oFormFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.ApprovalRoute");
 
                 that.routeDialog = new Dialog({
-                    title: 'Маршрут согласования',
+                    title: this.getResourceBundle().getText("vacation.route.Header"),
                     contentWidth: "15%",
                     draggable: true,
                     content: oFormFragment,
                     endButton: new Button({
-                        text: "Закрыть",
+                        text: this.getResourceBundle().getText("common.dialog.button.close"),
                         press: function () {
                             that.routeDialog.close();
                         }
@@ -205,7 +205,7 @@ sap.ui.define([
                 that.getView().bindElement({
                     path: sPlanPath,
                     parameters: {
-                        expand: "ToVacations,ToAbsenceRight"
+                        expand: "ToVacations,ToAbsenceRight,ToApprRoute"
                     },
                     model: "oData",
                     events: {

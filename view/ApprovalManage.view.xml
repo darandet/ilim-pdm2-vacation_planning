@@ -6,7 +6,11 @@
         displayBlock="true"
         height="100%">
 
-    <Table fixedLayout="false" class="sapUiMediumMarginTop" mode="MultiSelect" items="{oData>/ApprovalInboxSet}"
+    <Table fixedLayout="false" class="sapUiMediumMarginTop" mode="MultiSelect"
+           items="{
+                path: 'oData>/ApprovalInboxSet',
+                parameters : {expand:'ToVacations'}
+            }"
            selectionChange="onEmployeeSelect" rememberSelections="true"
            id="inboxTable">
         <headerToolbar>

@@ -170,6 +170,11 @@
       "oData": {
         "dataSource": "MainService"
       }
+    },
+    "resources": {
+      "css": [{
+        "uri": "css/style.css"
+      }]
     }
   }
 }
