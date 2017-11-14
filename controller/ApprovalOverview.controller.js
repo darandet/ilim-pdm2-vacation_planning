@@ -97,7 +97,7 @@ sap.ui.define([
 
         },
 
-        onShowPeriods: function () {
+        onShowPeriods: function (oEvent) {
             if (! this._oPeriodsPopover) {
                 this._oPeriodsPopover = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.PeriodSelect", this);
                 this.getView().addDependent(this._oPeriodsPopover);

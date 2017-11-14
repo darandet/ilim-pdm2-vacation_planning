@@ -4,7 +4,8 @@
         xmlns="sap.m"
         xmlns:f="sap.f"
         displayBlock="true"
-        height="100%">
+        height="100%"
+        busy="{screenState>/busy}">
 
     <f:DynamicPage height="100%" toggleHeaderOnTitleClick="true" showFooter="true">
         <f:title>
@@ -38,7 +39,7 @@
                                             valueColor="Neutral"
                                             indicator="None" state="Loaded"
                                             withMargin="false"
-                                            busy="{headerState>/busy}"/>
+                                            busy="{screenState>/busy}"/>
                                     <Label text = "{i18n>vacation.header.numeric.saldo}"/>
                                 </items>
                             </FlexBox>
@@ -51,7 +52,7 @@
                                             valueColor="Neutral"
                                             indicator="None" state="Loaded"
                                             withMargin="false"
-                                            busy="{headerState>/busy}"/>
+                                            busy="{screenState>/busy}"/>
                                     <Label text = "{i18n>vacation.header.numeric.availableDays} {oData>PlanYear} {i18n>vacation.header.title.part2}"/>
                                 </items>
                             </FlexBox>

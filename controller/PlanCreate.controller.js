@@ -39,6 +39,7 @@ sap.ui.define([
             oEventBus.subscribe("headerChanges", "planLoading", this._updatePlan, this);
             oEventBus.subscribe("headerChanges", "planReceived", this._updatePlan, this);
 
+            oEventBus.subscribe("oDataRequest", "SendSuccess", this._refreshTableAfterSend, this);
         },
 
         /**
@@ -277,6 +278,14 @@ sap.ui.define([
             };
 
             setTimeout(hideMessage, 3000); //CSS delay doesn't work
+        },
+
+        _refreshTableAfterSend: function () {
+
+            var oTable = this.getView().byId("vacationsTable");
+            var oTableBinding = oTable.getBinding("items");
+
+            oTableBinding.refresh();
         }
 
     });

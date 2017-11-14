@@ -148,10 +148,14 @@ sap.ui.define([
             var oDataModel = this.getModel("oData");
             var sCurrentCtxPath = this.getView().getBindingContext("oData").getPath();
             var oCurrentCtxObj = oDataModel.getObject(sCurrentCtxPath);
+            var oEventBus = sap.ui.getCore().getEventBus();
 
             var that = this;
 
             var fnHandleSuccess = function (oData, response) {
+
+                oEventBus.publish("oDataRequest", "SendSuccess");
+
                 var bCompact = !!that.getView().$().closest(".sapUiSizeCompact").length;
                 MessageBox.success(
                     oData.MessageText,
@@ -173,7 +177,7 @@ sap.ui.define([
                     );
                 } else {
                     MessageBox.error(
-                        this.getResourceBundle().getText("vacation.create.sendUnknownError"),
+                        that.getResourceBundle().getText("vacation.create.sendUnknownError"),
                         {
                             styleClass: bCompact ? "sapUiSizeCompact" : ""
                         }
@@ -181,16 +185,53 @@ sap.ui.define([
                 }
             };
 
-            oDataModel.callFunction("/SendVacationPlan", {
-                method: "POST",
-                urlParameters: {
-                    EmployeeId: oCurrentCtxObj.Pernr,
-                    PlanYear:   oCurrentCtxObj.PlanYear
-                },
-                success: fnHandleSuccess,
-                error: fnHandleError
-            });
 
+            if (!this.commentDialog) {
+
+                var oComment = {
+                    comment: ""
+                };
+
+                var oDialogFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.CommentsDialog");
+                var oCommentModel = new JSONModel(oComment);
+                this.commentDialog = new Dialog({
+                    title: this.getResourceBundle().getText("common.commentsDialog.Title"),
+                    draggable: true,
+                    content: oDialogFragment,
+                    type: 'Message',
+                    beginButton: new Button({
+                        text: this.getResourceBundle().getText("common.commentsDialog.CancelButton"),
+                        press: function () {
+                            that.commentDialog.close();
+                        }
+                    }),
+                    endButton: new Button({
+                        text: this.getResourceBundle().getText("common.commentsDialog.SendButton"),
+                        press: function () {
+
+                            var oCommentModel = that.commentDialog.getModel("comment");
+                            oDataModel.callFunction("/ActionOnVacationPlan", {
+                                method: "POST",
+                                urlParameters: {
+                                    EmployeeId: oCurrentCtxObj.Pernr,
+                                    PlanYear:   oCurrentCtxObj.PlanYear,
+                                    Action:     "SEND",
+                                    Comment:    oCommentModel.getProperty("/comment")
+                                },
+                                success: fnHandleSuccess,
+                                error: fnHandleError
+                            });
+
+                            oCommentModel.setProperty("/comment", "");
+                        }
+                    })
+
+                });
+                this.commentDialog.setModel("comment", oCommentModel);
+
+            }
+
+            this.commentDialog.open();
         },
 
 
