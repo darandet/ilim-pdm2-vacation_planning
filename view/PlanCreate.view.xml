@@ -10,7 +10,7 @@
 
     <FlexBox height="3rem" alignItems="Center" justifyContent="Center">
         <items>
-            <MessageStrip id="MessageContainer" showIcon="true" visible="false"/>
+            <MessageStrip id="MessageContainer" showIcon="true" visible="false" type="Error"/>
         </items>
     </FlexBox>
 

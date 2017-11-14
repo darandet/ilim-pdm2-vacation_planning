@@ -24,7 +24,7 @@ sap.ui.define([
 
 
             var oPlanCreateState = {
-                busy: true
+                busy: false
             };
             var oStateModel= new JSONModel(oPlanCreateState);
             this.setModel(oStateModel, "contentState");
@@ -36,6 +36,8 @@ sap.ui.define([
 
             var oEventBus = sap.ui.getCore().getEventBus();
             oEventBus.subscribe("headerChanges", "yearSelection", this._updatePlan, this);
+            oEventBus.subscribe("headerChanges", "planLoading", this._updatePlan, this);
+            oEventBus.subscribe("headerChanges", "planReceived", this._updatePlan, this);
 
         },
 
@@ -184,18 +186,20 @@ sap.ui.define([
 
         _updatePlan: function (sChannel, sEvent, oData) {
 
-            if (sChannel === "headerChanges" && sEvent === "yearSelection") {
+            var oContentStateModel = this.getModel("contentState");
 
+            if (sChannel === "headerChanges" && sEvent === "yearSelection") {
                 var oCalModel = this.getModel("calendar");
-                var oContentStateModel = this.getModel("contentState");
                 var oCalData = {
                     minDate: new Date(oData.key),
                     maxDate: new Date(oData.key, "11", "31")
                 };
                 oCalModel.setData(oCalData);
+
+            } else if (sChannel === "headerChanges" && sEvent === "planLoading") {
+                oContentStateModel.setProperty("/busy", true);
+            } else if (sChannel === "headerChanges" && sEvent === "planReceived") {
                 oContentStateModel.setProperty("/busy", false);
-
-
             }
 
         },
@@ -254,14 +258,14 @@ sap.ui.define([
             var oMessageContainer = this.getView().byId("MessageContainer");
             var sText;
 
-            if (typeof Error === Object) {
-                var oErrorResponse = JSON.parse(oError.responseText);
-                if (oError.statusCode === "400") {
+            if (typeof Error === "object") {
+                var oErrorResponse = JSON.parse(Error.responseText);
+                if (Error.statusCode === "400") {
                     sText = oErrorResponse.error.message.value;
                 } else {
                     sText = this.getResourceBundle().getText("vacation.create.sendUnknownError");
                 }
-            } else if (typeof Error === String) {
+            } else if (typeof Error === "string") {
                 sText = Error;
             }
 

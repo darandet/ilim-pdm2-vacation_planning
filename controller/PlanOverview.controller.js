@@ -23,7 +23,7 @@ sap.ui.define([
             var that = this;
 
             var oOverviewState = {
-                busy: true
+                busy: false
             };
 
 
@@ -31,7 +31,7 @@ sap.ui.define([
 
 
             var oStateModel= new JSONModel(oOverviewState);
-            this.setModel(oStateModel, "headerState");
+            this.setModel(oStateModel, "screenState");
 
         },
 
@@ -137,8 +137,6 @@ sap.ui.define([
                 return;
             }
 
-            this.getModel("headerState").setProperty("/busy", true);
-
             this._oPeriodsPopover.close();
 
             this._raiseYearSelectEvent(sKey);
@@ -200,6 +198,17 @@ sap.ui.define([
 
             var that = this;
             var oEventBus = sap.ui.getCore().getEventBus();
+            
+            var fnDataRequested = function () {
+                that.getModel("screenState").setProperty("/busy", true);
+                oEventBus.publish("headerChanges", "planLoading");
+            };
+
+            var fnDataReceived = function () {
+                that.getModel("screenState").setProperty("/busy", false);
+                oEventBus.publish("headerChanges", "planReceived");
+            };
+            
             this.getOwnerComponent().oRolesLoaded.then(function (oData) {
                 var sPlanPath = "/VacationPlanHdrSet(PlanYear='" + selectedYear + "',Pernr='" + oData.EmployeeId + "')";
                 that.getView().bindElement({
@@ -209,9 +218,8 @@ sap.ui.define([
                     },
                     model: "oData",
                     events: {
-                        dataReceived: function () {
-                            that.getModel("headerState").setProperty("/busy", false);
-                        }
+                        dataRequested: fnDataRequested,
+                        dataReceived: fnDataReceived
                     }
                 });
 
