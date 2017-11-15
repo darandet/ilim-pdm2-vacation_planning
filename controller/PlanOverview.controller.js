@@ -223,11 +223,14 @@ sap.ui.define([
                             });
 
                             oCommentModel.setProperty("/comment", "");
+                            that.commentDialog.close();
                         }
                     })
 
                 });
-                this.commentDialog.setModel("comment", oCommentModel);
+                this.commentDialog.setModel(oCommentModel, "comment");
+                this.getView().addDependent(this.commentDialog);
+
 
             }
 

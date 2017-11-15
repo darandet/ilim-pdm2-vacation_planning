@@ -44,11 +44,16 @@
                             <Text text="{oData>Bukrs}"/>
                             <ObjectStatus text="{path: 'oData>VpStatus', formatter: '.formatter.periodStatus'}"
                                           state="{path: 'oData>VpStatus', formatter: '.formatter.periodState'}"/>
-                            <Button icon="{path: 'oData>VpStatus', formatter: '.formatter.periodActionIcon'}"
-                                    text="{path: 'oData>VpStatus', formatter: '.formatter.periodAction'}"
-                                    type="{path: 'oData>VpStatus', formatter: '.formatter.periodActionType'}"
-                                    enabled="{path: 'oData>VpStatus', formatter: '.formatter.periodActionEnabled'}"
-                                    press="onUpdateMasterRecord"/>
+                            <l:HorizontalLayout>
+                                <Button icon="{path: 'oData>VpStatus', formatter: '.formatter.periodActionIcon'}"
+                                        text="{path: 'oData>VpStatus', formatter: '.formatter.periodAction'}"
+                                        type="{path: 'oData>VpStatus', formatter: '.formatter.periodActionType'}"
+                                        enabled="{path: 'oData>VpStatus', formatter: '.formatter.periodActionEnabled'}"
+                                        press="onUpdateMasterRecord"/>
+                                <Button icon="sap-icon://delete" class="sapUiTinyMarginBegin"
+                                        enabled="{path: 'oData>VpStatus', formatter: '.formatter.periodDeleteEnabled'}"
+                                        press="onDeleteMasterRecord"/>
+                            </l:HorizontalLayout>
                         </cells>
                     </ColumnListItem>
                 </items>

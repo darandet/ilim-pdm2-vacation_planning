@@ -219,12 +219,18 @@ sap.ui.define([
                 endda = BeginDate;
             }
 
+            var fnAddDay = function (date, days) {
+                var result = new Date(date);
+                result.setDate(result.getDate() + days);
+                return result;
+            };
+
             var oNewVacation = {
                 PlanYear: Year,
                 Pernr: Pernr,
                 ItemGuid: sDummyGUID,
-                BeginDate: BeginDate,
-                EndDate: endda,
+                BeginDate: fnAddDay(BeginDate, 1),
+                EndDate: fnAddDay(endda, 1),
                 VpProc: "",
                 VpStatus: "",
                 PlanGuid: sDummyGUID,
@@ -277,7 +283,7 @@ sap.ui.define([
                 oMessageContainer.close();
             };
 
-            setTimeout(hideMessage, 3000); //CSS delay doesn't work
+            setTimeout(hideMessage, 5000); //CSS delay doesn't work
         },
 
         _refreshTableAfterSend: function () {

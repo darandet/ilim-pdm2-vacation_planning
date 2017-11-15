@@ -26,17 +26,6 @@ sap.ui.define([
          */
         onInit: function() {
 
-            // var sServiceUrl = "http://localhost:3000/master_records";
-            // var sBUServiceUrl = "http://localhost:3000/balance_units";
-
-            var oModel = new JSONModel();
-            // oModel.loadData(sServiceUrl);
-
-            this.setModel(oModel, "data");
-
-            var oBUModel = new JSONModel();
-            // oBUModel.loadData(sBUServiceUrl);
-            this.setModel(oBUModel, "bukrs");
 
         },
 
@@ -121,7 +110,7 @@ sap.ui.define([
         onUpdateMasterRecord: function (oEvent) {
             var oButton = oEvent.getSource();
             var oDataModel = this.getModel("oData");
-            var sPath = oButton.getParent().getBindingContextPath();
+            var sPath = oButton.getParent().getParent().getBindingContextPath(); //Layout => Cell => Line
 
             var oMasterRecord = oDataModel.getObject(sPath);
 
@@ -132,7 +121,7 @@ sap.ui.define([
             }
 
             oMasterRecord.DoCommit = true;
-            this._updateMasterRecord(oMasterRecord, oDataModel, sPath)
+            this._updateMasterRecord(oMasterRecord, oDataModel, "update")
 
         },
 
@@ -143,6 +132,16 @@ sap.ui.define([
          */
         onRecordInput: function (oEvent) {
             //TODO добавить проверку на ввод. maxLength не работает с типом ввода Number
+        },
+
+        onDeleteMasterRecord: function () {
+            var oButton = oEvent.getSource();
+            var oDataModel = this.getModel("oData");
+            var sPath = oButton.getParent().getParent().getBindingContextPath(); //Layout => Cell => Line
+
+            var oMasterRecord = oDataModel.getObject(sPath);
+            oMasterRecord.DoCommit = true;
+            this._updateMasterRecord(oMasterRecord, oDataModel, "delete")
         },
 
         _postMasterRecord: function () {
@@ -171,12 +170,22 @@ sap.ui.define([
 
         },
 
-        _updateMasterRecord: function (oObject, oModel, sPath) {
+        _updateMasterRecord: function (oObject, oModel, action) {
 
-            oModel.update(
-                "/MasterRecordSet(PlanYear='" + oObject.PlanYear + "',Bukrs='" + oObject.Bukrs + "')",
-                oObject
-            );
+            switch (action) {
+                case "update":
+                    oModel.update(
+                        "/MasterRecordSet(PlanYear='" + oObject.PlanYear + "',Bukrs='" + oObject.Bukrs + "')",
+                        oObject
+                    );
+                    break;
+                case "delete":
+                    oModel.remove(
+                        "/MasterRecordSet(PlanYear='" + oObject.PlanYear + "',Bukrs='" + oObject.Bukrs + "')",
+                        oObject
+                    );
+                    break;
+            }
 
         }
 

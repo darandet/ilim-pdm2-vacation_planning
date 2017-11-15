@@ -62,7 +62,13 @@ sap.ui.define([],
 
         oFormatter.periodActionEnabled = function (sStatus) {
 
-            return sStatus !== "CLSD"
+            return sStatus !== "CLSD";
+
+        };
+
+        oFormatter.periodDeleteEnabled = function (sStatus) {
+
+            return sStatus === "CRTD";
 
         };
 
