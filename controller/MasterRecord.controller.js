@@ -134,7 +134,7 @@ sap.ui.define([
             //TODO добавить проверку на ввод. maxLength не работает с типом ввода Number
         },
 
-        onDeleteMasterRecord: function () {
+        onDeleteMasterRecord: function (oEvent) {
             var oButton = oEvent.getSource();
             var oDataModel = this.getModel("oData");
             var sPath = oButton.getParent().getParent().getBindingContextPath(); //Layout => Cell => Line

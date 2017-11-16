@@ -116,16 +116,18 @@ sap.ui.define([
 
         _patternMatched: function () {
 
-            // var oModel = this.getModel("user");
-            // if (oModel) {
-            //     var user = oModel.getProperty("/user");
-            // }
-
             var oRouter = this.getRouter();
-            oRouter.navTo("PlanOverview");
-            //TODO дыра в безопасности, если вводить путь напрямую
-            //TODO сделать навигацию в зависимости от полученных ролей
-
+            this.getOwnerComponent().oRolesLoaded.then(function (oData) {
+                if (oData.CanPlan) {
+                    oRouter.navTo("PlanOverview");
+                }
+                if (oData.CanApprove) {
+                    oRouter.navTo("ApprovePlan");
+                }
+                if (oData.CanControl) {
+                    oRouter.navTo("MasterRecord");
+                }
+            });
         }
 
     });

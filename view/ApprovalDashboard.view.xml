@@ -16,39 +16,41 @@
             <m:Panel width="45%" backgroundDesign="Solid">
                 <m:headerToolbar>
                     <m:Toolbar height="3rem">
-                        <m:Title text="Сотрудники без доступа к ЛК"/>
+                        <m:Title text="{i18n>dashboard.noAccessEmployees.title}"/>
                         <m:ToolbarSpacer />
-                        <m:Button icon="sap-icon://excel-attachment" text="Форма Т-7"/>
+                        <m:Button icon="sap-icon://excel-attachment" text="{i18n>dashboard.noAccessEmployees.T7ButtonText}"
+                                  press="onDownloadT7"
+                        />
                     </m:Toolbar>
                 </m:headerToolbar>
                 <m:content>
-                    <m:Table fixedLayout="false">
+                    <m:Table fixedLayout="false" items="{oData>/NoAccessEmployeesSet}" id="noAccessEmployeesTable">
                         <m:columns>
                             <m:Column vAlign="Middle" hAlign="Center">
-                                <m:Text text="№" />
+                                <m:Text text="{i18n>dashboard.noAccessEmployees.numberSign}" />
                             </m:Column>
                             <m:Column vAlign="Middle" hAlign="Center">
-                                <m:Text text="Табельный номер" />
+                                <m:Text text="{i18n>dashboard.noAccessEmployees.EmployeeId}" />
                             </m:Column>
                             <m:Column vAlign="Middle" hAlign="Center">
-                                <m:Text text="Сотрудник" />
+                                <m:Text text="{i18n>dashboard.noAccessEmployees.Employee}" />
                             </m:Column>
                             <m:Column vAlign="Middle" hAlign="Center">
-                                <m:Text text="Подразделение" />
+                                <m:Text text="{i18n>dashboard.noAccessEmployees.Department}" />
                             </m:Column>
                         </m:columns>
                         <m:items>
-                            <m:ColumnListItem class="sapUiTinyPaddingTop">
+                            <m:ColumnListItem>
                                 <m:cells>
                                     <m:ObjectIdentifier
-                                            text="1"/>
+                                            text=""/>
                                     <m:ObjectIdentifier
-                                            text="12345678"/>
+                                            text="{oData>EmployeeId}"/>
                                     <m:ObjectIdentifier
-                                            title="Петров Иван Иванович"
-                                            text="Ведущий инженер"/>
+                                            title="{oData>EmployeeName}"
+                                            text="{oData>PositionText}"/>
                                     <m:ObjectIdentifier
-                                            text="Проектный отдел"/>
+                                            text="{oData>OrgunitText}"/>
                                 </m:cells>
                             </m:ColumnListItem>
                         </m:items>

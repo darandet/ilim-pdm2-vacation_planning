@@ -92,6 +92,19 @@ sap.ui.define([
 
             this.getRouter().getRoute("ApprovalsDashboard").attachPatternMatched(this._patternMatched, this);
 
+            var oEventBus = sap.ui.getCore().getEventBus();
+            oEventBus.subscribe("managerHeaderChanges", "yearSelection", this._filterDashboardByYear, this);
+
+            this.oManagerController = this.getOwnerComponent().oManagerController;
+        },
+
+        onDownloadT7: function () {
+
+            var sYear = this.oManagerController.getCurrentYear();
+            var sServicePath = this.getOwnerComponent().getManifestEntry("sap.app").dataSources.MainService.uri;
+            var sODataKey = "(PlanYear='" + sYear +"',EmployeeId='')";
+
+            window.open(sServicePath + "/noAccessEmployeesSet" + sODataKey +  "/$value");
         },
 
         /**
@@ -102,6 +115,20 @@ sap.ui.define([
         _patternMatched: function () {
             var oEventBus = sap.ui.getCore().getEventBus();
             oEventBus.publish("childNavigation", "syncViews", { key: "overviewTab" });
+        },
+
+        _filterDashboardByYear: function (sChannel, sEvent, oData) {
+
+            var aFilters = [];
+            var filter = new Filter("PlanYear", sap.ui.model.FilterOperator.EQ, oData.PlanYear);
+
+            aFilters.push(filter);
+
+            // update list binding
+            var list = this.getView().byId("noAccessEmployeesTable");
+            var binding = list.getBinding("items");
+            binding.filter(filter);
+
         }
 
         /**
