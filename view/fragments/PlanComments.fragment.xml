@@ -7,14 +7,15 @@
                 sender="{oData>EmployeeName}"
                 iconDensityAware="false"
                 info="{oData>RoleText}"
-                timestamp="{ parts: [{path: 'oData>CommentDate'}, {path: 'oData>CommentTime'}], formatter: .formatter.planCommentTimestamp }"
-                text="text2" />
-        <FeedListItem
-                sender="Кожанова Н.Н."
-                senderPress="onPress"
-                iconDensityAware="false"
-                info="Отклонение"
-                timestamp="March 04 2013 16:40"
-                text="text2" />
+                timestamp="{
+                    path: 'oData>CommentTimestamp',
+                    type: 'sap.ui.model.type.DateTime',
+                    formatOptions: {
+                        relative:      true,
+                        relativeScale: auto
+                }"
+                text="{oData>CommentText}"
+                icon="/sap/opu/odata/sap/ZHR_PDM_VACATION_PLANNING_SRV/VacationPlanCommentsSet(PlanYear='',CommentDate=datetime='9999-12-31T00%3A00%3A00',EmployeeId='{oData>EmployeeId}')/$value"
+        />
     </List>
 </core:FragmentDefinition>

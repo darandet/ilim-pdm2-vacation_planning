@@ -93,13 +93,13 @@ sap.ui.define([
 
                 var oFormFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.PlanComments");
 
-                that._mRecordCreateDialog = new Dialog({
+                that._planComments = new Dialog({
                     title: that.getResourceBundle().getText("vacation.comments.Header"),
                     contentWidth: "35%",
                     draggable: true,
                     content: oFormFragment,
                     endButton: new Button({
-                        text: "Закрыть",
+                        text: that.getResourceBundle().getText("common.dialog.button.close"),
                         press: function () {
                             that._planComments.close();
                         }
@@ -149,97 +149,13 @@ sap.ui.define([
         },
 
         onSendPlan: function () {
-
+            
             var oDataModel = this.getModel("oData");
-            var sCurrentCtxPath = this.getView().getBindingContext("oData").getPath();
-            var oCurrentCtxObj = oDataModel.getObject(sCurrentCtxPath);
-            var oEventBus = sap.ui.getCore().getEventBus();
-
-            var that = this;
-
-            var fnHandleSuccess = function (oData, response) {
-
-                oEventBus.publish("oDataRequest", "SendSuccess");
-
-                var bCompact = !!that.getView().$().closest(".sapUiSizeCompact").length;
-                MessageBox.success(
-                    oData.MessageText,
-                    {
-                        styleClass: bCompact ? "sapUiSizeCompact" : ""
-                    }
-                );
-            };
-
-            var fnHandleError = function (oError) {
-                var bCompact = !!that.getView().$().closest(".sapUiSizeCompact").length;
-                var oErrorResponse = JSON.parse(oError.responseText);
-                if (oError.statusCode === "400") {
-                    MessageBox.error(
-                        oErrorResponse.error.message.value,
-                        {
-                            styleClass: bCompact ? "sapUiSizeCompact" : ""
-                        }
-                    );
-                } else {
-                    MessageBox.error(
-                        that.getResourceBundle().getText("vacation.create.sendUnknownError"),
-                        {
-                            styleClass: bCompact ? "sapUiSizeCompact" : ""
-                        }
-                    );
-                }
-            };
-
-
-            if (!this.commentDialog) {
-
-                var oComment = {
-                    comment: ""
-                };
-
-                var oDialogFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.CommentsDialog");
-                var oCommentModel = new JSONModel(oComment);
-                this.commentDialog = new Dialog({
-                    title: this.getResourceBundle().getText("common.commentsDialog.Title"),
-                    draggable: true,
-                    content: oDialogFragment,
-                    type: 'Message',
-                    beginButton: new Button({
-                        text: this.getResourceBundle().getText("common.commentsDialog.CancelButton"),
-                        press: function () {
-                            that.commentDialog.close();
-                        }
-                    }),
-                    endButton: new Button({
-                        text: this.getResourceBundle().getText("common.commentsDialog.SendButton"),
-                        press: function () {
-
-                            var oCommentModel = that.commentDialog.getModel("comment");
-                            oDataModel.callFunction("/ActionOnVacationPlan", {
-                                method: "POST",
-                                urlParameters: {
-                                    EmployeeId: oCurrentCtxObj.Pernr,
-                                    PlanYear:   oCurrentCtxObj.PlanYear,
-                                    Action:     "SEND",
-                                    Comment:    oCommentModel.getProperty("/Comment")
-                                },
-                                success: fnHandleSuccess,
-                                error: fnHandleError
-                            });
-
-                            oCommentModel.setProperty("/Comment", "");
-                            that.commentDialog.close();
-                        }
-                    })
-
-                });
-                this.commentDialog.setModel(oCommentModel, "comment");
-                this.getView().addDependent(this.commentDialog);
-
-
-            }
-
-            this.commentDialog.open();
+            var sCurrentPath = this.getView().getBindingContext("oData").getPath();
+            
+            var aVacations = this._convertModelVacationsToArray(oDataModel, sCurrentPath)
+            
+            this._checkVacationsBeforeSend(aVacations);
         },
 
 
@@ -309,6 +225,182 @@ sap.ui.define([
 
             });
 
+        },
+
+        _convertModelVacationsToArray: function (oModel, sPath) {
+
+            var aVacationsKeys = oModel.getData(sPath + "/ToVacations");
+            var aVacations = [];
+
+            for (var i=0; i < aVacationsKeys.length; i++) {
+                aVacations.push(oModel.getObject(aVacationsKeys[i]));
+            }
+
+            return aVacations;
+
+        },
+
+        _checkVacationsBeforeSend: function (aVacations) {
+
+            var bHas2Week = false;
+            var bHas1Week = false;
+            var N = 1000*60*60*24;
+
+
+            var fnDateDiff = function (Date1, Date2) {
+                return Math.round((Date2 - Date1)/N);
+            };
+
+            for(var i=0; i < aVacations.length; i++) {
+                if (fnDateDiff(aVacations.BeginDate, aVacations.EndDate) >= 14) {
+                    bHas2Week = true;
+                } else if (fnDateDiff(aVacations.BeginDate, aVacations.EndDate) >= 7) {
+                    bHas1Week = true;
+                }
+
+            }
+
+            if (!bHas1Week || !bHas2Week) {
+                this._showWarnings(bHas1Week, bHas2Week);
+            } else {
+                this._sendPlan();
+            }
+
+        },
+
+        _showWarnings: function (bHas1Week, bHas2Week) {
+
+            var sNo1WeekVacation = "<li>" + this.getResourceBundle().getText("vacation.checks.no1WeekMessage") + "</li>";
+            var sNo2WeekVacation = "<li>" + this.getResourceBundle().getText("vacation.checks.no2WeekMessage") + "</li>";
+
+            var sMessageText = "<p><strong>" + this.getResourceBundle().getText("vacation.checks.commonTextDetailed") + "</strong></p>\n<ul>";
+            var sFinalQuestion = "<p>" + this.getResourceBundle().getText("vacation.checks.finalQuestion") + "</p>";
+
+            if (!bHas1Week) {
+                sMessageText = sMessageText + sNo1WeekVacation;
+            }
+
+            if (!bHas2Week) {
+                sMessageText = sMessageText + sNo2WeekVacation;
+            }
+
+            sMessageText = sMessageText + "</ul>";
+            sMessageText = sMessageText + sFinalQuestion;
+
+            var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
+            MessageBox.show(this.getResourceBundle().getText("vacation.checks.commonText"), {
+                icon: MessageBox.Icon.WARNING,
+                title: this.getResourceBundle().getText("vacation.checks.Title"),
+                actions: [MessageBox.Action.YES, MessageBox.Action.NO],
+                defaultAction: sap.m.MessageBox.Action.NO,
+                details: sMessageText,
+                styleClass: bCompact ? "sapUiSizeCompact" : "",
+                onClose: function (oAction) {
+
+                }
+            });
+        },
+        
+        _sendPlan: function () {
+
+            var oDataModel = this.getModel("oData");
+            var sCurrentCtxPath = this.getView().getBindingContext("oData").getPath();
+            var oCurrentCtxObj = oDataModel.getObject(sCurrentCtxPath);
+            var oEventBus = sap.ui.getCore().getEventBus();
+
+            var that = this;
+
+            var fnHandleSuccess = function (oData, response) {
+
+                that.getModel("screenState").setProperty("/busy", false);
+
+                oEventBus.publish("oDataRequest", "SendSuccess");
+
+                var bCompact = !!that.getView().$().closest(".sapUiSizeCompact").length;
+                MessageBox.success(
+                    oData.MessageText,
+                    {
+                        styleClass: bCompact ? "sapUiSizeCompact" : ""
+                    }
+                );
+            };
+
+            var fnHandleError = function (oError) {
+
+                that.getModel("screenState").setProperty("/busy", false);
+
+                var bCompact = !!that.getView().$().closest(".sapUiSizeCompact").length;
+                var oErrorResponse = JSON.parse(oError.responseText);
+                if (oError.statusCode === "400") {
+                    MessageBox.error(
+                        oErrorResponse.error.message.value,
+                        {
+                            styleClass: bCompact ? "sapUiSizeCompact" : ""
+                        }
+                    );
+                } else {
+                    MessageBox.error(
+                        that.getResourceBundle().getText("vacation.create.sendUnknownError"),
+                        {
+                            styleClass: bCompact ? "sapUiSizeCompact" : ""
+                        }
+                    );
+                }
+            };
+
+
+            if (!this.commentDialog) {
+
+                var oComment = {
+                    comment: ""
+                };
+
+                var oDialogFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.CommentsDialog");
+                var oCommentModel = new JSONModel(oComment);
+                this.commentDialog = new Dialog({
+                    title: this.getResourceBundle().getText("common.commentsDialog.Title"),
+                    draggable: true,
+                    content: oDialogFragment,
+                    type: 'Message',
+                    beginButton: new Button({
+                        text: this.getResourceBundle().getText("common.commentsDialog.CancelButton"),
+                        press: function () {
+                            that.commentDialog.close();
+                        }
+                    }),
+                    endButton: new Button({
+                        text: this.getResourceBundle().getText("common.commentsDialog.SendButton"),
+                        press: function () {
+
+                            that.getModel("screenState").setProperty("/busy", true);
+
+                            var oCommentModel = that.commentDialog.getModel("comment");
+                            oDataModel.callFunction("/ActionOnVacationPlan", {
+                                method: "POST",
+                                urlParameters: {
+                                    EmployeeId: oCurrentCtxObj.Pernr,
+                                    PlanYear:   oCurrentCtxObj.PlanYear,
+                                    Action:     "SEND",
+                                    Comment:    oCommentModel.getProperty("/Comment")
+                                },
+                                success: fnHandleSuccess,
+                                error: fnHandleError
+                            });
+
+                            oCommentModel.setProperty("/Comment", "");
+                            that.commentDialog.close();
+                        }
+                    })
+
+                });
+                this.commentDialog.setModel(oCommentModel, "comment");
+                this.getView().addDependent(this.commentDialog);
+
+
+            }
+
+            this.commentDialog.open();
+            
         }
 
     });

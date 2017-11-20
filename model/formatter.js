@@ -97,10 +97,6 @@ sap.ui.define(["ilim/pdm2/vacation_planning/model/planningActions"],
             }
         };
 
-        oFormatter.planCommentTimestamp = function (Date, Time) {
-            return Date.toString() + Time.toString();
-        };
-
         return oFormatter;
 
     });

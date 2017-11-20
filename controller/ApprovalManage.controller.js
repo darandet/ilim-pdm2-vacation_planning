@@ -61,13 +61,14 @@ sap.ui.define([
             if (sQuery && sQuery.length > 0) {
 
                 aFilters = this.oManagerController.getComplexFilter(sQuery);
-                filter = new Filter({filters: aFilters, and: true});
+                var filter = new Filter({filters: aFilters, and: true});
+
+                // update list binding
+                var list = this.getView().byId("inboxTable");
+                var binding = list.getBinding("items");
+                binding.filter(filter);
             }
 
-            // update list binding
-            var list = this.getView().byId("inboxTable");
-            var binding = list.getBinding("items");
-            binding.filter(filter);
         },
 
         onApprovePlan: function (oEvent) {
@@ -180,7 +181,7 @@ sap.ui.define([
                 method: "POST",
                 urlParameters: {
                     Action:     Action,
-                    EmployeeId: oContextObject.Pernr,
+                    EmployeeId: oContextObject.EmployeeId,
                     PlanYear:   oContextObject.PlanYear,
                     Comment:    oContextObject.comment
                 },
