@@ -4,8 +4,9 @@ sap.ui.define([
     "jquery.sap.global",
     "sap/ui/model/Filter",
     "ilim/pdm2/vacation_planning/utils/managerController",
-    "sap/m/MessageBox"
-], function (Controller, JSONModel, $, Filter, managerController, MessageBox) {
+    "sap/m/MessageBox",
+    "ilim/pdm2/vacation_planning/model/formatter"
+], function (Controller, JSONModel, $, Filter, managerController, MessageBox, Formatter) {
     "use strict";
 
     return Controller.extend("ilim.pdm2.vacation_planning.controller.ApprovalManage", {
@@ -18,6 +19,8 @@ sap.ui.define([
 
         selectedEmployees: [],
         oManagerController: {},
+
+        formatter: Formatter,
 
         onInit: function() {
 
@@ -71,45 +74,110 @@ sap.ui.define([
             var sCtxPath        = oSource.getContextBindingPath("oData");
             var oCurrentCtxObj  = this.getModel("oData").getObject(sCtxPath);
 
-            var fnHandleSuccess = function (oData, response) {
-                var bCompact = !!that.getView().$().closest(".sapUiSizeCompact").length;
-                MessageBox.success(
-                    oData.MessageText,
-                    {
-                        styleClass: bCompact ? "sapUiSizeCompact" : ""
-                    }
-                );
-            };
 
-            var fnHandleError = function (oError) {
-                var bCompact = !!that.getView().$().closest(".sapUiSizeCompact").length;
-                var oErrorResponse = JSON.parse(oError.responseText);
-                if (oError.statusCode === "400") {
-                    MessageBox.error(
-                        oErrorResponse.error.message.value,
-                        {
-                            styleClass: bCompact ? "sapUiSizeCompact" : ""
-                        }
-                    );
-                } else {
-                    MessageBox.error(
-                        this.getResourceBundle().getText("vacation.create.sendUnknownError"),
-                        {
-                            styleClass: bCompact ? "sapUiSizeCompact" : ""
-                        }
-                    );
-                }
-            };
+            if (!this.commentDialog) {
 
-            oDataModel.callFunction("/ApproveVacationPlan", {
+                var oComment = {
+                    comment: ""
+                };
+
+                var oDialogFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.CommentsDialog");
+                var oCommentModel = new JSONModel(oComment);
+                this.commentDialog = new Dialog({
+                    title: this.getResourceBundle().getText("common.commentsDialog.Title"),
+                    draggable: true,
+                    content: oDialogFragment,
+                    type: 'Message',
+                    beginButton: new Button({
+                        text: this.getResourceBundle().getText("common.commentsDialog.CancelButton"),
+                        press: function () {
+                            that.commentDialog.close();
+                        }
+                    }),
+                    endButton: new Button({
+                        text: this.getResourceBundle().getText("common.commentsDialog.SendButton"),
+                        press: function () {
+
+                            var oCommentModel = that.commentDialog.getModel("comment");
+                            that._callActionOnPlan(oCurrentCtxObj, "APROV");
+
+                            oCommentModel.setProperty("/comment", "");
+                            that.commentDialog.close();
+                        }
+                    })
+
+                });
+                this.commentDialog.setModel(oCommentModel, "comment");
+                this.getView().addDependent(this.commentDialog);
+
+
+            }
+
+            this.commentDialog.open();
+        },
+
+        onRejectPlan: function (oEvent) {
+
+            var oSource         = oEvent.getSource();
+            var sCtxPath        = oSource.getContextBindingPath("oData");
+            var oCurrentCtxObj  = this.getModel("oData").getObject(sCtxPath);
+
+
+            if (!this.commentDialog) {
+
+                var oComment = {
+                    comment: ""
+                };
+
+                var oDialogFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.CommentsDialog");
+                var oCommentModel = new JSONModel(oComment);
+                this.commentDialog = new Dialog({
+                    title: this.getResourceBundle().getText("common.commentsDialog.Title"),
+                    draggable: true,
+                    content: oDialogFragment,
+                    type: 'Message',
+                    beginButton: new Button({
+                        text: this.getResourceBundle().getText("common.commentsDialog.CancelButton"),
+                        press: function () {
+                            that.commentDialog.close();
+                        }
+                    }),
+                    endButton: new Button({
+                        text: this.getResourceBundle().getText("common.commentsDialog.SendButton"),
+                        press: function () {
+
+                            var oCommentModel = that.commentDialog.getModel("comment");
+                            that._callActionOnPlan(oCurrentCtxObj, "REJEC");
+
+                            oCommentModel.setProperty("/comment", "");
+                            that.commentDialog.close();
+                        }
+                    })
+
+                });
+                this.commentDialog.setModel(oCommentModel, "comment");
+                this.getView().addDependent(this.commentDialog);
+
+
+            }
+
+            this.commentDialog.open();
+        },
+
+        _callActionOnPlan: function (oContextObject, Action) {
+
+            oDataModel.callFunction("/ActionOnVacationPlan", {
                 method: "POST",
                 urlParameters: {
-                    EmployeeId: oCurrentCtxObj.Pernr,
-                    PlanYear:   oCurrentCtxObj.PlanYear
-                },
-                success: fnHandleSuccess,
-                error: fnHandleError
+                    Action: Action,
+                    EmployeeId: oContextObject.Pernr,
+                    PlanYear:   oContextObject.PlanYear
+                }
+                // ,
+                // success: fnHandleSuccess,
+                // error: fnHandleError
             });
+
         },
 
         _filterInboxByYear: function (sChannel, sEvent, oData) {
@@ -126,7 +194,9 @@ sap.ui.define([
             // update list binding
             var list = this.getView().byId("inboxTable");
             var binding = list.getBinding("items");
-            binding.filter(filter);
+            if (binding) {
+                binding.filter(filter);
+            }
 
         },
 

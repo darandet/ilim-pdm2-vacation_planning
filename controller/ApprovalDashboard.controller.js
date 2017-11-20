@@ -1,7 +1,8 @@
 sap.ui.define([
     "ilim/pdm2/vacation_planning/controller/BaseController",
-    'sap/ui/model/json/JSONModel'
-], function (Controller, JSONModel) {
+    "sap/ui/model/json/JSONModel",
+    "sap/ui/model/Filter"
+], function (Controller, JSONModel, Filter) {
     "use strict";
 
     return Controller.extend("ilim.pdm2.vacation_planning.controller.ApprovalDashboard", {
@@ -104,7 +105,7 @@ sap.ui.define([
             var sServicePath = this.getOwnerComponent().getManifestEntry("sap.app").dataSources.MainService.uri;
             var sODataKey = "(PlanYear='" + sYear +"',EmployeeId='')";
 
-            window.open(sServicePath + "/noAccessEmployeesSet" + sODataKey +  "/$value");
+            window.open(sServicePath + "/NoAccessEmployeesSet" + sODataKey +  "/$value");
         },
 
         /**
@@ -115,6 +116,20 @@ sap.ui.define([
         _patternMatched: function () {
             var oEventBus = sap.ui.getCore().getEventBus();
             oEventBus.publish("childNavigation", "syncViews", { key: "overviewTab" });
+
+            var that = this;
+
+            this.getOwnerComponent().oRolesLoaded.then( function (oData) {
+                if (!oData.CanApprove) {
+                    that.getRouter().navTo("NoAuthorization");
+                } else {
+                    that.oManagerController.oWhenPeriodIsLoaded.then( function (oData) {
+
+                        that._filterDashboardByYear(null, null, oData);
+
+                    });
+                }
+            });
         },
 
         _filterDashboardByYear: function (sChannel, sEvent, oData) {
@@ -127,7 +142,9 @@ sap.ui.define([
             // update list binding
             var list = this.getView().byId("noAccessEmployeesTable");
             var binding = list.getBinding("items");
-            binding.filter(filter);
+            if (binding) {
+                binding.filter(filter);
+            }
 
         }
 

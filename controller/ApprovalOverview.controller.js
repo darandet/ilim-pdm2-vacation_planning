@@ -35,6 +35,8 @@ sap.ui.define([
 
                 if (!oData.PlanYear) {
                     that.getRouter().navTo("PlanningClosed");
+                } else {
+                    that._raiseYearSelectEvent(oData.PlanYear)
                 }
             };
 
@@ -99,7 +101,7 @@ sap.ui.define([
 
         onShowPeriods: function (oEvent) {
             if (! this._oPeriodsPopover) {
-                this._oPeriodsPopover = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.PeriodSelect", this);
+                this._oPeriodsPopover = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.ManagingPeriodsSelect", this);
                 this.getView().addDependent(this._oPeriodsPopover);
 
             }
@@ -107,7 +109,7 @@ sap.ui.define([
             this._oPeriodsPopover.openBy(oEvent.getSource());
         },
 
-        onYearSelect: function () {
+        onYearSelect: function (oEvent) {
 
             var sKey = oEvent.getParameter("item").getKey();
 

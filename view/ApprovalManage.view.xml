@@ -71,15 +71,20 @@
                                   unit="{i18n>main.table.units}"/>
                     <CheckBox enabled="false" selected="{oData>HasAccess}" />
                     <ObjectStatus
-                            text="{oData>PlanStatus}" />
+                            text="{parts: [{path: 'oData>PlanStatus'}, {path: 'oData>CanApprove'}],
+                                    formatter: '.formatter.vacationPlanStatus'}"
+                            state="{path: 'oData>PlanStatus', formatter: '.formatter.vacationPlanState'}"/>
+
                     <FlexBox alignItems="Center" justifyContent="SpaceBetween">
                         <items>
-                            <Button type="Accept" icon="sap-icon://accept" enabled="{oData>canApprove}"
+                            <Button type="Accept" icon="sap-icon://accept" enabled="{oData>CanApprove}"
                                     press="onApprovePlan"
                             />
-                            <Button type="Reject" icon="sap-icon://decline" enabled="{oData>canReject}"/>
-                            <Button icon="sap-icon://create-form" enabled="{oData>canCreate}"/>
-                            <Button icon="sap-icon://comment" enabled="{oData>canComment}"/>
+                            <Button type="Reject" icon="sap-icon://decline" enabled="{oData>CanReject}"
+                                    press="onRejectPlan"
+                            />
+                            <Button icon="sap-icon://create-form" enabled="{oData>CanCreate}"/>
+                            <Button icon="sap-icon://comment" enabled="{oData>CanComment}"/>
                         </items>
                     </FlexBox>
 

@@ -64,6 +64,30 @@ sap.ui.define(["ilim/pdm2/vacation_planning/model/planningActions"],
 
         };
 
+        oFormatter.vacationPlanStatus = function (sStatus, bCanApprove) {
+
+            if (bCanApprove) {
+                return this.getResourceBundle().getText("main.planStatus.Pending");
+            } else {
+                return this.getResourceBundle().getText("main.planStatus." + sStatus);
+            }
+
+        };
+
+        oFormatter.vacationPlanState = function (sStatus) {
+
+            if (sStatus === "VP09") {
+                return sap.ui.core.ValueState.Success;
+            } else if (sStatus === "VP00" || sStatus === "VP01" ) {
+                return sap.ui.core.ValueState.None;
+            } else if (sStatus === "VP04") {
+                return sap.ui.core.ValueState.Error;
+            } else {
+                return sap.ui.core.ValueState.Warning;
+            }
+
+        };
+
         return oFormatter;
 
     });
