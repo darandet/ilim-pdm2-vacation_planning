@@ -2,13 +2,12 @@
         xmlns="sap.m"
         xmlns:core="sap.ui.core">
 
-    <List>
+    <List items="{oData>ToComments}">
         <FeedListItem
-                sender="Самойлова Я.В."
-                senderPress="onPress"
+                sender="{oData>EmployeeName}"
                 iconDensityAware="false"
-                info="Согласование"
-                timestamp="March 04 2013 16:40"
+                info="{oData>RoleText}"
+                timestamp="{ parts: [{path: 'oData>CommentDate'}, {path: 'oData>CommentTime'}], formatter: .formatter.planCommentTimestamp }"
                 text="text2" />
         <FeedListItem
                 sender="Кожанова Н.Н."

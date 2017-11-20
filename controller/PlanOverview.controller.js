@@ -89,29 +89,34 @@ sap.ui.define([
 
         onShowComments: function () {
             var that = this;
-            if (!that._mRecordCreateDialog) {
+            if (!that._planComments) {
 
                 var oFormFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.PlanComments");
 
                 that._mRecordCreateDialog = new Dialog({
-                    title: 'Комментарии к плану',
+                    title: that.getResourceBundle().getText("vacation.comments.Header"),
                     contentWidth: "35%",
                     draggable: true,
                     content: oFormFragment,
                     endButton: new Button({
                         text: "Закрыть",
                         press: function () {
-                            that._mRecordCreateDialog.close();
+                            that._planComments.close();
                         }
                     })
                 });
 
                 //to get access to the global model
-                that.getView().addDependent(that._mRecordCreateDialog);
+                that.getView().addDependent(that._planComments);
 
             }
 
-            that._mRecordCreateDialog.open();
+            var sPlanPath = that.getView().getBindingContext("oData").getPath();
+            that._planComments.bindElement({
+                path: sPlanPath,
+                model: "oData"
+            });
+            that._planComments.open();
         },
 
         onShowPeriods: function (oEvent) {
