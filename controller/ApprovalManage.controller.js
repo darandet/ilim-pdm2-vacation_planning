@@ -5,8 +5,10 @@ sap.ui.define([
     "sap/ui/model/Filter",
     "ilim/pdm2/vacation_planning/utils/managerController",
     "sap/m/MessageBox",
+    "sap/m/Dialog",
+    "sap/m/Button",
     "ilim/pdm2/vacation_planning/model/formatter"
-], function (Controller, JSONModel, $, Filter, managerController, MessageBox, Formatter) {
+], function (Controller, JSONModel, $, Filter, managerController, MessageBox, Dialog, Button, Formatter) {
     "use strict";
 
     return Controller.extend("ilim.pdm2.vacation_planning.controller.ApprovalManage", {
@@ -71,9 +73,10 @@ sap.ui.define([
         onApprovePlan: function (oEvent) {
 
             var oSource         = oEvent.getSource();
-            var sCtxPath        = oSource.getContextBindingPath("oData");
+            var sCtxPath        = oSource.getParent().getBindingContext("oData").getPath(); //Button -> Item
             var oCurrentCtxObj  = this.getModel("oData").getObject(sCtxPath);
 
+            var that = this;
 
             if (!this.commentDialog) {
 
@@ -99,9 +102,11 @@ sap.ui.define([
                         press: function () {
 
                             var oCommentModel = that.commentDialog.getModel("comment");
+                            oCurrentCtxObj.comment = oCommentModel.getProperty("/Comment");
+
                             that._callActionOnPlan(oCurrentCtxObj, "APROV");
 
-                            oCommentModel.setProperty("/comment", "");
+                            oCommentModel.setProperty("/Comment", "");
                             that.commentDialog.close();
                         }
                     })
@@ -119,9 +124,10 @@ sap.ui.define([
         onRejectPlan: function (oEvent) {
 
             var oSource         = oEvent.getSource();
-            var sCtxPath        = oSource.getContextBindingPath("oData");
+            var sCtxPath        = oSource.getParent().getBindingContext("oData").getPath(); //Button -> Item
             var oCurrentCtxObj  = this.getModel("oData").getObject(sCtxPath);
 
+            var that = this;
 
             if (!this.commentDialog) {
 
@@ -147,9 +153,11 @@ sap.ui.define([
                         press: function () {
 
                             var oCommentModel = that.commentDialog.getModel("comment");
+                            oCurrentCtxObj.comment = oCommentModel.getProperty("/Comment");
+
                             that._callActionOnPlan(oCurrentCtxObj, "REJEC");
 
-                            oCommentModel.setProperty("/comment", "");
+                            oCommentModel.setProperty("/Comment", "");
                             that.commentDialog.close();
                         }
                     })
@@ -166,17 +174,26 @@ sap.ui.define([
 
         _callActionOnPlan: function (oContextObject, Action) {
 
+            var oDataModel = this.getView().getModel("oData");
+
             oDataModel.callFunction("/ActionOnVacationPlan", {
                 method: "POST",
                 urlParameters: {
-                    Action: Action,
+                    Action:     Action,
                     EmployeeId: oContextObject.Pernr,
-                    PlanYear:   oContextObject.PlanYear
-                }
-                // ,
-                // success: fnHandleSuccess,
+                    PlanYear:   oContextObject.PlanYear,
+                    Comment:    oContextObject.comment
+                },
+                success: fnHandleSuccess
                 // error: fnHandleError
             });
+
+            var fnHandleSuccess = function (oData, response) {
+                var oTable = this.getView().byId("inboxTable");
+                var oTableBinding = oTable.getBinding("items");
+
+                oTableBinding.refresh();
+            }.bind(this);
 
         },
 

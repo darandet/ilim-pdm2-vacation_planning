@@ -216,13 +216,13 @@ sap.ui.define([
                                     EmployeeId: oCurrentCtxObj.Pernr,
                                     PlanYear:   oCurrentCtxObj.PlanYear,
                                     Action:     "SEND",
-                                    Comment:    oCommentModel.getProperty("/comment")
+                                    Comment:    oCommentModel.getProperty("/Comment")
                                 },
                                 success: fnHandleSuccess,
                                 error: fnHandleError
                             });
 
-                            oCommentModel.setProperty("/comment", "");
+                            oCommentModel.setProperty("/Comment", "");
                             that.commentDialog.close();
                         }
                     })

@@ -6,9 +6,7 @@
                        placement="Bottom" >
         <content>
             <SelectList
-                    items="{
-                        path: 'oData>/ManagingPeriodsSet',
-                    }"
+                    items="{oData>/ManagingPeriodsSet}"
                     itemPress="onYearSelect">
                 <core:Item key="{oData>PlanYear}" text="{oData>PlanYear}" />
             </SelectList>

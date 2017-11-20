@@ -80,7 +80,9 @@
                             <Button type="Accept" icon="sap-icon://accept" enabled="{oData>CanApprove}"
                                     press="onApprovePlan"
                             />
-                            <Button type="Reject" icon="sap-icon://decline" enabled="{oData>CanReject}"
+                            <Button type="Reject"
+                                    icon="{path: 'oData>PlanStatus', formatter: '.formatter.vacationPlanRejectIcon'}"
+                                    enabled="{oData>CanReject}"
                                     press="onRejectPlan"
                             />
                             <Button icon="sap-icon://create-form" enabled="{oData>CanCreate}"/>
