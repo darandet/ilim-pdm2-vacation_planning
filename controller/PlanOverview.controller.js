@@ -233,7 +233,7 @@ sap.ui.define([
             var aVacations = [];
 
             for (var i=0; i < aVacationsKeys.length; i++) {
-                aVacations.push(oModel.getObject(aVacationsKeys[i]));
+                aVacations.push(oModel.getObject("/" + aVacationsKeys[i]));
             }
 
             return aVacations;
@@ -248,13 +248,13 @@ sap.ui.define([
 
 
             var fnDateDiff = function (Date1, Date2) {
-                return Math.round((Date2 - Date1)/N);
+                return Math.round((Date2 - Date1)/N) + 1;
             };
 
             for(var i=0; i < aVacations.length; i++) {
-                if (fnDateDiff(aVacations.BeginDate, aVacations.EndDate) >= 14) {
+                if (fnDateDiff(aVacations[i].BeginDate, aVacations[i].EndDate) >= 14) {
                     bHas2Week = true;
-                } else if (fnDateDiff(aVacations.BeginDate, aVacations.EndDate) >= 7) {
+                } else if (fnDateDiff(aVacations[i].BeginDate, aVacations[i].EndDate) >= 7) {
                     bHas1Week = true;
                 }
 
@@ -295,9 +295,11 @@ sap.ui.define([
                 defaultAction: sap.m.MessageBox.Action.NO,
                 details: sMessageText,
                 styleClass: bCompact ? "sapUiSizeCompact" : "",
-                onClose: function (oAction) {
-
-                }
+                onClose: function (sAction) {
+                    if (sAction === "YES") {
+                        this._sendPlan();
+                    }
+                }.bind(this)
             });
         },
         

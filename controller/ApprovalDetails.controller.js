@@ -13,37 +13,39 @@ sap.ui.define([
          */
 
         selectedEmployees: [],
+        oManagerController: {},
 
         onInit: function() {
 
             this.getRouter().getRoute("ApprovalDetails").attachPatternMatched(this._patternMatched, this);
+            this.oManagerController = this.getOwnerComponent().oManagerController;
+
+            var oJSONModel = new JSONModel();
+            this.setModel(oJSONModel, "vacations");
 
         },
 
-        onBackToInbox: function (oEvent) {
+        onBackToInbox: function () {
 
             this.getRouter().navTo("ManageApprovals");
 
         },
 
-        _patternMatched: function (oEvent) {
+        _patternMatched: function () {
 
-            var oModel, sFilter;
-            var oArgs = oEvent.getParameter("arguments");
+            var aSelectedContexts = this.oManagerController.getSelectedEmployees();
+            var oDataModel        = this.getOwnerComponent().getModel("oData");
 
-            this.selectedEmployees = JSON.parse(oArgs.selectedEmployees);
+            var aJSONData         = [];
+            var Object            = {};
 
-            if (this.getModel("vacations")) {
-                oModel = this.getModel("vacations");
-            } else {
-                oModel = new JSONModel();
-                this.setModel(oModel, "vacations");
+
+            for (var i=0; i < aSelectedContexts.length; i++) {
+                Object = oDataModel.getObject(aSelectedContexts[i].getPath());
+                aJSONData.push(oDataModel.getObject("/" + Object.ToVacations));
             }
 
-            sFilter = this.selectedEmployees.join();
-
-            oModel.loadData("http://localhost:3000/employees/vacations?filter=" + sFilter);
-
+            this.getModel("vacations").setData(aJSONData);
         }
 
         /**

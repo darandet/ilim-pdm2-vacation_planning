@@ -28,7 +28,7 @@
         </headerToolbar>
         <content>
             <Table fixedLayout="false" id="vacationsTable" class="sapUiSmallMarginTop"
-                   items="{path: 'vacations>/results', sorter: {path : 'pernr'} }">
+                   items="{vacations>/}">
                 <columns>
                     <Column vAlign="Middle" hAlign="Center">
                         <Text text="{i18n>details.table.employee}" />

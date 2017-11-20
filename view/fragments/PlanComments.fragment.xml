@@ -15,7 +15,7 @@
                         relativeScale: auto
                 }"
                 text="{oData>CommentText}"
-                icon="/sap/opu/odata/sap/ZHR_PDM_VACATION_PLANNING_SRV/VacationPlanCommentsSet(PlanYear='',CommentDate=datetime='9999-12-31T00%3A00%3A00',EmployeeId='{oData>EmployeeId}')/$value"
+                icon="/sap/opu/odata/sap/ZHR_PDM_VACATION_PLANNING_SRV/VacationPlanCommentsSet(PlanYear='',CommentTimestamp=datetime'9999-12-31T00%3A00%3A00',EmployeeId='{oData>EmployeeId}')/$value"
         />
     </List>
 </core:FragmentDefinition>

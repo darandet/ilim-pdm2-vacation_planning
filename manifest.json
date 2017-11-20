@@ -91,7 +91,7 @@
           "target": "PlanningClosed"
         },
         {
-          "pattern": "approval/manage/{selectedEmployees}",
+          "pattern": "approval/manage/details",
           "name": "ApprovalDetails",
           "target": "ApprovalDetails"
         },

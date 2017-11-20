@@ -37,21 +37,24 @@ sap.ui.define([
 
         onShowSelected: function (oEvent) {
 
-            this.getRouter().navTo("ApprovalDetails", {
-                selectedEmployees: JSON.stringify(this.selectedEmployees)
-            });
+            var oList  = this.getView().byId("inboxTable");
+            var oModel = this.getModel("oData");
+
+            this.oManagerController.setSelectedEmployees(oList.getSelectedContexts());
+
+            this.getRouter().navTo("ApprovalDetails");
         },
 
         onEmployeeSelect: function (oEvent) {
 
-            this.selectedEmployees = [];
-            var oList = oEvent.getSource();
-            var oModel = this.getModel("inbox");
-
-            for (var i=0; i < oList.getSelectedContexts().length; i++) {
-                var oObject = oModel.getObject(oList.getSelectedContexts()[i].sPath);
-                this.selectedEmployees.push(oObject.employeeId)
-            }
+            // this.selectedEmployees = [];
+            // var oList = oEvent.getSource();
+            // var oModel = this.getModel("oData");
+            //
+            // for (var i=0; i < oList.getSelectedContexts().length; i++) {
+            //     var oObject = oModel.getObject(oList.getSelectedContexts()[i].sPath);
+            //     this.selectedEmployees.push(oObject.employeeId)
+            // }
         },
 
         onEmployeeSearch: function (oEvent) {

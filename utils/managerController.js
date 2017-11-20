@@ -12,6 +12,7 @@ sap.ui.define([
                 this.aSelectionFilters = [];
                 this.oModel = {};
                 this.oWhenPeriodIsLoaded = {};
+                this.aSelectedEmplCntx = [];
             },
 
             setCurrentYear: function (sYear) {
@@ -61,6 +62,14 @@ sap.ui.define([
 
             getModel: function () {
                 return this.oModel;
+            },
+
+            setSelectedEmployees: function (aBindingContexts) {
+                this.aSelectedEmplCntx = aBindingContexts;
+            },
+
+            getSelectedEmployees: function () {
+                return this.aSelectedEmplCntx;
             }
 
         };
