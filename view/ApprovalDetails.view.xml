@@ -4,6 +4,7 @@
         xmlns="sap.m"
         xmlns:f="sap.f"
         xmlns:ilim="ilim.pdm2.vacation_planning.controls"
+        xmlns:unified="sap.ui.unified"
         displayBlock="true"
         height="100%"
         id="ApprovalDetails">
@@ -38,7 +39,7 @@
                     <items>
                         <ColumnListItem class="sapUiTinyPaddingTop">
                             <cells>
-                                <ObjectIdentifier title="{vacations>Pernr}"/>
+                                <ObjectIdentifier title="{vacations>EmployeeName}"/>
                                 <Text   textAlign="Center"
                                         text="{path: 'vacations>BeginDate', type: 'sap.ui.model.type.Date', formatOptions: {style: 'short'}} - {path: 'vacations>EndDate', type: 'sap.ui.model.type.Date', formatOptions: {style: 'short'}}"/>
                                 <ObjectStatus text="{vacations>VpProc}"/>
@@ -46,7 +47,32 @@
                         </ColumnListItem>
                     </items>
                 </Table>
-                <Text text="ASLdjal;fjsla;kfdj lsakjdf l;asndf asndf ,.asdnf .as,dnf asdnf als;kdfj ;asldfj sal;djf la;s"/>
+                <PlanningCalendar viewKey="M" rows="{path: 'calendar>/'}">
+                    <views>
+                        <PlanningCalendarView
+                                key="M"
+                                intervalType="Month"
+                                description="months view"
+                                intervalsS="2"
+                                intervalsM="6"
+                                intervalsL="12"
+                                showSubIntervals="true/"/>
+                    </views>
+                    <rows>
+                        <PlanningCalendarRow
+                                title="{calendar>EmployeeName}"
+                                appointments="{calendar>ToVacations}">
+                            <appointments>
+                                <unified:CalendarAppointment
+                                        startDate="{ calendar>BeginDate }"
+                                        endDate="{ calendar>EndDate }"
+                                        title="Заголовок"
+                                        text="текст">
+                                </unified:CalendarAppointment>
+                            </appointments>
+                        </PlanningCalendarRow>
+                    </rows>
+                </PlanningCalendar>
             </ilim:VacPlanCarousel>
         </content>
     </Panel>

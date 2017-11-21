@@ -40,7 +40,7 @@ sap.ui.define([
             var oList  = this.getView().byId("inboxTable");
             var oModel = this.getModel("oData");
 
-            this.oManagerController.setSelectedEmployees(oList.getSelectedContexts());
+            this.oManagerController.setSelectedEmployees(oList.getSelectedContextPaths());
 
             this.getRouter().navTo("ApprovalDetails");
         },
@@ -217,13 +217,22 @@ sap.ui.define([
                 if (!oData.CanApprove) {
                     that.getRouter().navTo("NoAuthorization");
                 } else {
-                    that.oManagerController.oWhenPeriodIsLoaded.then( function (oData) {
+                    if (that.oManagerController.getCurrentYear()) {
+                        that._filterInboxByYear(null, null, {PlanYear: that.oManagerController.getCurrentYear()});
+                    } else {
 
-                        that._filterInboxByYear(null, null, oData);
+                        that.oManagerController.oWhenPeriodIsLoaded.then( function (oData) {
 
-                    });
+                            that._filterInboxByYear(null, null, oData);
+
+                        });
+                    }
                 }
             });
+
+            if (this.oManagerController.getSelectedEmployees()) {
+                this.getView().byId("inboxTable").setSelectedContextPaths(this.oManagerController.getSelectedEmployees());
+            }
         }
 
         /**

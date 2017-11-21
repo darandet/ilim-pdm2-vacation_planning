@@ -23,6 +23,9 @@ sap.ui.define([
             var oJSONModel = new JSONModel();
             this.setModel(oJSONModel, "vacations");
 
+            oJSONModel = new JSONModel();
+            this.setModel(oJSONModel, "calendar")
+
         },
 
         onBackToInbox: function () {
@@ -33,19 +36,27 @@ sap.ui.define([
 
         _patternMatched: function () {
 
-            var aSelectedContexts = this.oManagerController.getSelectedEmployees();
+            var aSelectedContextPaths = this.oManagerController.getSelectedEmployees();
             var oDataModel        = this.getOwnerComponent().getModel("oData");
 
-            var aJSONData         = [];
-            var Object            = {};
+            var aVacationsData = [], aVacationKeys = [], aCalendarData = [];
+            var Object, Vacation;
 
-
-            for (var i=0; i < aSelectedContexts.length; i++) {
-                Object = oDataModel.getObject(aSelectedContexts[i].getPath());
-                aJSONData.push(oDataModel.getObject("/" + Object.ToVacations));
+            for (var i=0; i < aSelectedContextPaths.length; i++) {
+                Object        = oDataModel.getObject(aSelectedContextPaths[i]);
+                Object.ToVacations = [];
+                aVacationKeys = oDataModel.getObject(aSelectedContextPaths[i] + "/ToVacations");
+                for (var j=0; j < aVacationKeys.length; j++){
+                    Vacation = oDataModel.getObject("/" + aVacationKeys[j]);
+                    Vacation.EmployeeName = Object.EmployeeName;
+                    aVacationsData.push(Vacation);
+                    Object.ToVacations.push(Vacation);
+                }
+                aCalendarData.push(Object);
             }
+            this.getModel("vacations").setData(aVacationsData);
+            this.getModel("calendar").setData(aCalendarData);
 
-            this.getModel("vacations").setData(aJSONData);
         }
 
         /**
