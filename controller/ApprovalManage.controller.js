@@ -45,18 +45,6 @@ sap.ui.define([
             this.getRouter().navTo("ApprovalDetails");
         },
 
-        onEmployeeSelect: function (oEvent) {
-
-            // this.selectedEmployees = [];
-            // var oList = oEvent.getSource();
-            // var oModel = this.getModel("oData");
-            //
-            // for (var i=0; i < oList.getSelectedContexts().length; i++) {
-            //     var oObject = oModel.getObject(oList.getSelectedContexts()[i].sPath);
-            //     this.selectedEmployees.push(oObject.employeeId)
-            // }
-        },
-
         onEmployeeSearch: function (oEvent) {
 
             var aFilters = [];

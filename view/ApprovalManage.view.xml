@@ -11,7 +11,7 @@
                 path: 'oData>/ApprovalInboxSet',
                 parameters : {expand:'ToVacations'}
             }"
-           selectionChange="onEmployeeSelect" rememberSelections="true"
+           rememberSelections="true"
            id="inboxTable">
         <headerToolbar>
             <OverflowToolbar>

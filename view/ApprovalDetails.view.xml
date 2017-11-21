@@ -3,6 +3,7 @@
         xmlns:mvc="sap.ui.core.mvc"
         xmlns="sap.m"
         xmlns:f="sap.f"
+        xmlns:ilim="ilim.pdm2.vacation_planning.controls"
         displayBlock="true"
         height="100%"
         id="ApprovalDetails">
@@ -15,42 +16,38 @@
                     <ToolbarSpacer/>
                     <Title text="{i18n>details.header}" level="H2"/>
                     <ToolbarSpacer/>
-                    <SegmentedButton select="onDataViewChange" id="dataViewChangeButton">
-                        <items>
-                            <SegmentedButtonItem key="tableView" icon="sap-icon://table-view"
-                                                 id="tableViewButton"/>
-                            <SegmentedButtonItem key="timelineView" icon="sap-icon://accelerated"
-                                                 id="timelineViewButton"/>
-                        </items>
-                    </SegmentedButton>
                 </content>
             </Toolbar>
         </headerToolbar>
         <content>
-            <Table fixedLayout="false" id="vacationsTable" class="sapUiSmallMarginTop"
-                   items="{vacations>/}">
-                <columns>
-                    <Column vAlign="Middle" hAlign="Center">
-                        <Text text="{i18n>details.table.employee}" />
-                    </Column>
-                    <Column vAlign="Middle" hAlign="Center">
-                        <Text text="{i18n>details.table.period}" />
-                    </Column>
-                    <Column vAlign="Middle" hAlign="Center">
-                        <Text text="{i18n>details.table.operation}" />
-                    </Column>
-                </columns>
-                <items>
-                    <ColumnListItem class="sapUiTinyPaddingTop">
-                        <cells>
-                            <ObjectIdentifier title="{vacations>pernr}"/>
-                            <Text   textAlign="Center"
-                                    text="{vacations>begda} - {vacations>endda}"/>
-                            <ObjectStatus text="{vacations>status}" state="Success" />
-                        </cells>
-                    </ColumnListItem>
-                </items>
-            </Table>
+            <ilim:VacPlanCarousel arrowsPlacement="PageIndicator" pageIndicatorPlacement="Top"
+                                  leftIcon="sap-icon://table-view" rightIcon="sap-icon://accelerated">
+                <Table fixedLayout="false" id="vacationsTable" class="sapUiSmallMarginTop"
+                       items="{vacations>/}">
+                    <columns>
+                        <Column vAlign="Middle" hAlign="Center">
+                            <Text text="{i18n>details.table.employee}" />
+                        </Column>
+                        <Column vAlign="Middle" hAlign="Center">
+                            <Text text="{i18n>details.table.period}" />
+                        </Column>
+                        <Column vAlign="Middle" hAlign="Center">
+                            <Text text="{i18n>details.table.operation}" />
+                        </Column>
+                    </columns>
+                    <items>
+                        <ColumnListItem class="sapUiTinyPaddingTop">
+                            <cells>
+                                <ObjectIdentifier title="{vacations>Pernr}"/>
+                                <Text   textAlign="Center"
+                                        text="{path: 'vacations>BeginDate', type: 'sap.ui.model.type.Date', formatOptions: {style: 'short'}} - {path: 'vacations>EndDate', type: 'sap.ui.model.type.Date', formatOptions: {style: 'short'}}"/>
+                                <ObjectStatus text="{vacations>VpProc}"/>
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+                <Text text="ASLdjal;fjsla;kfdj lsakjdf l;asndf asndf ,.asdnf .as,dnf asdnf als;kdfj ;asldfj sal;djf la;s"/>
+            </ilim:VacPlanCarousel>
         </content>
     </Panel>
 </mvc:View>
