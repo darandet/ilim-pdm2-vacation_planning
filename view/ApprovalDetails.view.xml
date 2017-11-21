@@ -47,7 +47,8 @@
                         </ColumnListItem>
                     </items>
                 </Table>
-                <PlanningCalendar viewKey="M" rows="{path: 'calendar>/'}">
+                <PlanningCalendar viewKey="M" appoitmentsReducedHeight="true" appointmentsVisualization="Filled"
+                                  showIntervalHeaders="false" rows="{path: 'calendar>/'}">
                     <views>
                         <PlanningCalendarView
                                 key="M"
@@ -64,10 +65,9 @@
                                 appointments="{calendar>ToVacations}">
                             <appointments>
                                 <unified:CalendarAppointment
-                                        startDate="{ calendar>BeginDate }"
-                                        endDate="{ calendar>EndDate }"
-                                        title="Заголовок"
-                                        text="текст">
+                                        startDate="{calendar>BeginDate}"
+                                        endDate="{calendar>EndDate}"
+                                        type="{calendar>Type}">
                                 </unified:CalendarAppointment>
                             </appointments>
                         </PlanningCalendarRow>

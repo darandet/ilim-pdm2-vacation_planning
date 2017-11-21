@@ -40,15 +40,25 @@ sap.ui.define([
             var oDataModel        = this.getOwnerComponent().getModel("oData");
 
             var aVacationsData = [], aVacationKeys = [], aCalendarData = [];
-            var Object, Vacation;
+            var Object, Vacation, Type;
+            var PossibleTypes = [1,2,3,4,5,6,7,8,9], TypesPool, randomType;
+
 
             for (var i=0; i < aSelectedContextPaths.length; i++) {
                 Object        = oDataModel.getObject(aSelectedContextPaths[i]);
                 Object.ToVacations = [];
+
+                if (TypesPool.length < 1) {
+                    TypesPool = PossibleTypes;
+                }
+                randomType = TypesPool.splice(Math.floor(Math.random() * TypesPool.length), 1);
+
+
                 aVacationKeys = oDataModel.getObject(aSelectedContextPaths[i] + "/ToVacations");
                 for (var j=0; j < aVacationKeys.length; j++){
                     Vacation = oDataModel.getObject("/" + aVacationKeys[j]);
                     Vacation.EmployeeName = Object.EmployeeName;
+                    Vacation.Type = "Type0" + randomType[0];
                     aVacationsData.push(Vacation);
                     Object.ToVacations.push(Vacation);
                 }
@@ -57,6 +67,10 @@ sap.ui.define([
             this.getModel("vacations").setData(aVacationsData);
             this.getModel("calendar").setData(aCalendarData);
 
+
+            function getRandomInt(min, max) {
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
         }
 
         /**
