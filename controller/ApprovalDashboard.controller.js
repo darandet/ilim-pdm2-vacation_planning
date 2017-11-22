@@ -11,8 +11,8 @@ sap.ui.define([
          * @namespace ilim.pdm2.vacation_planning.ApprovalDashboard
          */
 
-        sDataPath1: "https://sapui5.hana.ondemand.com/test-resources/sap/viz/demokit/dataset/milk_production_testing_data/revenue_cost_consume/betterMedium.json",
-        sDataPath2: "https://sapui5.hana.ondemand.com/test-resources/sap/viz/demokit/dataset/milk_production_testing_data/revenue_cost_consume/small.json",
+        //sDataPath1: "https://sapui5.hana.ondemand.com/test-resources/sap/viz/demokit/dataset/milk_production_testing_data/revenue_cost_consume/betterMedium.json",
+        //sDataPath2: "https://sapui5.hana.ondemand.com/test-resources/sap/viz/demokit/dataset/milk_production_testing_data/revenue_cost_consume/small.json",
 
         /**
          * Called when a controller is instantiated and its View controls (if available) are already created.
@@ -22,74 +22,74 @@ sap.ui.define([
         onInit: function() {
 
             var oModel;
-            var oVizFrame;
-            var sLocalPath;
+//             var oVizFrame;
+//             var sLocalPath;
 
-            for (var i = 0; i < 3; i++) {
+//             for (var i = 0; i < 3; i++) {
 
-                if (i === 0) {
-                    oVizFrame = this.getView().byId("idVizFrame");
-                    sLocalPath = this.sDataPath1;
-                } else if (i === 1) {
-                    oVizFrame = this.getView().byId("idVizFrame2");
-                    sLocalPath = this.sDataPath2;
-                } else if (i === 2) {
-                    oVizFrame = this.getView().byId("idVizFrame3");
-                    sLocalPath = this.sDataPath2;
-                }
+//                 if (i === 0) {
+//                     oVizFrame = this.getView().byId("idVizFrame");
+//                     sLocalPath = this.sDataPath1;
+//                 } else if (i === 1) {
+//                     oVizFrame = this.getView().byId("idVizFrame2");
+//                     sLocalPath = this.sDataPath2;
+//                 } else if (i === 2) {
+//                     oVizFrame = this.getView().byId("idVizFrame3");
+//                     sLocalPath = this.sDataPath2;
+//                 }
 
-                oModel = new JSONModel(sLocalPath);
-                oVizFrame.setModel(oModel);
+//                 oModel = new JSONModel(sLocalPath);
+//                 oVizFrame.setModel(oModel);
 
-                oVizFrame.setVizProperties({
-                    valueAxis: {
-                        title: {
-                            visible: false
-                        },
-                        label: {
-                            visible: false
-                        }
-                    },
-                    categoryAxis: {
-                        title: {
-                            visible: false
-                        }
-                    },
-                    title: {
-                        visible: false
-                    },
-                    legendGroup: {
-                        layout: {
-                            position: 'auto'
-                        }
-                    },
-                    legend: {
-                        visible: false
-                    }
-                });
+//                 oVizFrame.setVizProperties({
+//                     valueAxis: {
+//                         title: {
+//                             visible: false
+//                         },
+//                         label: {
+//                             visible: false
+//                         }
+//                     },
+//                     categoryAxis: {
+//                         title: {
+//                             visible: false
+//                         }
+//                     },
+//                     title: {
+//                         visible: false
+//                     },
+//                     legendGroup: {
+//                         layout: {
+//                             position: 'auto'
+//                         }
+//                     },
+//                     legend: {
+//                         visible: false
+//                     }
+//                 });
 
-                if (i === 2) {
-                    oVizFrame.setVizProperties({
-                        plotArea: {
-                            referenceLine: {
-                                line: {
-                                    valueAxis: [{
-                                        value: 1000000,
-                                        visible: true,
-                                        size: 1,
-                                        type: "dotted",
-                                        label: {
-                                            text: "Target",
-                                            visible: true
-                                        }
-                                    }]
-                                }
-                            }
-                        }
-                    });
-                }
+//                 if (i === 2) {
+//                     oVizFrame.setVizProperties({
+//                         plotArea: {
+//                             referenceLine: {
+//                                 line: {
+//                                     valueAxis: [{
+//                                         value: 1000000,
+//                                         visible: true,
+//                                         size: 1,
+//                                         type: "dotted",
+//                                         label: {
+//                                             text: "Target",
+//                                             visible: true
+//                                         }
+//                                     }]
+//                                 }
+//                             }
+//                         }
+//                     });
+//                 }
 
-            }
+//             }
 
             this.getRouter().getRoute("ApprovalsDashboard").attachPatternMatched(this._patternMatched, this);
 
@@ -145,7 +145,21 @@ sap.ui.define([
             if (binding) {
                 binding.filter(filter);
             }
-
+            
+            binding = this.getView().byId("idVizFrame").getDataset().getBinding("data");
+            if (binding) {
+                binding.filter(filter);
+            }                
+            
+            binding = this.getView().byId("idVizFrame2").getDataset().getBinding("data");
+            if (binding) {
+                binding.filter(filter);
+            }                
+            
+            binding = this.getView().byId("idVizFrame3").getDataset().getBinding("data");
+            if (binding) {
+                binding.filter(filter);
+            }                            
         }
 
         /**

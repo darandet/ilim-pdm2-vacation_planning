@@ -58,11 +58,59 @@
                 </m:content>
             </m:Panel>
             <m:Panel width="45%" backgroundDesign="Solid" headerText="{i18n>dashboard.graphic.absencePercent}" height="300px">
-                <viz:VizFrame id="idVizFrame" height='100%' width="100%" vizType='column'>
+                <viz:VizFrame id="idVizFrame" height='100%' width="100%" vizType='column'
+                  vizProperties="{
+                                   valueAxis: {
+                                     title: {
+                                       visible: false
+                                     },
+                                     label: {
+                                       visible: false
+                                     }
+                                   },
+                                   categoryAxis: {
+                                     title: {
+                                       visible: false
+                                     }
+                                   },
+                                   title: {
+                                     visible: false
+                                   },
+                                   legendGroup: {
+                                     layout: {
+                                       position: 'bottom'
+                                     }
+                                   },
+                                   legend: {
+                                     visible: false
+                                   },
+                                   toolTip : {  
+                                     visible: false 
+                                   },        
+                                   interaction: {
+                                     behaviorType: 'noHoverBehavior'
+                                   },                                                      
+                                   plotArea: {
+                                     referenceLine: {
+                                       line: {
+                                         valueAxis: [{
+                                           value: 3,
+                                           visible: true,
+                                           size: 1,
+                                           type: 'dotted',
+                                           label: {
+                                             text: 'Target',
+                                             visible: false
+                                           }
+                                         }]
+                                       }
+                                     }
+                                   }                                                                    
+                                 }">
                     <viz:dataset>
-                        <viz.data:FlattenedDataset data="{oData/>AbsencePercentGraphSet}">
+                        <viz.data:FlattenedDataset data="{oData>/AbsencePercentGraphSet}">
                             <viz.data:dimensions>
-                                <viz.data:DimensionDefinition name="Month"
+                                <viz.data:DimensionDefinition name="Months"
                                                               value="{Dimension}" />
                             </viz.data:dimensions>
                             <viz.data:measures>
@@ -76,7 +124,7 @@
                         <viz.feeds:FeedItem id='valueAxisFeed' uid="valueAxis" type="Measure"
                                             values="Percent" />
                         <viz.feeds:FeedItem id='categoryAxisFeed' uid="categoryAxis" type="Dimension"
-                                            values="Month" />
+                                            values="Months" />
                     </viz:feeds>
                 </viz:VizFrame>
             </m:Panel>
@@ -86,9 +134,41 @@
 
     <m:FlexBox fitContainer="true" renderType="Bare" justifyContent="SpaceBetween" class="sapUiMediumMarginTop">
         <m:Panel width="30%" backgroundDesign="Solid" headerText="{i18n>dashboard.graphic.numberApproved}" height="300px">
-            <viz:VizFrame id="idVizFrame2" height='100%' width="100%" vizType='donut'>
+            <viz:VizFrame id="idVizFrame2" height='100%' width="100%" vizType='donut'
+                vizProperties="{
+                                 valueAxis: {
+                                   title: {
+                                     visible: false
+                                   },
+                                   label: {
+                                     visible: false
+                                   }
+                                 },
+                                 categoryAxis: {
+                                   title: {
+                                     visible: false
+                                   }
+                                 },
+                                 title: {
+                                   visible: false
+                                 },
+                                 legendGroup: {
+                                   layout: {
+                                     position: 'bottom'
+                                   }
+                                 },
+                                 legend: {
+                                   visible: true
+                                 },
+                                 toolTip : {  
+                                   visible: false 
+                                 },        
+                                 interaction: {
+                                   behaviorType: 'noHoverBehavior'
+                                 }                                                    
+                               }">
                 <viz:dataset>
-                    <viz.data:FlattenedDataset data="{/ApproveNumberGraphSet}">
+                    <viz.data:FlattenedDataset data="{oData>/ApproveNumberGraphSet}">
                         <viz.data:dimensions>
                             <viz.data:DimensionDefinition name="Category"
                                                           value="{Dimension}" />
@@ -109,7 +189,58 @@
             </viz:VizFrame>
         </m:Panel>
         <m:Panel width="45%" backgroundDesign="Solid" headerText="{i18n>dashboard.graphic.vacDaysPlanned}" height="300px">
-            <viz:VizFrame id="idVizFrame3" height='100%' width="100%" vizType='bar'>
+            <viz:VizFrame id="idVizFrame3" height='100%' width="100%" vizType='bar'
+                vizProperties="{
+                                 valueAxis: {
+                                   title: {
+                                     visible: false
+                                   },
+                                   label: {
+                                     visible: false
+                                   }
+                                 },
+                                 categoryAxis: {
+                                   title: {
+                                     visible: false
+                                   },
+                                   label: {
+                                     visible: false
+                                   }                                   
+                                 },
+                                 title: {
+                                   visible: false
+                                 },
+                                 legendGroup: {
+                                   layout: {
+                                     position: 'bottom'
+                                   }
+                                 },
+                                 legend: {
+                                   visible: true
+                                 },
+                                 toolTip : {  
+                                   visible: false 
+                                 },        
+                                 interaction: {
+                                   behaviorType: 'noHoverBehavior'
+                                 },                                                          
+                                 plotArea: {
+                                   referenceLine: {
+                                     line: {
+                                       valueAxis: [{
+                                         value: 3,
+                                         visible: true,
+                                         size: 1,
+                                         type: 'dotted',
+                                         label: {
+                                           text: 'Target',
+                                           visible: false
+                                         }
+                                       }]
+                                     }
+                                   }
+                                 }
+                               }">
                 <viz:dataset>
                     <viz.data:FlattenedDataset data="{oData>/VacationPlanDaysGraphSet}">
                         <viz.data:dimensions>
@@ -127,6 +258,8 @@
                     <viz.feeds:FeedItem uid="valueAxis" type="Measure"
                                         values="Days" />
                     <viz.feeds:FeedItem uid="categoryAxis" type="Dimension"
+                                        values="Category" />
+                    <viz.feeds:FeedItem uid="color" type="Dimension"
                                         values="Category" />
                 </viz:feeds>
             </viz:VizFrame>
