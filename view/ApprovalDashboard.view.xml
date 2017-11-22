@@ -60,7 +60,7 @@
             <m:Panel width="45%" backgroundDesign="Solid" headerText="{i18n>dashboard.graphic.absencePercent}" height="300px">
                 <viz:VizFrame id="idVizFrame" height='100%' width="100%" vizType='column'>
                     <viz:dataset>
-                        <viz.data:FlattenedDataset data="{oData/>AbsencePercentGraphSet}">
+                        <viz.data:FlattenedDataset data="{oData>/AbsencePercentGraphSet}">
                             <viz.data:dimensions>
                                 <viz.data:DimensionDefinition name="Month"
                                                               value="{Dimension}" />
@@ -88,7 +88,7 @@
         <m:Panel width="30%" backgroundDesign="Solid" headerText="{i18n>dashboard.graphic.numberApproved}" height="300px">
             <viz:VizFrame id="idVizFrame2" height='100%' width="100%" vizType='donut'>
                 <viz:dataset>
-                    <viz.data:FlattenedDataset data="{/ApproveNumberGraphSet}">
+                    <viz.data:FlattenedDataset data="{oData>/ApproveNumberGraphSet}">
                         <viz.data:dimensions>
                             <viz.data:DimensionDefinition name="Category"
                                                           value="{Dimension}" />
