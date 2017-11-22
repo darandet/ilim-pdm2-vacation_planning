@@ -134,6 +134,7 @@ sap.ui.define([
 
         _filterDashboardByYear: function (sChannel, sEvent, oData) {
 
+            var oVizFrame;
             var aFilters = [];
             var filter = new Filter("PlanYear", sap.ui.model.FilterOperator.EQ, oData.PlanYear);
 
@@ -156,7 +157,7 @@ sap.ui.define([
                     oVizFrame = this.getView().byId("idVizFrame3");
                 }            
 
-                binding = oVizFrame.getBinding("data");
+                binding = oVizFrame.getDataset().getBinding("data");
                 if (binding) {
                     binding.filter(filter);
                 }                
