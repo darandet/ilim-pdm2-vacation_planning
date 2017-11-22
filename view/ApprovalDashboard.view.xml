@@ -57,29 +57,26 @@
                     </m:Table>
                 </m:content>
             </m:Panel>
-            <m:Panel width="45%" backgroundDesign="Solid" headerText="Процент отсутствия сотрудников" height="300px">
-                <viz:VizFrame id="idVizFrame" uiConfig="{applicationSet:'fiori'}"
-                              height='100%' width="100%" vizType='column'>
+            <m:Panel width="45%" backgroundDesign="Solid" headerText="{i18n>dashboard.graphic.absencePercent}" height="300px">
+                <viz:VizFrame id="idVizFrame" height='100%' width="100%" vizType='column'>
                     <viz:dataset>
-                        <viz.data:FlattenedDataset data="{/milk}">
+                        <viz.data:FlattenedDataset data="{oData/>AbsencePercentGraphSet}">
                             <viz.data:dimensions>
-                                <viz.data:DimensionDefinition name="Week"
-                                                              value="{Week}" />
+                                <viz.data:DimensionDefinition name="Month"
+                                                              value="{Dimension}" />
                             </viz.data:dimensions>
                             <viz.data:measures>
-                                <viz.data:MeasureDefinition name="Revenue"
-                                                            value="{Revenue}" />
-                                <viz.data:MeasureDefinition name="Cost"
-                                                            value="{Cost}" />
+                                <viz.data:MeasureDefinition name="Percent"
+                                                            value="{Measure}" />
                             </viz.data:measures>
                         </viz.data:FlattenedDataset>
                     </viz:dataset>
 
                     <viz:feeds>
                         <viz.feeds:FeedItem id='valueAxisFeed' uid="valueAxis" type="Measure"
-                                            values="Revenue" />
+                                            values="Percent" />
                         <viz.feeds:FeedItem id='categoryAxisFeed' uid="categoryAxis" type="Dimension"
-                                            values="Week" />
+                                            values="Month" />
                     </viz:feeds>
                 </viz:VizFrame>
             </m:Panel>
@@ -88,53 +85,49 @@
     </m:FlexBox>
 
     <m:FlexBox fitContainer="true" renderType="Bare" justifyContent="SpaceBetween" class="sapUiMediumMarginTop">
-        <m:Panel width="30%" backgroundDesign="Solid" headerText="Число согласованных сотрудников" height="300px">
-            <viz:VizFrame id="idVizFrame2" uiConfig="{applicationSet:'fiori'}"
-                          height='100%' width="100%" vizType='donut'>
+        <m:Panel width="30%" backgroundDesign="Solid" headerText="{i18n>dashboard.graphic.numberApproved}" height="300px">
+            <viz:VizFrame id="idVizFrame2" height='100%' width="100%" vizType='donut'>
                 <viz:dataset>
-                    <viz.data:FlattenedDataset data="{/milk}">
+                    <viz.data:FlattenedDataset data="{/ApproveNumberGraphSet}">
                         <viz.data:dimensions>
-                            <viz.data:DimensionDefinition name="Store Name"
-                                                          value="{Store Name}" />
+                            <viz.data:DimensionDefinition name="Category"
+                                                          value="{Dimension}" />
                         </viz.data:dimensions>
                         <viz.data:measures>
-                            <viz.data:MeasureDefinition name="Revenue"
-                                                        value="{Revenue}" />
+                            <viz.data:MeasureDefinition name="Number"
+                                                        value="{Measure}" />
                         </viz.data:measures>
                     </viz.data:FlattenedDataset>
                 </viz:dataset>
 
                 <viz:feeds>
                     <viz.feeds:FeedItem uid="size" type="Measure"
-                                        values="Revenue" />
+                                        values="Number" />
                     <viz.feeds:FeedItem uid="color" type="Dimension"
-                                        values="Store Name" />
+                                        values="Category" />
                 </viz:feeds>
             </viz:VizFrame>
         </m:Panel>
-        <m:Panel width="45%" backgroundDesign="Solid" headerText="Отпускных дней запланировано" height="300px">
-            <viz:VizFrame id="idVizFrame3" uiConfig="{applicationSet:'fiori'}"
-                          height='100%' width="100%" vizType='bar'>
+        <m:Panel width="45%" backgroundDesign="Solid" headerText="{i18n>dashboard.graphic.vacDaysPlanned}" height="300px">
+            <viz:VizFrame id="idVizFrame3" height='100%' width="100%" vizType='bar'>
                 <viz:dataset>
-                    <viz.data:FlattenedDataset data="{/milk}">
+                    <viz.data:FlattenedDataset data="{oData>/VacationPlanDaysGraphSet}">
                         <viz.data:dimensions>
-                            <viz.data:DimensionDefinition name="Store Name"
-                                                          value="{Store Name}" />
+                            <viz.data:DimensionDefinition name="Category"
+                                                          value="{Dimension}" />
                         </viz.data:dimensions>
                         <viz.data:measures>
-                            <viz.data:MeasureDefinition name="Revenue"
-                                                        value="{Revenue}" />
-                            <viz.data:MeasureDefinition name="Cost"
-                                                        value="{Cost}" />
+                            <viz.data:MeasureDefinition name="Days"
+                                                        value="{Measure}" />
                         </viz.data:measures>
                     </viz.data:FlattenedDataset>
                 </viz:dataset>
 
                 <viz:feeds>
                     <viz.feeds:FeedItem uid="valueAxis" type="Measure"
-                                        values="Revenue" />
+                                        values="Days" />
                     <viz.feeds:FeedItem uid="categoryAxis" type="Dimension"
-                                        values="Store Name" />
+                                        values="Category" />
                 </viz:feeds>
             </viz:VizFrame>
         </m:Panel>
