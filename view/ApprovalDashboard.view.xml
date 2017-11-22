@@ -112,7 +112,7 @@
                 </viz:feeds>
             </viz:VizFrame>
         </m:Panel>
-        <m:Panel width="45%" backgroundDesign="Solid" headerText="Отпускных дней запланировано" height="300px">
+        <m:Panel width="45%" backgroundDesign="Solid" headerText="Отпускных дней запланировано2" height="300px">
             <viz:VizFrame id="idVizFrame3" uiConfig="{applicationSet:'fiori'}"
                           height='100%' width="100%" vizType='bar'>
                 <viz:dataset>
