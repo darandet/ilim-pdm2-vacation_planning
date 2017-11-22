@@ -288,19 +288,34 @@ sap.ui.define([
             sMessageText = sMessageText + sFinalQuestion;
 
             var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
-            MessageBox.show(this.getResourceBundle().getText("vacation.checks.commonText"), {
-                icon: MessageBox.Icon.WARNING,
-                title: this.getResourceBundle().getText("vacation.checks.Title"),
-                actions: [MessageBox.Action.YES, MessageBox.Action.NO],
-                defaultAction: sap.m.MessageBox.Action.NO,
-                details: sMessageText,
-                styleClass: bCompact ? "sapUiSizeCompact" : "",
-                onClose: function (sAction) {
-                    if (sAction === "YES") {
-                        this._sendPlan();
+
+            var oWarningDialog = new Dialog({
+                type: sap.m.DialogType.Warning,
+                title: this.getResourceBundle().getText("vacation.checks.commonText"),
+                state: "Warning",
+                content: new sap.m.FormattedText({
+                    htmlText: sMessageText
+                }),
+                beginButton: new Button({
+                    text: this.getResourceBundle().getText("vacation.checks.YesButton"),
+                    press: function () {
+                        oWarningDialog.close();
+                        this._sendPlan()
+                    }.bind(this)
+                }),
+                endButton: new Button({
+                    text: this.getResourceBundle().getText("vacation.checks.NoButton"),
+                    press: function () {
+                        oWarningDialog.close();
                     }
-                }.bind(this)
+                }),
+                afterClose: function () {
+                    oWarningDialog.destroy();
+                }
             });
+
+            oWarningDialog.addStyleClass("sapUiContentPadding");
+            oWarningDialog.open();
         },
         
         _sendPlan: function () {
@@ -354,7 +369,7 @@ sap.ui.define([
             if (!this.commentDialog) {
 
                 var oComment = {
-                    comment: ""
+                    Comment: ""
                 };
 
                 var oDialogFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.CommentsDialog");

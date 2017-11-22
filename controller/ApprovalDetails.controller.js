@@ -41,7 +41,7 @@ sap.ui.define([
 
             var aVacationsData = [], aVacationKeys = [], aCalendarData = [];
             var Object, Vacation, Type;
-            var PossibleTypes = [1,2,3,4,5,6,7,8,9], TypesPool, randomType;
+            var PossibleTypes = [1,2,3,4,5,6,7,8,9], TypesPool = [], randomType;
 
 
             for (var i=0; i < aSelectedContextPaths.length; i++) {

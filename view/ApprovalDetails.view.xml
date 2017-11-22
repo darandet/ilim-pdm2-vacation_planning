@@ -56,8 +56,8 @@
                                 description="months view"
                                 intervalsS="2"
                                 intervalsM="6"
-                                intervalsL="12"
-                                showSubIntervals="true/"/>
+                                intervalsL="9"
+                                showSubIntervals="false"/>
                     </views>
                     <rows>
                         <PlanningCalendarRow

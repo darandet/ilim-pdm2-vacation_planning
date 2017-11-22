@@ -8,7 +8,7 @@
             axisOrientation="Vertical"
             enableScroll="false"
             enableDoubleSided="false"
-            lazyLoading="true"
+            lazyLoading="false"
             textHeight="automatic"
             sort="false"
             showHeaderBar="false"
@@ -16,9 +16,10 @@
             content="{oData>ToApprRoute}">
         <content>
             <TimelineItem
-                    userNameClickable="true"
-                    title="{oData>ApproverRoleText}"
-                    userName="{oData>ApproverName}">
+                    userNameClickable="false"
+                    text="{oData>ApproverRoleText}"
+                    userName="{oData>ApproverName}"
+                    dateTime="">
             </TimelineItem>
         </content>
     </Timeline>
