@@ -145,7 +145,22 @@ sap.ui.define([
             if (binding) {
                 binding.filter(filter);
             }
+            
+            for (var i = 0; i < 3; i++) {
 
+                if (i === 0) {
+                    oVizFrame = this.getView().byId("idVizFrame");
+                } else if (i === 1) {
+                    oVizFrame = this.getView().byId("idVizFrame2");
+                } else if (i === 2) {
+                    oVizFrame = this.getView().byId("idVizFrame3");
+                }            
+
+                binding = oVizFrame.getBinding("data");
+                if (binding) {
+                    binding.filter(filter);
+                }                
+            }
         }
 
         /**
