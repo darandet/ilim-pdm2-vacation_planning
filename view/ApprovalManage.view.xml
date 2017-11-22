@@ -85,8 +85,8 @@
                                     enabled="{oData>CanReject}"
                                     press="onRejectPlan"
                             />
-                            <Button icon="sap-icon://create-form" enabled="{oData>CanCreate}"/>
-                            <Button icon="sap-icon://comment" enabled="{oData>CanComment}"/>
+                            <Button icon="sap-icon://create-form" enabled="{oData>CanCreate}" press="onShowPlanForm"/>
+                            <Button icon="sap-icon://comment" enabled="{oData>CanComment}" press="onShowComments"/>
                         </items>
                     </FlexBox>
 

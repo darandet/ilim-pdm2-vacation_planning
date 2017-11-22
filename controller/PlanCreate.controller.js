@@ -3,9 +3,8 @@ sap.ui.define([
     "jquery.sap.global",
     "sap/ui/model/json/JSONModel",
     "sap/ui/model/odata/v2/ODataModel",
-    "ilim/pdm2/vacation_planning/model/formatter",
-    "sap/m/MessageBox"
-], function (Controller, $, JSONModel, ODataModel, Formatter, MessageBox) {
+    "ilim/pdm2/vacation_planning/model/formatter"
+], function (Controller, $, JSONModel, ODataModel, Formatter) {
     "use strict";
 
     return Controller.extend("ilim.pdm2.vacation_planning.controller.PlanCreate", {

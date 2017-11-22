@@ -164,6 +164,65 @@ sap.ui.define([
             this.commentDialog.open();
         },
 
+        onShowComments: function (oEvent) {
+            var that = this;
+            if (!that._planComments) {
+
+                var oFormFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.PlanComments");
+
+                that._planComments = new Dialog({
+                    title: that.getResourceBundle().getText("vacation.comments.Header"),
+                    contentWidth: "35%",
+                    draggable: true,
+                    content: oFormFragment,
+                    endButton: new Button({
+                        text: that.getResourceBundle().getText("common.dialog.button.close"),
+                        press: function () {
+                            that._planComments.close();
+                        }
+                    })
+                });
+
+                //to get access to the global model
+                that.getView().addDependent(that._planComments);
+
+            }
+
+            var oSource         = oEvent.getSource();
+            var sCtxPath        = oSource.getParent().getBindingContext("oData").getPath(); //Button -> Item
+            that._planComments.bindElement({
+                path: sCtxPath,
+                model: "oData"
+            });
+            that._planComments.open();
+
+        },
+
+        onShowPlanForm: function (oEvent) {
+            var oSource         = oEvent.getSource();
+            var sCtxPath        = oSource.getParent().getBindingContext("oData").getPath(); //Button -> Item
+
+            var that = this;
+            if (!that.planCreationForm) {
+
+                var oPlanView = sap.ui.xmlview("ilim.pdm2.vacation_planning.view.PlanCreate");
+                that.planCreationForm = new Dialog({
+                    title: this.getResourceBundle().getText("vacation.footer.button.vacationPlan"),
+                    resizable: true,
+                    content: oPlanView,
+                    beginButton: new Button({
+                        text: this.getResourceBundle().getText("common.commentsDialog.CancelButton"),
+                        press: function () {
+                            that.planCreationForm.close();
+                        }
+                    })
+                })
+            }
+
+            that.planCreationForm.open();
+
+        },
+
         _callActionOnPlan: function (oContextObject, Action) {
 
             var oDataModel = this.getView().getModel("oData");
