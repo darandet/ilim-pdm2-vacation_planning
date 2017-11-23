@@ -24,7 +24,7 @@
                     </m:Toolbar>
                 </m:headerToolbar>
                 <m:content>
-                    <m:Table fixedLayout="false" items="{oData>/NoAccessEmployeesSet}" id="noAccessEmployeesTable">
+                    <m:Table fixedLayout="false" id="noAccessEmployeesTable" items="{path: 'oData>ToNoAccEmpl'}">
                         <m:columns>
                             <m:Column vAlign="Middle" hAlign="Center">
                                 <m:Text text="{i18n>dashboard.noAccessEmployees.numberSign}" />
@@ -108,7 +108,7 @@
                                    }                                                                    
                                  }">
                     <viz:dataset>
-                        <viz.data:FlattenedDataset data="{oData>/AbsencePercentGraphSet}">
+                        <viz.data:FlattenedDataset data="{path: 'oData>ToAbsPercGraph'}">
                             <viz.data:dimensions>
                                 <viz.data:DimensionDefinition name="Months"
                                                               value="{Dimension}" />
@@ -168,7 +168,7 @@
                                  }                                                    
                                }">
                 <viz:dataset>
-                    <viz.data:FlattenedDataset data="{oData>/ApproveNumberGraphSet}">
+                    <viz.data:FlattenedDataset data="{path: 'oData>ToApprNumGraph'}">
                         <viz.data:dimensions>
                             <viz.data:DimensionDefinition name="Category"
                                                           value="{Dimension}" />
@@ -242,7 +242,7 @@
                                  }
                                }">
                 <viz:dataset>
-                    <viz.data:FlattenedDataset data="{oData>/VacationPlanDaysGraphSet}">
+                    <viz.data:FlattenedDataset data="{path: 'oData>ToVacPlanDaysGraph'}">
                         <viz.data:dimensions>
                             <viz.data:DimensionDefinition name="Category"
                                                           value="{Dimension}" />
