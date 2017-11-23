@@ -100,6 +100,13 @@ sap.ui.define([
             if (sKey === 'approvalTab') {
                 oRouter.navTo('ManageApprovals');
             } else if (sKey === 'overviewTab') {
+                this.getView().bindElement({
+                    path: this.getView().getBindingContext("oData").getPath(),
+                    parameters: {
+                        expand: "ToAbsPercGraph,ToApprNumGraph,ToVacPlanDaysGraph"
+                    },
+                    model: "oData"
+                });                  
                 oRouter.navTo('ApprovalsDashboard');
             }
 
