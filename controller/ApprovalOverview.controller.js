@@ -103,7 +103,7 @@ sap.ui.define([
                 this.getView().bindElement({
                     path: this.getView().getBindingContext("oData").getPath(),
                     parameters: {
-                        expand: "ToNoAccEmpl,ToAbsPercGraph,ToApprNumGraph,ToVacPlanDaysGraph"
+                        expand: "ToAbsPercGraph,ToApprNumGraph,ToVacPlanDaysGraph"
                     },
                     model: "oData"
                 });                  
