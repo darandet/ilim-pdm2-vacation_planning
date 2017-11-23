@@ -4,75 +4,10 @@
         xmlns="sap.m"
         xmlns:u="sap.ui.unified"
         xmlns:l="sap.ui.layout"
+        xmlns:core="sap.ui.core"
         displayBlock="true"
         busy="{contentState>/busy}">
 
 
-    <FlexBox height="3rem" alignItems="Center" justifyContent="Center">
-        <items>
-            <MessageStrip id="MessageContainer" showIcon="true" visible="false" type="Error"/>
-        </items>
-    </FlexBox>
-
-    <l:Grid defaultSpan="L7 M12 S12" class="sapUiSmallMarginTop" hSpacing="0.5">
-        <l:content>
-            <u:Calendar width="99%"
-                    id="calendar"
-                    intervalSelection="true"
-                    months="2"
-                    select="onDateRangeSelect"
-                    maxDate="{calendar>/maxDate}" minDate="{calendar>/minDate}">
-            </u:Calendar>
-            <Table fixedLayout="false" items="{oData>ToVacations}" id="vacationsTable">
-                <headerToolbar>
-                    <Toolbar>
-                        <DateRangeSelection id="VacationRangeInput"/>
-                        <ToolbarSpacer/>
-                        <Button	type="Emphasized" text="{i18n>vacation.addButton}" press="onAddVacation"/>
-                    </Toolbar>
-                </headerToolbar>
-                <columns>
-                    <Column vAlign="Middle">
-                        <Text text="{i18n>vacation.table.begda}" />
-                    </Column>
-                    <Column vAlign="Middle">
-                        <Text text="{i18n>vacation.table.endda}" />
-                    </Column>
-                    <Column vAlign="Middle">
-                        <Text text="{i18n>vacation.table.status}" />
-                    </Column>
-                    <Column>
-                    </Column>
-                </columns>
-                <items>
-                    <ColumnListItem>
-                        <cells>
-                            <Text text="{
-                                            path: 'oData>BeginDate',
-                                            type: 'sap.ui.model.type.Date',
-                                            formatOptions: {
-                                                style: 'medium'
-                                            }
-                                    }"
-                            />
-                            <Text text="{
-                                            path: 'oData>EndDate',
-                                            type: 'sap.ui.model.type.Date',
-                                            formatOptions: {
-                                                style: 'medium'
-                                            }
-                                        }"
-                            />
-                            <ObjectStatus text="{path: 'oData>VpStatus', formatter: '.formatter.vacationStatus'}"
-                                          state="{path: 'oData>VpStatus', formatter: '.formatter.vacationState'}"/>
-                            <Button icon="sap-icon://edit" press="onShowActions"/>
-                        </cells>
-                    </ColumnListItem>
-                </items>
-                <layoutData>
-                    <l:GridData span="L5 M12 S12" />
-                </layoutData>
-            </Table>
-        </l:content>
-    </l:Grid>
+    <core:Fragment fragmentName="ilim.pdm2.vacation_planning.view.fragments.PlanForm" type="XML"/>
 </mvc:View>

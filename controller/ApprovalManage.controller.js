@@ -1,5 +1,5 @@
 sap.ui.define([
-    "ilim/pdm2/vacation_planning/controller/BaseController",
+    "ilim/pdm2/vacation_planning/controller/PlanCreate.controller",
     "sap/ui/model/json/JSONModel",
     "jquery.sap.global",
     "sap/ui/model/Filter",
@@ -201,24 +201,41 @@ sap.ui.define([
         onShowPlanForm: function (oEvent) {
             var oSource         = oEvent.getSource();
             var sCtxPath        = oSource.getParent().getBindingContext("oData").getPath(); //Button -> Item
+            var oCtxObject      = this.getModel("oData").getObject(sCtxPath);
 
             var that = this;
             if (!that.planCreationForm) {
+                var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
 
-                var oPlanView = sap.ui.xmlview("ilim.pdm2.vacation_planning.view.PlanCreate");
+                // var oPlanView = sap.ui.xmlview("ilim.pdm2.vacation_planning.view.PlanCreate");
+                var oPlanView = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.PlanForm");
                 that.planCreationForm = new Dialog({
                     title: this.getResourceBundle().getText("vacation.footer.button.vacationPlan"),
+                    width: '800px',
                     resizable: true,
+                    draggable: true,
                     content: oPlanView,
                     beginButton: new Button({
                         text: this.getResourceBundle().getText("common.commentsDialog.CancelButton"),
                         press: function () {
                             that.planCreationForm.close();
                         }
-                    })
-                })
+                    }),
+                    styleClass: bCompact ? "sapUiSizeCompact" : ""
+                });
+                that.getView().addDependent(that.planCreationForm);
             }
 
+            var sPlanPath = "/VacationPlanHdrSet(PlanYear='" + oCtxObject.PlanYear + "',Pernr='" + oCtxObject.EmployeeId + "')";
+            var oBindingContext = new sap.ui.model.Context(this.getModel("oData"), sPlanPath);
+            this.planCreationForm.setBindingContext(oBindingContext, "oData");
+            this.planCreationForm.bindElement({
+                path: sPlanPath,
+                parameters: {
+                    expand: "ToVacations"
+                },
+                model: "oData"
+            });
             that.planCreationForm.open();
 
         },
@@ -254,18 +271,6 @@ sap.ui.define([
             var oSearchField = this.getView().byId("inboxEmployeeSearchField");
             oSearchField.setValue("");
 
-            var aFilters = [];
-            var filter = new Filter("PlanYear", sap.ui.model.FilterOperator.EQ, oData.PlanYear);
-
-            aFilters.push(filter);
-
-            // update list binding
-            var list = this.getView().byId("inboxTable");
-            var binding = list.getBinding("items");
-            if (binding) {
-                binding.filter(filter);
-            }
-
         },
 
         _patternMatched: function () {
@@ -275,17 +280,17 @@ sap.ui.define([
             this.getOwnerComponent().oRolesLoaded.then( function (oData) {
                 if (!oData.CanApprove) {
                     that.getRouter().navTo("NoAuthorization");
-                } else {
-                    if (that.oManagerController.getCurrentYear()) {
-                        that._filterInboxByYear(null, null, {PlanYear: that.oManagerController.getCurrentYear()});
-                    } else {
-
-                        that.oManagerController.oWhenPeriodIsLoaded.then( function (oData) {
-
-                            that._filterInboxByYear(null, null, oData);
-
-                        });
-                    }
+            //     } else {
+            //         if (that.oManagerController.getCurrentYear()) {
+            //             that._filterInboxByYear(null, null, {PlanYear: that.oManagerController.getCurrentYear()});
+            //         } else {
+            //
+            //             that.oManagerController.oWhenPeriodIsLoaded.then( function (oData) {
+            //
+            //                 that._filterInboxByYear(null, null, oData);
+            //
+            //             });
+            //         }
                 }
             });
 

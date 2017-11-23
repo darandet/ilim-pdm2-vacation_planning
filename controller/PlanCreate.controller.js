@@ -209,7 +209,7 @@ sap.ui.define([
             var that = this;
 
             var sDummyGUID = "12345678-aaaa-bbbb-cccc-ddddeeeeffff";
-            var oDataModel = this.getOwnerComponent().getModel("oData");
+            var oDataModel = this.getModel("oData");
             var endda;
 
             if (EndDate) {

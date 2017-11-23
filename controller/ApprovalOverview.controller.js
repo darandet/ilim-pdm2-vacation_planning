@@ -30,6 +30,12 @@ sap.ui.define([
             var oModel = new JSONModel({ key: "approvalTab" });
             this.setModel(oModel, "viewSync");
 
+            var oOverviewState = {
+                busy: false
+            };
+            var oStateModel= new JSONModel(oOverviewState);
+            this.setModel(oStateModel, "screenState");
+
 
             var fnDataReceived = function (oData, response) {
 
@@ -178,19 +184,35 @@ sap.ui.define([
 
             var that = this;
             var oEventBus = sap.ui.getCore().getEventBus();
+
+            var fnDataRequested = function () {
+                that.getModel("screenState").setProperty("/busy", true);
+            };
+
+            var fnDataReceived = function () {
+                that.getModel("screenState").setProperty("/busy", false);
+            };
+
             this.getOwnerComponent().oRolesLoaded.then(function (oRolesData) {
 
                 that.oManagerController.setCurrentYear(selectedYear);
                 var sPlanPath = "/ManagingPeriodsSet('" + selectedYear + "')";
                 that.getView().bindElement({
                     path: sPlanPath,
+                    parameters: {
+                        expand: "ToInbox,ToInbox/ToVacations"
+                    },
+                    events: {
+                        dataRequested: fnDataRequested,
+                        dataReceived: fnDataReceived
+                    },
                     model: "oData"
                 });
 
 
                 oEventBus.publish("managerHeaderChanges", "yearSelection", { PlanYear: selectedYear });
             });
-        },
+        }
         
     });
 
