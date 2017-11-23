@@ -70,7 +70,7 @@ sap.ui.define([
 
             var that = this;
 
-            if (!this.commentDialog) {
+            if (!this.approveCommentDialog) {
 
                 var oComment = {
                     comment: ""
@@ -78,7 +78,7 @@ sap.ui.define([
 
                 var oDialogFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.CommentsDialog");
                 var oCommentModel = new JSONModel(oComment);
-                this.commentDialog = new Dialog({
+                this.approveCommentDialog = new Dialog({
                     title: this.getResourceBundle().getText("common.commentsDialog.Title"),
                     draggable: true,
                     content: oDialogFragment,
@@ -86,31 +86,31 @@ sap.ui.define([
                     beginButton: new Button({
                         text: this.getResourceBundle().getText("common.commentsDialog.CancelButton"),
                         press: function () {
-                            that.commentDialog.close();
+                            that.approveCommentDialog.close();
                         }
                     }),
                     endButton: new Button({
                         text: this.getResourceBundle().getText("common.commentsDialog.SendButton"),
                         press: function () {
 
-                            var oCommentModel = that.commentDialog.getModel("comment");
+                            var oCommentModel = that.approveCommentDialog.getModel("comment");
                             oCurrentCtxObj.comment = oCommentModel.getProperty("/Comment");
 
                             that._callActionOnPlan(oCurrentCtxObj, "APROV");
 
                             oCommentModel.setProperty("/Comment", "");
-                            that.commentDialog.close();
+                            that.approveCommentDialog.close();
                         }
                     })
 
                 });
-                this.commentDialog.setModel(oCommentModel, "comment");
-                this.getView().addDependent(this.commentDialog);
+                this.approveCommentDialog.setModel(oCommentModel, "comment");
+                this.getView().addDependent(this.approveCommentDialog);
 
 
             }
 
-            this.commentDialog.open();
+            this.approveCommentDialog.open();
         },
 
         onRejectPlan: function (oEvent) {
@@ -121,7 +121,7 @@ sap.ui.define([
 
             var that = this;
 
-            if (!this.commentDialog) {
+            if (!this.rejectCommentDialog) {
 
                 var oComment = {
                     comment: ""
@@ -129,7 +129,7 @@ sap.ui.define([
 
                 var oDialogFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.CommentsDialog");
                 var oCommentModel = new JSONModel(oComment);
-                this.commentDialog = new Dialog({
+                this.rejectCommentDialog = new Dialog({
                     title: this.getResourceBundle().getText("common.commentsDialog.Title"),
                     draggable: true,
                     content: oDialogFragment,
@@ -137,31 +137,31 @@ sap.ui.define([
                     beginButton: new Button({
                         text: this.getResourceBundle().getText("common.commentsDialog.CancelButton"),
                         press: function () {
-                            that.commentDialog.close();
+                            that.rejectCommentDialog.close();
                         }
                     }),
                     endButton: new Button({
                         text: this.getResourceBundle().getText("common.commentsDialog.SendButton"),
                         press: function () {
 
-                            var oCommentModel = that.commentDialog.getModel("comment");
+                            var oCommentModel = that.rejectCommentDialog.getModel("comment");
                             oCurrentCtxObj.comment = oCommentModel.getProperty("/Comment");
 
                             that._callActionOnPlan(oCurrentCtxObj, "REJEC");
 
                             oCommentModel.setProperty("/Comment", "");
-                            that.commentDialog.close();
+                            that.rejectCommentDialog.close();
                         }
                     })
 
                 });
-                this.commentDialog.setModel(oCommentModel, "comment");
-                this.getView().addDependent(this.commentDialog);
+                this.rejectCommentDialog.setModel(oCommentModel, "comment");
+                this.getView().addDependent(this.rejectCommentDialog);
 
 
             }
 
-            this.commentDialog.open();
+            this.rejectCommentDialog.open();
         },
 
         onShowComments: function (oEvent) {
@@ -207,11 +207,11 @@ sap.ui.define([
             if (!that.planCreationForm) {
                 var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
 
-                // var oPlanView = sap.ui.xmlview("ilim.pdm2.vacation_planning.view.PlanCreate");
-                var oPlanView = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.PlanForm");
+                var prefix = this.getView().createId("").replace("--",""); //to use getView().byId() on fragment elements
+                var oPlanView = sap.ui.xmlfragment(prefix, "ilim.pdm2.vacation_planning.view.fragments.PlanForm", this);
                 that.planCreationForm = new Dialog({
                     title: this.getResourceBundle().getText("vacation.footer.button.vacationPlan"),
-                    width: '800px',
+                    contextWidth: '70%',
                     resizable: true,
                     draggable: true,
                     content: oPlanView,
@@ -221,8 +221,19 @@ sap.ui.define([
                             that.planCreationForm.close();
                         }
                     }),
-                    styleClass: bCompact ? "sapUiSizeCompact" : ""
+                    endButton: new Button({
+                        text: this.getResourceBundle().getText("vacations.footer.button.sendPlan"),
+                        type: "Accept",
+                        press: function () {
+                            this.planCreationForm.close();
+                            this._sendPlanOnBehalf();
+                        }.bind(this)
+                    })
                 });
+
+                if (bCompact) {
+                    that.planCreationForm.addStyleClass("sapUiSizeCompact");
+                }
                 that.getView().addDependent(that.planCreationForm);
             }
 
@@ -237,6 +248,69 @@ sap.ui.define([
                 model: "oData"
             });
             that.planCreationForm.open();
+
+        },
+
+        _sendPlanOnBehalf: function () {
+
+            var that = this;
+
+            var fnHandleSuccess = function (oData, response) {
+                var oTable = this.getView().byId("inboxTable");
+                var oTableBinding = oTable.getBinding("items");
+
+                oTableBinding.refresh();
+            }.bind(this);
+
+            if (!this.onBehalfCommentDialog) {
+
+                var oComment = {
+                    Comment: ""
+                };
+
+                var oDialogFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.CommentsDialog");
+                var oCommentModel = new JSONModel(oComment);
+                this.onBehalfCommentDialog = new Dialog({
+                    title: this.getResourceBundle().getText("common.commentsDialog.Title"),
+                    draggable: true,
+                    content: oDialogFragment,
+                    type: "Message",
+                    beginButton: new Button({
+                        text: this.getResourceBundle().getText("common.commentsDialog.CancelButton"),
+                        press: function () {
+                            that.onBehalfCommentDialog.close()
+                        }
+                    }),
+                    endButton: new Button({
+                        text: this.getResourceBundle().getText("common.commentsDialog.SendButton"),
+                        press: function () {
+                            var oCommentModel   = that.onBehalfCommentDialog.getModel("comment");
+                            var oDataModel      = that.getModel("oData");
+                            var sPlanPath       = that.planCreationForm.getBindingContext("oData").getPath();
+                            var oCurrentCtxObj  = oDataModel.getObject(sPlanPath);
+
+                            oDataModel.callFunction("/ActionOnVacationPlan", {
+                                method: "POST",
+                                urlParameters: {
+                                    Action:     "SDLM",
+                                    EmployeeId: oCurrentCtxObj.Pernr,
+                                    PlanYear:   oCurrentCtxObj.PlanYear,
+                                    Comment:    oCommentModel.getProperty("/Comment")
+                                },
+                                success: fnHandleSuccess
+                            });
+
+                            oCommentModel.setProperty("/Comment", "");
+                            that.onBehalfCommentDialog.close();
+                        }
+                    })
+                });
+
+                this.onBehalfCommentDialog.setModel(oCommentModel, "comment");
+                this.getView().addDependent(this.onBehalfCommentDialog);
+            }
+
+            this.onBehalfCommentDialog.open();
 
         },
 

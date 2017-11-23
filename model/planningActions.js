@@ -33,7 +33,11 @@ sap.ui.define([
                 }
             }
 
-            return oStatus.functions.indexOf(sAction.toLowerCase()) > -1;
+            if (oStatus) {
+                return oStatus.functions.indexOf(sAction.toLowerCase()) > -1;
+            } else {
+                return false;
+            }
 
         };
 

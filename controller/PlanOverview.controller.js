@@ -366,7 +366,7 @@ sap.ui.define([
             };
 
 
-            if (!this.commentDialog) {
+            if (!this.approveCommentDialog) {
 
                 var oComment = {
                     Comment: ""
@@ -374,7 +374,7 @@ sap.ui.define([
 
                 var oDialogFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.CommentsDialog");
                 var oCommentModel = new JSONModel(oComment);
-                this.commentDialog = new Dialog({
+                this.approveCommentDialog = new Dialog({
                     title: this.getResourceBundle().getText("common.commentsDialog.Title"),
                     draggable: true,
                     content: oDialogFragment,
@@ -382,7 +382,7 @@ sap.ui.define([
                     beginButton: new Button({
                         text: this.getResourceBundle().getText("common.commentsDialog.CancelButton"),
                         press: function () {
-                            that.commentDialog.close();
+                            that.approveCommentDialog.close();
                         }
                     }),
                     endButton: new Button({
@@ -391,7 +391,7 @@ sap.ui.define([
 
                             that.getModel("screenState").setProperty("/busy", true);
 
-                            var oCommentModel = that.commentDialog.getModel("comment");
+                            var oCommentModel = that.approveCommentDialog.getModel("comment");
                             oDataModel.callFunction("/ActionOnVacationPlan", {
                                 method: "POST",
                                 urlParameters: {
@@ -405,18 +405,18 @@ sap.ui.define([
                             });
 
                             oCommentModel.setProperty("/Comment", "");
-                            that.commentDialog.close();
+                            that.approveCommentDialog.close();
                         }
                     })
 
                 });
-                this.commentDialog.setModel(oCommentModel, "comment");
-                this.getView().addDependent(this.commentDialog);
+                this.approveCommentDialog.setModel(oCommentModel, "comment");
+                this.getView().addDependent(this.approveCommentDialog);
 
 
             }
 
-            this.commentDialog.open();
+            this.approveCommentDialog.open();
             
         }
 
