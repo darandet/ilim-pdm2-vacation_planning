@@ -18,7 +18,7 @@
                 <SearchField width="30%"
                              placeholder="{i18n>main.toolbar.searchPlaceholder}"
                              id="inboxEmployeeSearchField"
-                             liveChange="onEmployeeSearch"/>
+                             search="onEmployeeSearch"/>
                 <ToolbarSpacer/>
                 <OverflowToolbarButton type="Transparent" icon="sap-icon://multiselect-all"/>
                 <OverflowToolbarButton type="Transparent" icon="sap-icon://filter"/>
