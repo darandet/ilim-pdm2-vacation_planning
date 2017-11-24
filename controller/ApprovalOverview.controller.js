@@ -207,7 +207,7 @@ sap.ui.define([
                 that.getView().bindElement({
                     path: sPlanPath,
                     parameters: {
-                        expand: "ToInbox,ToInbox/ToVacations"
+                        expand: "ToInbox,ToInbox/ToVacations,ToManager,ToDepartment,ToStatus"
                     },
                     events: {
                         dataRequested: fnDataRequested,
