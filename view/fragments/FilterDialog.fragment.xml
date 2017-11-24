@@ -16,7 +16,7 @@
       </ViewSettingsFilterItem>
       <ViewSettingsFilterItem text="{i18n>main.table.status}" key="Status" items="{path: 'oData>ToStatus'}">
         <items>
-          <ViewSettingsItem text="{path: 'oData>PlanStatus', formatter: '.formatter.vacationPlanState'}" key="{oData>PlanStatus}"/>
+          <ViewSettingsItem text="{path: 'oData>PlanStatus', formatter: '.formatter.vacationStatus'}" key="{oData>PlanStatus}"/>
         </items>
       </ViewSettingsFilterItem>
     </filterItems>
