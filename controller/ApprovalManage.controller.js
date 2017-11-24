@@ -61,6 +61,24 @@ sap.ui.define([
             }
 
         },
+        
+        _getFilterDialog : function () {
+          if (!this._oDialog) {
+            this._oDialog = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.FilterDialog", this);
+            this.getView().addDependent(this._oDialog);
+          }
+          return this._oDialog;
+        },
+
+        handleConfirm: function (oEvent) {
+          if (oEvent.getParameters().filterString) {
+            sap.m.MessageToast.show(oEvent.getParameters().filterString);
+          }
+        },
+
+        onFilterPress: function (oEvent) {
+          this._getFilterDialog().open();
+        },        
 
         onApprovePlan: function (oEvent) {
 
