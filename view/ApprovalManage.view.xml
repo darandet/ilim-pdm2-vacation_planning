@@ -21,7 +21,7 @@
                              search="onEmployeeSearch"/>
                 <ToolbarSpacer/>
                 <OverflowToolbarButton type="Transparent" icon="sap-icon://multiselect-all"/>
-                <OverflowToolbarButton type="Transparent" icon="sap-icon://filter"/>
+                <OverflowToolbarButton type="Transparent" icon="sap-icon://filter" press="onFilterPress"/>
                 <OverflowToolbarButton type="Transparent" icon="sap-icon://excel-attachment"/>
                 <OverflowToolbarButton type="Transparent" icon="sap-icon://action-settings"/>
                 <Button icon="sap-icon://display" text="{i18n>main.toolbar.showSelected}" press="onShowSelected"/>
@@ -60,7 +60,7 @@
                             text="{oData>PositionText}"/>
                     <VBox>
                         <Label text="{oData>OrgunitText}" />
-                        <Label text="{inbox>Pbtxt}" />
+                        <Label text="{oData>Pbtxt}" />
                     </VBox>
                     <ObjectIdentifier
                             text="{oData>EmployeeId}"/>
