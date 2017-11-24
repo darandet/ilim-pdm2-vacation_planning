@@ -137,29 +137,29 @@ sap.ui.define([
             var aFilters = [];
             var filter = new Filter("PlanYear", sap.ui.model.FilterOperator.EQ, oData.PlanYear);
 
-            aFilters.push(filter);
+            //aFilters.push(filter);
 
             // update list binding
-            var list = this.getView().byId("noAccessEmployeesTable");
-            var binding = list.getBinding("items");
-            if (binding) {
-                binding.filter(filter);
-            }
+            //var list = this.getView().byId("noAccessEmployeesTable");
+            //var binding = list.getBinding("items");
+            //if (binding) {
+            //    binding.filter(filter);
+            //}
             
-            binding = this.getView().byId("idVizFrame").getDataset().getBinding("data");
-            if (binding) {
-                binding.filter(filter);
-            }                
+            //binding = this.getView().byId("idVizFrame").getDataset().getBinding("data");
+            //if (binding) {
+            //    binding.filter(filter);
+            //}                
             
-            binding = this.getView().byId("idVizFrame2").getDataset().getBinding("data");
-            if (binding) {
-                binding.filter(filter);
-            }                
+            //binding = this.getView().byId("idVizFrame2").getDataset().getBinding("data");
+            //if (binding) {
+            //    binding.filter(filter);
+            //}                
             
-            binding = this.getView().byId("idVizFrame3").getDataset().getBinding("data");
-            if (binding) {
-                binding.filter(filter);
-            }                            
+            //binding = this.getView().byId("idVizFrame3").getDataset().getBinding("data");
+            //if (binding) {
+            //    binding.filter(filter);
+            //}                            
         }
 
         /**
