@@ -25,6 +25,7 @@ sap.ui.define([
             this.getRouter().getRoute("ApprovePlan").attachPatternMatched(this._patternMatched, this);
             var oEventBus = sap.ui.getCore().getEventBus();
             oEventBus.subscribe("childNavigation", "syncViews", this._syncViews, this);
+            oEventBus.subscribe("childNavigation", "graphAppears", this._prepareGraphData, this);            
 
 
             var oModel = new JSONModel({ key: "approvalTab" });
@@ -100,17 +101,22 @@ sap.ui.define([
             if (sKey === 'approvalTab') {
                 oRouter.navTo('ManageApprovals');
             } else if (sKey === 'overviewTab') {
-                this.getView().bindElement({
-                    path: this.getView().getBindingContext("oData").getPath(),
-                    parameters: {
-                        expand: "ToAbsPercGraph,ToApprNumGraph,ToVacPlanDaysGraph"
-                    },
-                    model: "oData"
-                });                  
                 oRouter.navTo('ApprovalsDashboard');
             }
-
         },
+        
+        _prepareGraphData: function(sChannel, sEvent) {
+
+            if (sChannel === "childNavigation" && sEvent === "graphAppears" ) {
+              this.getView().bindElement({
+                  path: this.getView().getBindingContext("oData").getPath(),
+                  parameters: {
+                      expand: "ToAbsPercGraph,ToApprNumGraph,ToVacPlanDaysGraph"
+                  },
+                  model: "oData"
+              });
+            }
+        },        
 
         onShowPeriods: function (oEvent) {
             if (! this._oPeriodsPopover) {
