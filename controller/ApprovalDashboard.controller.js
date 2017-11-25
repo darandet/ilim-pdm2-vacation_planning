@@ -123,10 +123,9 @@ sap.ui.define([
                 if (!oData.CanApprove) {
                     that.getRouter().navTo("NoAuthorization");
                 } else {
-                    that.oManagerController.oWhenPeriodIsLoaded.then( function (oData) {
-
-                        that._filterDashboardByYear(null, null, oData);
-
+                    that.oManagerController.oWhenPeriodIsLoaded.then( function (oData) {                        
+                        oEventBus.publish("childNavigation", "graphAppears");
+                        //that._filterDashboardByYear(null, null, oData);
                     });
                 }
             });
