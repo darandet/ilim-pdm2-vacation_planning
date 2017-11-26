@@ -101,6 +101,7 @@ sap.ui.define([
             if (sKey === 'approvalTab') {
                 oRouter.navTo('ManageApprovals');
             } else if (sKey === 'overviewTab') {
+                this._raiseYearSelectEvent(this.getModel("oData").getObject(this.getView().getBindingContext("oData").getPath()).PlanYear);                            
                 oRouter.navTo('ApprovalsDashboard');
             }
         },
@@ -210,18 +211,32 @@ sap.ui.define([
 
                 that.oManagerController.setCurrentYear(selectedYear);
                 var sPlanPath = "/ManagingPeriodsSet('" + selectedYear + "')";
-                that.getView().bindElement({
-                    path: sPlanPath,
-                    parameters: {
-                        expand: "ToInbox,ToInbox/ToVacations,ToManager,ToDepartment,ToStatus"
-                    },
-                    events: {
-                        dataRequested: fnDataRequested,
-                        dataReceived: fnDataReceived
-                    },
-                    model: "oData"
-                });
-
+                if (that.getModel("viewSync").getProperty('/key') === "approvalTab")
+                {
+                  that.getView().bindElement({
+                      path: sPlanPath,
+                      parameters: {
+                          expand: "ToInbox,ToInbox/ToVacations,ToManager,ToDepartment,ToStatus"
+                      },
+                      events: {
+                          dataRequested: fnDataRequested,
+                          dataReceived: fnDataReceived
+                      },
+                      model: "oData"
+                  });
+                } else if (that.getModel("viewSync").getProperty('/key') === "overviewTab") {
+                  that.getView().bindElement({
+                      path: sPlanPath,
+                      parameters: {
+                          expand: "ToAbsPercGraph,ToApprNumGraph,ToVacPlanDaysGraph"
+                      },
+                      events: {
+                          dataRequested: fnDataRequested,
+                          dataReceived: fnDataReceived
+                      },
+                      model: "oData"
+                  });
+                }
 
                 oEventBus.publish("managerHeaderChanges", "yearSelection", { PlanYear: selectedYear });
             });
