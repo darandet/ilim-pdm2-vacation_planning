@@ -369,7 +369,7 @@ sap.ui.define([
 
             var that      = this;
             var oEventBus = sap.ui.getCore().getEventBus();
-            oEventBus.publish("childNavigation", "syncViews", { key: "manageTab" });            
+            oEventBus.publish("childNavigation", "syncViews", { key: "approvalTab" });            
 
             this.getOwnerComponent().oRolesLoaded.then( function (oData) {
                 if (!oData.CanApprove) {
