@@ -25,8 +25,6 @@ sap.ui.define([
             this.getRouter().getRoute("ApprovePlan").attachPatternMatched(this._patternMatched, this);
             var oEventBus = sap.ui.getCore().getEventBus();
             oEventBus.subscribe("childNavigation", "syncViews", this._syncViews, this);
-            oEventBus.subscribe("childNavigation", "graphAppears", this._prepareGraphData, this);            
-
 
             var oModel = new JSONModel({ key: "approvalTab" });
             this.setModel(oModel, "viewSync");
@@ -43,7 +41,7 @@ sap.ui.define([
                 if (!oData.PlanYear) {
                     that.getRouter().navTo("PlanningClosed");
                 } else {
-                    that._raiseYearSelectEvent(oData.PlanYear)
+                    that._raiseYearSelectEvent(oData.PlanYear, '')
                 }
             };
 
@@ -56,8 +54,7 @@ sap.ui.define([
 
             this.oManagerController = this.getOwnerComponent().oManagerController;
             this.oManagerController.setModel(this.getOwnerComponent().getModel("oData"));
-            this.oManagerController.getManagerDefaultPeriod("/ManagingPeriodsSet('')", fnDataReceived, fnRequestError);
-            
+            this.oManagerController.getManagerDefaultPeriod("/ManagingPeriodsSet(PlanYear='',OnlySubord='')", fnDataReceived, fnRequestError);            
         },
 
         /**
@@ -101,21 +98,18 @@ sap.ui.define([
             if (sKey === 'approvalTab') {
                 oRouter.navTo('ManageApprovals');
             } else if (sKey === 'overviewTab') {
-                this._raiseYearSelectEvent(this.getModel("oData").getObject(this.getView().getBindingContext("oData").getPath()).PlanYear);                            
+                var oObject = this.getModel("oData").getObject(this.getView().getBindingContext("oData").getPath());
+                this._raiseYearSelectEvent(oObject.PlanYear, oObject.OnlySubord);
                 oRouter.navTo('ApprovalsDashboard');
             }
         },
         
-        _prepareGraphData: function(sChannel, sEvent) {
+        onSubordPress: function (oEvent) {
 
-            if (sChannel === "childNavigation" && sEvent === "graphAppears" ) {
-              this.getView().bindElement({
-                  path: this.getView().getBindingContext("oData").getPath(),
-                  parameters: {
-                      expand: "ToAbsPercGraph,ToApprNumGraph,ToVacPlanDaysGraph"
-                  },
-                  model: "oData"
-              });
+            if (oEvent.getSource().getPressed()) {
+              this._raiseYearSelectEvent(this.getModel("oData").getObject(this.getView().getBindingContext("oData").getPath()).PlanYear, 'X');
+            } else {
+              this._raiseYearSelectEvent(this.getModel("oData").getObject(this.getView().getBindingContext("oData").getPath()).PlanYear, '');
             }
         },        
 
@@ -142,8 +136,7 @@ sap.ui.define([
             }
 
             this._oPeriodsPopover.close();
-
-            this._raiseYearSelectEvent(sKey);
+            this._raiseYearSelectEvent(sKey, oCtxObject.OnlySubord);
         },
 
         /**
@@ -159,7 +152,7 @@ sap.ui.define([
             var fnDataReceived = function (oData, response) {
 
                 if (oData.PlanYear) {
-                    that._raiseYearSelectEvent(oData.PlanYear);
+                    that._raiseYearSelectEvent(oData.PlanYear, oData.OnlySubord);
                 }
             };
 
@@ -194,7 +187,7 @@ sap.ui.define([
 
         },
 
-        _raiseYearSelectEvent: function (selectedYear) {
+        _raiseYearSelectEvent: function (selectedYear, subord) {
 
             var that = this;
             var oEventBus = sap.ui.getCore().getEventBus();
@@ -210,7 +203,7 @@ sap.ui.define([
             this.getOwnerComponent().oRolesLoaded.then(function (oRolesData) {
 
                 that.oManagerController.setCurrentYear(selectedYear);
-                var sPlanPath = "/ManagingPeriodsSet('" + selectedYear + "')";
+                var sPlanPath = "/ManagingPeriodsSet(PlanYear='" + selectedYear + "',OnlySubord='" + subord + "')";
                 if (that.getModel("viewSync").getProperty('/key') === "approvalTab")
                 {
                   that.getView().bindElement({
@@ -228,7 +221,7 @@ sap.ui.define([
                   that.getView().bindElement({
                       path: sPlanPath,
                       parameters: {
-                          expand: "ToAbsPercGraph,ToApprNumGraph,ToVacPlanDaysGraph"
+                          expand: "ToAbsPercGraph,ToApprNumGraph,ToVacPlanDaysGraph,ToNoAccEmpl"
                       },
                       events: {
                           dataRequested: fnDataRequested,
