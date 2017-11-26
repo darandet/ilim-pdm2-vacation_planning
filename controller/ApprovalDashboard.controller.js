@@ -42,7 +42,7 @@ sap.ui.define([
          */
         _patternMatched: function () {
             var oEventBus = sap.ui.getCore().getEventBus();
-            oEventBus.publish("childNavigation", "syncViews", { key: "dashboardTab" });
+            oEventBus.publish("childNavigation", "syncViews", { key: "overviewTab" });
 
             var that = this;
 
