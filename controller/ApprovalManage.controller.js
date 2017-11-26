@@ -367,7 +367,9 @@ sap.ui.define([
 
         _patternMatched: function () {
 
-            var that = this;
+            var that      = this;
+            var oEventBus = sap.ui.getCore().getEventBus();
+            oEventBus.publish("childNavigation", "syncViews", { key: "manageTab" });            
 
             this.getOwnerComponent().oRolesLoaded.then( function (oData) {
                 if (!oData.CanApprove) {
