@@ -44,6 +44,15 @@ sap.ui.define([
 
             this.getRouter().navTo("ApprovalDetails");
         },
+        
+        onShowExcel: function (oEvent) {
+
+          //Передаем "от лица" через ProjPernr, даты через Ename и Pltxt
+          var sUrl = "/sap/opu/odata/sap/ZHR_PDM_VACATION_PLANNING_SRV/ManagingPeriodsSet(PlanYear='2018',OnlySubord='')/ToInbox?$format=xlsx";
+          var encodeUrl = encodeURI(sUrl);
+          sap.m.URLHelper.redirect(encodeUrl, true);
+
+        },
 
         onEmployeeSearch: function (oEvent) {
 
