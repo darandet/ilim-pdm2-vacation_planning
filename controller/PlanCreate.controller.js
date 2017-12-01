@@ -354,10 +354,12 @@ sap.ui.define([
             if (!this.approveCommentDialog) {
 
                 var oComment = {
-                    Comment: ""
+                    BeginDate: oObjectToModify.BeginDate,
+                    EndDate:   oObjectToModify.EndDate,
+                    Comment:   ""
                 };
 
-                var oDialogFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.CommentsDialog");
+                var oDialogFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.DatesCommentsDialog");
                 var oCommentModel = new JSONModel(oComment);
                 this.approveCommentDialog = new Dialog({
                     title: this.getResourceBundle().getText("common.commentsDialog.Title"),
@@ -383,8 +385,8 @@ sap.ui.define([
                                 method: "POST",
                                 urlParameters: {
                                     VacationGUID: oObjectToModify.ItemGuid,
-                                    NewBeginDate: oObjectToModify.BeginDate,
-                                    NewEndDate:   oObjectToModify.EndDate,
+                                    NewBeginDate: oCommentModel.getProperty("/BeginDate"),
+                                    NewEndDate:   oCommentModel.getProperty("/EndDate"),
                                     RequestType:  sRequestType,
                                     Comment:      oCommentModel.getProperty("/Comment")
                                 },
