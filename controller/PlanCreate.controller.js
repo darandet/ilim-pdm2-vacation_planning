@@ -5,8 +5,9 @@ sap.ui.define([
     "sap/ui/model/odata/v2/ODataModel",
     "sap/m/Dialog",
     "sap/m/Button",
+    "sap/m/MessageBox",    
     "ilim/pdm2/vacation_planning/model/formatter"
-], function (Controller, $, JSONModel, ODataModel, Dialog, Button, Formatter) {
+], function (Controller, $, JSONModel, ODataModel, Dialog, Button, MessageBox, Formatter) {
     "use strict";
 
     return Controller.extend("ilim.pdm2.vacation_planning.controller.PlanCreate", {
@@ -164,12 +165,14 @@ sap.ui.define([
                 this._deleteItem(oObjectToDelete);
             } else if(sFunction === "confirm"){
                 var oModel = this._actionSheet.getModel("vacation");
-                var oObjectToConfirm = oModel.getData();            
-                this._modifyVacation(oObjectToConfirm, "CRQ");
+                var oObjectToConfirm = oModel.getData();
+                var sReqType = "CRQ";
+                this._modifyVacation(oObjectToConfirm, sReqType);
             } else {
                 var oModel = this._actionSheet.getModel("vacation");
-                var oObjectToTransfer = oModel.getData();            
-                this._modifyVacation(oObjectToTransfer, "TRQ");
+                var oObjectToTransfer = oModel.getData();
+                var sReqType = "TRQ";
+                this._modifyVacation(oObjectToTransfer, sReqType);
             }
         },
 
@@ -392,8 +395,11 @@ sap.ui.define([
                             oCommentModel.setProperty("/Comment", "");
                             that.approveCommentDialog.close();
                         }
-                    })
-
+                    }),
+                    afterClose: function() {
+                        that.approveCommentDialog.destroy();
+                        that.approveCommentDialog = undefined;
+                    }
                 });
                 this.approveCommentDialog.setModel(oCommentModel, "comment");
                 this.getView().addDependent(this.approveCommentDialog);
