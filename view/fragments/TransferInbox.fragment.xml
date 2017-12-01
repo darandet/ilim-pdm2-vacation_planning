@@ -59,8 +59,9 @@
                             text="{oData>EmployeeId}"/>
                     <Text   textAlign="Center"
                             text="{oData>ChperEname}"/>
-                    <ObjectNumber number="{oData>AbsRightSaldo}/{oData>AbsRightTotal}/{oData>AbsRightPlanned}"
-                                  unit="{i18n>main.table.units}"/>
+                    <ObjectIdentifier
+                            title="{oData>NewStartDate} - {oData>NewEndDate}"
+                            text="{oData>StartDate} - {oData>EndDate}"/>
                     <CheckBox enabled="false" selected="{oData>HasAccess}" />
                     <ObjectStatus
                             text="{parts: [{path: 'oData>PlanStatus'}, {path: 'oData>CanApprove'}],
