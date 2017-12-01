@@ -359,7 +359,13 @@ sap.ui.define([
                     Comment:   ""
                 };
 
-                var oDialogFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.DatesCommentsDialog");
+                if (sRequestType === "CRQ")
+                {
+                  var oDialogFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.CommentsDialog");
+                } else {
+                  var oDialogFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.DatesCommentsDialog");
+                }
+                
                 var oCommentModel = new JSONModel(oComment);
                 this.approveCommentDialog = new Dialog({
                     title: this.getResourceBundle().getText("common.commentsDialog.Title"),
