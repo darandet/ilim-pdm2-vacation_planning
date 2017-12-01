@@ -60,8 +60,8 @@
                     <Text   textAlign="Center"
                             text="{oData>ChperEname}"/>
                     <ObjectIdentifier
-                            title="{oData>NewStartDate} - {oData>NewEndDate}"
-                            text="{oData>StartDate} - {oData>EndDate}"/>
+                            title="{path: 'oData>NewBeginDate', formatter: '.formatter.dateToString'} - {path: 'oData>NewEndDate', formatter: '.formatter.dateToString'}"
+                            text="{path: 'oData>BeginDate', formatter: '.formatter.dateToString'} - {path: 'oData>EndDate', formatter: '.formatter.dateToString'}"/>
                     <CheckBox enabled="false" selected="{oData>HasAccess}" />
                     <ObjectStatus
                             text="{parts: [{path: 'oData>PlanStatus'}, {path: 'oData>CanApprove'}],
