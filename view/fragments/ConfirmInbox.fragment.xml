@@ -4,10 +4,10 @@
 
     <Table fixedLayout="false" class="sapUiMediumMarginTop" mode="MultiSelect"
            items="{
-                path: 'oData>ToInbox'
+                path: 'oData>ToConfirmInbox'
             }"
            rememberSelections="true"
-           id="inboxTable3">
+           id="confirmTable">
         <headerToolbar>
             <OverflowToolbar>
                 <Title text="{i18n>main.toolbar.title}" level="H2"/>
@@ -71,12 +71,12 @@
                         <items>
                             <Button type="Accept" icon="sap-icon://accept"
                                     enabled="{path: 'oData>CanApprove', formatter: '.formatter.any2Boolean'}"
-                                    press="onApprovePlan"
+                                    press="onApproveConfirm"
                             />
                             <Button type="Reject"
                                     icon="{path: 'oData>PlanStatus', formatter: '.formatter.vacationPlanRejectIcon'}"
                                     enabled="{path: 'oData>CanReject', formatter: '.formatter.any2Boolean'}"
-                                    press="onRejectPlan"
+                                    press="onRejectConfirm"
                             />
                             <Button icon="sap-icon://comment"
                                     enabled="{path: 'oData>CanComment', formatter: '.formatter.any2Boolean'}"
