@@ -7,7 +7,7 @@
                 path: 'oData>ToInbox'
             }"
            rememberSelections="true"
-           id="inboxTable2">
+           id="transferTable">
         <headerToolbar>
             <OverflowToolbar>
                 <Title text="{i18n>main.toolbar.title}" level="H2"/>
@@ -72,12 +72,12 @@
                         <items>
                             <Button type="Accept" icon="sap-icon://accept"
                                     enabled="{path: 'oData>CanApprove', formatter: '.formatter.any2Boolean'}"
-                                    press="onApprovePlan"
+                                    press="onApproveTransfer"
                             />
                             <Button type="Reject"
                                     icon="{path: 'oData>PlanStatus', formatter: '.formatter.vacationPlanRejectIcon'}"
                                     enabled="{path: 'oData>CanReject', formatter: '.formatter.any2Boolean'}"
-                                    press="onRejectPlan"
+                                    press="onRejectTransfer"                                    
                             />
                             <Button icon="sap-icon://comment"
                                     enabled="{path: 'oData>CanComment', formatter: '.formatter.any2Boolean'}"
