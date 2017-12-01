@@ -35,6 +35,15 @@ sap.ui.define(["ilim/pdm2/vacation_planning/model/planningActions"],
             }
 
         };
+    
+        oFormatter.any2Boolean = function (sValue) {
+
+            if (sValue) {
+              return true;
+            } else {
+              return false;
+            }
+        };    
 
         oFormatter.deleteEnabled = function (sStatus) {
 
