@@ -72,16 +72,23 @@
 
                     <FlexBox alignItems="Center" justifyContent="SpaceBetween">
                         <items>
-                            <Button type="Accept" icon="sap-icon://accept" enabled="{oData>CanApprove}"
+                            <Button type="Accept" icon="sap-icon://accept"
+                                    enabled="{path: 'oData>CanApprove', formatter: '.formatter.any2Boolean'}"
                                     press="onApprovePlan"
                             />
                             <Button type="Reject"
                                     icon="{path: 'oData>PlanStatus', formatter: '.formatter.vacationPlanRejectIcon'}"
-                                    enabled="{oData>CanReject}"
+                                    enabled="{path: 'oData>CanReject', formatter: '.formatter.any2Boolean'}"
                                     press="onRejectPlan"
                             />
-                            <Button icon="sap-icon://create-form" enabled="{oData>CanCreate}" press="onShowPlanForm"/>
-                            <Button icon="sap-icon://comment" enabled="{oData>CanComment}" press="onShowComments"/>
+                            <Button icon="sap-icon://create-form"
+                                    enabled="{path: 'oData>CanCreate', formatter: '.formatter.any2Boolean'}"
+                                    press="onShowPlanForm"
+                            />
+                            <Button icon="sap-icon://comment"
+                                    enabled="{path: 'oData>CanComment', formatter: '.formatter.any2Boolean'}"
+                                    press="onShowComments"
+                            />
                         </items>
                     </FlexBox>
 
