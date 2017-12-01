@@ -90,6 +90,18 @@ sap.ui.define([
         },        
 
         onApprovePlan: function (oEvent) {
+          this.onApproveInbox(oEvent, "VPL");
+        },
+
+        onApproveTransfer: function (oEvent) {
+          this.onApproveInbox(oEvent, "TRQ");
+        },
+
+        onApproveConfirm: function (oEvent) {
+          this.onApproveInbox(oEvent, "CRQ");
+        },
+
+        onApproveInbox: function(oEvent, sType) {
 
             var oSource         = oEvent.getSource();
             var sCtxPath        = oSource.getParent().getBindingContext("oData").getPath(); //Button -> Item
@@ -100,7 +112,8 @@ sap.ui.define([
             if (!this.approveCommentDialog) {
 
                 var oComment = {
-                    comment: ""
+                    Comment: "",
+                    InboxType: sType
                 };
 
                 var oDialogFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.CommentsDialog");
@@ -121,14 +134,19 @@ sap.ui.define([
                         press: function () {
 
                             var oCommentModel = that.approveCommentDialog.getModel("comment");
+                            var sReqType      = oCommentModel.getProperty("/InboxType");
                             oCurrentCtxObj.comment = oCommentModel.getProperty("/Comment");
 
-                            that._callActionOnPlan(oCurrentCtxObj, "APROV");
+                            that._callActionOnPlan(oCurrentCtxObj, "APROV", sReqType);
 
                             oCommentModel.setProperty("/Comment", "");
                             that.approveCommentDialog.close();
                         }
-                    })
+                    }),
+                    afterClose: function() {
+                        that.approveCommentDialog.destroy();
+                        that.approveCommentDialog = undefined;
+                    }                    
 
                 });
                 this.approveCommentDialog.setModel(oCommentModel, "comment");
@@ -141,6 +159,18 @@ sap.ui.define([
         },
 
         onRejectPlan: function (oEvent) {
+          this.onRejectInbox(oEvent, "VPL")
+        },
+
+        onRejectTransfer: function (oEvent) {
+          this.onRejectInbox(oEvent, "TRQ")
+        },
+
+        onRejectConfirm: function (oEvent) {
+          this.onRejectInbox(oEvent, "CRQ")
+        },
+
+        onRejectInbox: function (oEvent, sType) {
 
             var oSource         = oEvent.getSource();
             var sCtxPath        = oSource.getParent().getBindingContext("oData").getPath(); //Button -> Item
@@ -151,7 +181,8 @@ sap.ui.define([
             if (!this.rejectCommentDialog) {
 
                 var oComment = {
-                    comment: ""
+                    Comment: "",
+                    ReqType: sType
                 };
 
                 var oDialogFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.CommentsDialog");
@@ -172,14 +203,19 @@ sap.ui.define([
                         press: function () {
 
                             var oCommentModel = that.rejectCommentDialog.getModel("comment");
+                            var sReqType      = oCommentModel.getProperty("/ReqType");
                             oCurrentCtxObj.comment = oCommentModel.getProperty("/Comment");
 
-                            that._callActionOnPlan(oCurrentCtxObj, "REJEC");
+                            that._callActionOnPlan(oCurrentCtxObj, "REJEC", sReqType);
 
                             oCommentModel.setProperty("/Comment", "");
                             that.rejectCommentDialog.close();
                         }
-                    })
+                    }),
+                    afterClose: function() {
+                        that.rejectCommentDialog.destroy();
+                        that.rejectCommentDialog = undefined;
+                    }                    
 
                 });
                 this.rejectCommentDialog.setModel(oCommentModel, "comment");
@@ -341,28 +377,49 @@ sap.ui.define([
 
         },
 
-        _callActionOnPlan: function (oContextObject, Action) {
+        _callActionOnPlan: function (oContextObject, Action, sType) {
 
             var oDataModel = this.getView().getModel("oData");
 
-            oDataModel.callFunction("/ActionOnVacationPlan", {
-                method: "POST",
-                urlParameters: {
-                    Action:     Action,
-                    EmployeeId: oContextObject.EmployeeId,
-                    PlanYear:   oContextObject.PlanYear,
-                    Comment:    oContextObject.comment
-                },
-                success: fnHandleSuccess
-                // error: fnHandleError
-            });
-
             var fnHandleSuccess = function (oData, response) {
-                var oTable = this.getView().byId("inboxTable");
+                if (sType === "CRQ") {
+                    var oTable = this.getView().byId("confirmTable");
+                } else if (sType === "TRQ") {
+                    var oTable = this.getView().byId("transferTable");                    
+                } else {
+                    var oTable = this.getView().byId("inboxTable");                    
+                }                
                 var oTableBinding = oTable.getBinding("items");
 
                 oTableBinding.refresh();
             }.bind(this);
+            
+            if (sType === "CRQ" || sType === "TRQ")
+            {
+              oDataModel.callFunction("/ActionOnRequest", {
+                  method: "POST",
+                  urlParameters: {
+                      Action:      Action,
+                      RequestId:   oContextObject.RequestId,
+                      RequestType: sType,
+                      Comment:     oContextObject.comment
+                  },
+                  success: fnHandleSuccess
+                  // error: fnHandleError
+              });
+            } else {
+              oDataModel.callFunction("/ActionOnVacationPlan", {
+                  method: "POST",
+                  urlParameters: {
+                      Action:     Action,
+                      EmployeeId: oContextObject.EmployeeId,
+                      PlanYear:   oContextObject.PlanYear,
+                      Comment:    oContextObject.comment
+                  },
+                  success: fnHandleSuccess
+                  // error: fnHandleError
+              });
+            }            
 
         },
 
