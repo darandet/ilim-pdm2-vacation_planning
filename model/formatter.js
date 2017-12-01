@@ -36,6 +36,21 @@ sap.ui.define(["ilim/pdm2/vacation_planning/model/planningActions"],
 
         };
     
+        oFormatter.dateToString = function (dDate) {
+
+          var ret        = new sap.ui.model.type.String();
+          var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({pattern : "dd.MM.yyyy" });
+          var TZOffsetMs = new Date(0).getTimezoneOffset()*60*1000;
+          ret = "";
+
+          if (dDate)
+          {
+            ret = dateFormat.format(new Date(dDate.getTime() + TZOffsetMs));
+          }
+
+          return ret;
+       };    
+    
         oFormatter.any2Boolean = function (sValue) {
 
             if (sValue) {
