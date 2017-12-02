@@ -36,6 +36,36 @@ sap.ui.define(["ilim/pdm2/vacation_planning/model/planningActions"],
 
         };
     
+        oFormatter.vacationProc = function (sProc) {
+
+            var oResourceBundle = this.getView().getModel("i18n").getResourceBundle();
+
+            switch (sProc) {
+                case "PLAN":
+                    return oResourceBundle.getText("vacation.employee.proc.plan");
+                case "CONF":
+                    return oResourceBundle.getText("vacation.employee.proc.conf");
+                case "TRAN":
+                    return oResourceBundle.getText("vacation.employee.proc.tran");
+                default:
+                    return "";
+            }
+        };
+
+        oFormatter.vacEditEnabled = function (sProc) {
+
+            switch (sProc) {
+                case "PLAN":
+                    return true;
+                case "CONF":
+                    return false;
+                case "TRAN":
+                    return false;
+                default:
+                    return false;
+            }
+        };    
+    
         oFormatter.dateToString = function (dDate) {
 
           var ret        = new sap.ui.model.type.String();
