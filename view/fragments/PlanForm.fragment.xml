@@ -67,7 +67,7 @@
                             <ObjectStatus text="{path: 'oData>VpStatus', formatter: '.formatter.vacationStatus'}"
                                           state="{path: 'oData>VpStatus', formatter: '.formatter.vacationState'}"/>
                             <Button icon="sap-icon://edit" 
-                                    enabled="{path: 'oData>/VpProc', formatter: '.formatter.vacEditEnabled'}"                                    
+                                    enabled="{path: 'oData>VpProc', formatter: '.formatter.vacEditEnabled'}"
                                     press="onShowActions"/>
                         </cells>
                     </ColumnListItem>
