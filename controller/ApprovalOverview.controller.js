@@ -41,7 +41,8 @@ sap.ui.define([
                 if (!oData.PlanYear) {
                     that.getRouter().navTo("PlanningClosed");
                 } else {
-                    that._raiseYearSelectEvent(oData.PlanYear, '')
+                    that.oManagerController.setOnlySubord('X');                    
+                    that._raiseYearSelectEvent(oData.PlanYear);
                 }
             };
 
@@ -99,7 +100,7 @@ sap.ui.define([
                 oRouter.navTo('ManageApprovals');
             } else if (sKey === 'overviewTab') {
                 var oObject = this.getModel("oData").getObject(this.getView().getBindingContext("oData").getPath());
-                this._raiseYearSelectEvent(oObject.PlanYear, oObject.OnlySubord);
+                this._raiseYearSelectEvent(oObject.PlanYear);
                 oRouter.navTo('ApprovalsDashboard');
             }
         },
@@ -107,10 +108,11 @@ sap.ui.define([
         onSubordPress: function (oEvent) {
 
             if (oEvent.getSource().getPressed()) {
-              this._raiseYearSelectEvent(this.getModel("oData").getObject(this.getView().getBindingContext("oData").getPath()).PlanYear, 'X');
+                this.oManagerController.setOnlySubord('X');
             } else {
-              this._raiseYearSelectEvent(this.getModel("oData").getObject(this.getView().getBindingContext("oData").getPath()).PlanYear, '');
+                this.oManagerController.setOnlySubord('');
             }
+            this._raiseYearSelectEvent(this.getModel("oData").getObject(this.getView().getBindingContext("oData").getPath()).PlanYear);
         },        
 
         onShowPeriods: function (oEvent) {
@@ -136,7 +138,7 @@ sap.ui.define([
             }
 
             this._oPeriodsPopover.close();
-            this._raiseYearSelectEvent(sKey, oCtxObject.OnlySubord);
+            this._raiseYearSelectEvent(sKey);
         },
 
         /**
@@ -152,7 +154,7 @@ sap.ui.define([
             var fnDataReceived = function (oData, response) {
 
                 if (oData.PlanYear) {
-                    that._raiseYearSelectEvent(oData.PlanYear, oData.OnlySubord);
+                    that._raiseYearSelectEvent(oData.PlanYear);
                 }
             };
 
@@ -187,10 +189,11 @@ sap.ui.define([
 
         },
 
-        _raiseYearSelectEvent: function (selectedYear, subord) {
+        _raiseYearSelectEvent: function (selectedYear) {
 
-            var that = this;
+            var that      = this;
             var oEventBus = sap.ui.getCore().getEventBus();
+            var subord    = this.oManagerController.getOnlySubord();            
 
             var fnDataRequested = function () {
                 that.getModel("screenState").setProperty("/busy", true);
