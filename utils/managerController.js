@@ -9,6 +9,7 @@ sap.ui.define([
 
             constructor: function () {
                 this.selectedYear = "";
+                this.onlySubord   = "";
                 this.aSelectionFilters = [];
                 this.oModel = {};
                 this.oWhenPeriodIsLoaded = {};
@@ -18,6 +19,14 @@ sap.ui.define([
             setCurrentYear: function (sYear) {
                 this.selectedYear = sYear;
             },
+                
+            setOnlySubord: function (sSubord) {
+                this.onlySubord = sSubord;
+            },
+
+            getOnlySubord: function () {
+                return this.onlySubord;
+            },                
 
             getCurrentYear: function () {
                 return this.selectedYear;
