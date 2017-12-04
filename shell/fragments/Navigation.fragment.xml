@@ -6,7 +6,7 @@
     <tnt:SideNavigation id="sideNavigation" visible="true">
         <tnt:item>
             <tnt:NavigationList itemSelect="onSideNavigation">
-                <tnt:NavigationListItem key="NavToPlan" text="{i18n>sideNavigation.item.planVacation}"
+<!--                 <tnt:NavigationListItem key="NavToPlan" text="{i18n>sideNavigation.item.planVacation}"
                                         icon="sap-icon://appointment"
                                         id="planNavItem"/>
                 <tnt:NavigationListItem key="NavToApprov" text="{i18n>sideNavigation.item.approvePlan}"
@@ -14,7 +14,7 @@
                                         id="approveNavItem"/>
                 <tnt:NavigationListItem key="NavToControl" text="{i18n>sideNavigation.item.masterRecords}"
                                         icon="sap-icon://approvals"
-                                        id="controlNavItem"/>
+                                        id="controlNavItem"/> -->
             </tnt:NavigationList>
         </tnt:item>
         <tnt:fixedItem>
