@@ -107,7 +107,8 @@ sap.ui.define([
         
         onSubordPress: function (oEvent) {
 
-            if (oEvent.getSource().getPressed()) {
+            //if (oEvent.getSource().getPressed()) {
+            if (oEvent.getParameter('key') === "subord") {                
                 this.oManagerController.setOnlySubord('X');
             } else {
                 this.oManagerController.setOnlySubord('');
