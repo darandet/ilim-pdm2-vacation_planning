@@ -29,8 +29,9 @@ sap.ui.define([
         onDownloadT7: function () {
 
             var sYear = this.oManagerController.getCurrentYear();
+            var sSubord = this.oManagerController.getOnlySubord();            
             var sServicePath = this.getOwnerComponent().getManifestEntry("sap.app").dataSources.MainService.uri;
-            var sODataKey = "(PlanYear='" + sYear +"',EmployeeId='')";
+            var sODataKey = "(PlanYear='" + sYear +"',EmployeeId='',OnlySubord='" + sSubord + "')";
 
             window.open(sServicePath + "/NoAccessEmployeesSet" + sODataKey +  "/$value");
         },
