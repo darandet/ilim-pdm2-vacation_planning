@@ -47,8 +47,13 @@ sap.ui.define([
         
         onShowExcel: function (oEvent) {
 
-          //Передаем "от лица" через ProjPernr, даты через Ename и Pltxt
-          var sUrl = "/sap/opu/odata/sap/ZHR_PDM_VACATION_PLANNING_SRV/ManagingPeriodsSet(PlanYear='2018',OnlySubord='')/ToInbox?$format=xlsx";
+          var sPlanYear = this.oManagerController.getCurrentYear();
+          var sSubord   = this.oManagerController.getOnlySubord();
+          var sUrl      = "/sap/opu/odata/sap/ZHR_PDM_VACATION_PLANNING_SRV/ManagingPeriodsSet(PlanYear='" +
+                              sPlanYear +
+                              "',OnlySubord='" +
+                              sSubord +
+                              "')/ToInbox?$format=xlsx";
           var encodeUrl = encodeURI(sUrl);
           sap.m.URLHelper.redirect(encodeUrl, true);
 
@@ -56,18 +61,22 @@ sap.ui.define([
 
         onEmployeeSearch: function (oEvent) {
 
-            var aFilters = [];
-            var sQuery = oEvent.getSource().getValue();
-            if (sQuery && sQuery.length > 0) {
+            this.oManagerController.setSearchline(oEvent.getSource().getValue());
+            var aFilters = this.oManagerController.getComplexFilter();
+            this.getView().byId("inboxTable").getBinding("items").filter(aFilters);            
+            
+            //var aFilters = [];
+            //var sQuery = oEvent.getSource().getValue();
+            //if (sQuery && sQuery.length > 0) {
 
-                aFilters = this.oManagerController.getComplexFilter(sQuery);
-                var filter = new Filter({filters: aFilters, and: true});
+            //    aFilters = this.oManagerController.getComplexFilter(sQuery);
+            //    var filter = new Filter({filters: aFilters, and: true});
 
                 // update list binding
-                var list = this.getView().byId("inboxTable");
-                var binding = list.getBinding("items");
-                binding.filter(filter);
-            }
+            //    var list = this.getView().byId("inboxTable");
+            //    var binding = list.getBinding("items");
+            //    binding.filter(filter);
+            //}
 
         },
         
@@ -80,9 +89,34 @@ sap.ui.define([
         },
 
         handleConfirm: function (oEvent) {
+          this.oManagerController.clearFilters();
+
           if (oEvent.getParameters().filterString) {
-            sap.m.MessageToast.show(oEvent.getParameters().filterString);
+
+              var aFilters = oEvent.getParameters().filterItems;
+
+              for (var i=0; i < aFilters.length; i++) {
+                  var val = aFilters[i].getKey();
+                  var key = aFilters[i].getParent().getKey();
+
+                  switch (key) {
+                      case "Manager":
+                        this.oManagerController.addManagerVal(val);
+                        break;
+                      case "Department":
+                        this.oManagerController.addDepartVal(val);
+                        break;
+                      case "Status":
+                        this.oManagerController.addStatusVal(val);
+                        break;
+                  }
+              }
+
+              sap.m.MessageToast.show(oEvent.getParameters().filterString);
           }
+
+          var aFilters = this.oManagerController.getComplexFilter();
+          this.getView().byId("inboxTable").getBinding("items").filter(aFilters);
         },
 
         onFilterPress: function (oEvent) {
