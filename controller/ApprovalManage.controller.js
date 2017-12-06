@@ -63,7 +63,18 @@ sap.ui.define([
 
             this.oManagerController.setSearchline(oEvent.getSource().getValue());
             var aFilters = this.oManagerController.getComplexFilter();
-            this.getView().byId("inboxTable").getBinding("items").filter(aFilters);            
+            
+            switch (this.oManagerController.getCurrentTab()) {
+              case "plan":
+                this.getView().byId("inboxTable").getBinding("items").filter(aFilters);
+                break;
+              case "tran":
+                this.getView().byId("transferTable").getBinding("items").filter(aFilters);
+                break;
+              case "conf":
+                this.getView().byId("confirmTable").getBinding("items").filter(aFilters);
+                break;
+            }
             
             //var aFilters = [];
             //var sQuery = oEvent.getSource().getValue();
@@ -80,12 +91,39 @@ sap.ui.define([
 
         },
         
-        _getFilterDialog : function () {
-          if (!this._oDialog) {
-            this._oDialog = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.FilterDialog", this);
-            this.getView().addDependent(this._oDialog);
+        onTabSelect: function (oEvent) {
+
+          this.oManagerController.setCurrentTab(oEvent.getSource().getSelectedKey());
+        },
+
+        _getTransFilterDialog: function () {
+
+          if (!this._oTransDialog) {
+            this._oTransDialog = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.TransferFilterDialog", this);
+            this.getView().addDependent(this._oTransDialog);
           }
-          return this._oDialog;
+
+          return this._oTransDialog;
+        },
+
+        _getPlanFilterDialog : function () {
+
+          if (!this._oPlanDialog) {
+            this._oPlanDialog = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.PlanFilterDialog", this);
+            this.getView().addDependent(this._oPlanDialog);
+          }
+
+          return this._oPlanDialog;
+        },
+
+        _getConfFilterDialog : function () {
+
+          if (!this._oConfDialog) {
+            this._oConfDialog = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.ConfirmFilterDialog", this);
+            this.getView().addDependent(this._oConfDialog);
+          }
+
+          return this._oConfDialog;
         },
 
         handleConfirm: function (oEvent) {
@@ -116,11 +154,33 @@ sap.ui.define([
           }
 
           var aFilters = this.oManagerController.getComplexFilter();
-          this.getView().byId("inboxTable").getBinding("items").filter(aFilters);
+            
+          switch (this.oManagerController.getCurrentTab())
+          {
+            case "plan":
+              this.getView().byId("inboxTable").getBinding("items").filter(aFilters);
+              break;
+            case "tran":
+              this.getView().byId("transferTable").getBinding("items").filter(aFilters);
+              break;
+            case "conf":
+              this.getView().byId("confirmTable").getBinding("items").filter(aFilters);
+              break;
+          }
         },
 
         onFilterPress: function (oEvent) {
-          this._getFilterDialog().open();
+          switch (this.oManagerController.getCurrentTab()) {
+            case "plan":
+              this._getPlanFilterDialog().open();
+              break;
+            case "tran":
+              this._getTransFilterDialog().open();
+              break;
+            case "conf":
+              this._getConfFilterDialog().open();
+              break;
+          }
         },        
 
         onApprovePlan: function (oEvent) {
