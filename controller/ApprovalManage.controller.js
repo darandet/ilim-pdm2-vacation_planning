@@ -49,11 +49,11 @@ sap.ui.define([
 
           var sPlanYear = this.oManagerController.getCurrentYear();
           var sSubord   = this.oManagerController.getOnlySubord();
-          var sUrl      = "/sap/opu/odata/sap/ZHR_PDM_VACATION_PLANNING_SRV/ManagingPeriodsSet(PlanYear='" +
+          var sUrl      = "/sap/opu/odata/sap/ZHR_PDM_VACATION_PLANNING_SRV/VacationPlanXLSSet?$filter=Bukrs eq '" + 
                               sPlanYear +
-                              "',OnlySubord='" +
+                              "' and HasAccess eq '" +
                               sSubord +
-                              "')/ToInbox?$format=xlsx";
+                              "'&$format=xlsx";    
           var encodeUrl = encodeURI(sUrl);
           sap.m.URLHelper.redirect(encodeUrl, true);
 
