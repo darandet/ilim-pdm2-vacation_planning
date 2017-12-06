@@ -8,18 +8,19 @@
 
     <IconTabBar
       id="idIconTabBarMulti"
-      class="sapUiResponsiveContentPadding">
+      class="sapUiResponsiveContentPadding"
+      select="onTabSelect">
       <items>
         <IconTabFilter
-          icon="sap-icon://hint">
+          icon="sap-icon://work-history" key="plan">
           <core:Fragment fragmentName="ilim.pdm2.vacation_planning.view.fragments.PlanInbox" type="XML"/>
         </IconTabFilter>
         <IconTabFilter
-          icon="sap-icon://attachment">
+          icon="sap-icon://workflow-tasks" key="tran">
           <core:Fragment fragmentName="ilim.pdm2.vacation_planning.view.fragments.TransferInbox" type="XML"/>
         </IconTabFilter>
         <IconTabFilter
-          icon="sap-icon://notes">
+          icon="sap-icon://accept" key="conf">
           <core:Fragment fragmentName="ilim.pdm2.vacation_planning.view.fragments.ConfirmInbox" type="XML"/>
         </IconTabFilter>
       </items>
