@@ -23,7 +23,7 @@
             <Table fixedLayout="false" items="{oData>ToVacations}" id="vacationsTable">
                 <headerToolbar>
                     <Toolbar>
-                        <DateRangeSelection id="VacationRangeInput"/>
+                        <DateRangeSelection id="VacationRangeInput" placeholder="DD.MM.YYYY - DD.MM.YYYY"/>
                         <ToolbarSpacer/>
                         <Button	type="Emphasized" text="{i18n>vacation.addButton}" press="onAddVacation"/>
                     </Toolbar>
