@@ -264,7 +264,8 @@ sap.ui.define([
             var oCtxObject = oDataModel.getObject(sCurrentContextPath);
 
             var sObjectKey = "";
-            sObjectKey = sObjectKey + "(PlanYear='" + oCtxObject.PlanYear + "',";
+            sObjectKey = sObjectKey + "(OnlySubord='',";
+            sObjectKey = sObjectKey + "PlanYear='" + oCtxObject.PlanYear + "',";
             sObjectKey = sObjectKey + "Pernr='" + oCtxObject.Pernr + "',";
             sObjectKey = sObjectKey + "ItemGuid=guid'" + oObject.ItemGuid + "')";
 
