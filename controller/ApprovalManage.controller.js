@@ -325,7 +325,17 @@ sap.ui.define([
             var that = this;
             if (!that._planComments) {
 
-                var oFormFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.PlanComments");
+                switch (that.oManagerController.getCurrentTab()) {
+                  case "plan":
+                    var oFormFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.PlanComments");
+                    break;
+                  case "tran":
+                    var oFormFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.TransComments");
+                    break;
+                  case "conf":
+                    var oFormFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.ConfComments");
+                    break;
+                }
 
                 that._planComments = new Dialog({
                     title: that.getResourceBundle().getText("vacation.comments.Header"),
@@ -337,7 +347,11 @@ sap.ui.define([
                         press: function () {
                             that._planComments.close();
                         }
-                    })
+                    }),
+                    afterClose: function() {
+                        that._planComments.destroy();
+                        that._planComments = undefined;
+                    }                    
                 });
 
                 //to get access to the global model
