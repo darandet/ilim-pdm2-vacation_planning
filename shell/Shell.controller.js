@@ -17,7 +17,49 @@ sap.ui.define([
             var that = this;
 
             this.getRouter().getRoute("HomePage").attachPatternMatched(this._patternMatched, this);
+            
+            var fnDataReceived = function (oData, response) {
 
+                var oSideNavigation = that.getView().byId('sideNavigation');
+
+                if (oData.CanPlan) {
+                    var oItemPlan = new NavItem({
+                      key:  "NavToPlan",
+                      text: that.getResourceBundle().getText("sideNavigation.item.planVacation"),
+                      icon: "sap-icon://appointment"
+                    });
+                    oSideNavigation.getItem().addItem(oItemPlan);
+                }
+
+                if (oData.CanApprove) {
+                    var oItemAppr = new NavItem({
+                      key:  "NavToApprov",
+                      text: that.getResourceBundle().getText("sideNavigation.item.approvePlan"),
+                      icon: "sap-icon://sap-box"
+                    });
+                    oSideNavigation.getItem().addItem(oItemAppr);
+                }
+
+                if (oData.CanControl) {
+                    var oItemMaster = new NavItem({
+                      key:  "NavToControl",
+                      text: that.getResourceBundle().getText("sideNavigation.item.masterRecords"),
+                      icon: "sap-icon://approvals"
+                    });
+                    oSideNavigation.getItem().addItem(oItemMaster);
+                }
+
+                oSideNavigation.setVisible(true);
+            };            
+            
+            var fnConnectionError = function (oError) {
+
+                console.log(oError);
+                MessageBox.error(oError.message, {
+                    title: oError.statusText,
+                    details: oError.responseText
+                });
+            };       
 
             this.getOwnerComponent().oRolesLoaded = new Promise( function (fnResolve, fnReject) {
 
@@ -29,6 +71,8 @@ sap.ui.define([
                     });
 
             });
+            
+            this.getOwnerComponent().oRolesLoaded.then(fnDataReceived, fnConnectionError);                        
 
         },
 
@@ -39,29 +83,29 @@ sap.ui.define([
          */
         onBeforeRendering: function() {
 
-            var that = this;
+            //var that = this;
 
-            var fnDataReceived = function (oData, response) {
-                var oSideNavigation = that.getView().byId('sideNavigation');
-                var oItemAggregation = oSideNavigation.getItem();
-                var aItems = oItemAggregation.getItems();
+            //var fnDataReceived = function (oData, response) {
+            //    var oSideNavigation = that.getView().byId('sideNavigation');
+            //    var oItemAggregation = oSideNavigation.getItem();
+            //    var aItems = oItemAggregation.getItems();
 
-                for (var i = 0; i < 3; i++) {
-                    if (aItems[i]) {
-                        var sId = aItems[i].getId();
-                        if (sId.indexOf("planNavItem") > 0 && !oData.CanPlan) {
-                            oItemAggregation.removeItem(sId);
-                        }
-                        if (sId.indexOf("approveNavItem") > 0 && !oData.CanApprove) {
-                            oItemAggregation.removeItem(sId);
-                        }
-                        if (sId.indexOf("controlNavItem") > 0 && !oData.CanControl) {
-                            oItemAggregation.removeItem(sId);
-                        }
-                    }
-                }
+            //    for (var i = 0; i < 3; i++) {
+            //        if (aItems[i]) {
+            //            var sId = aItems[i].getId();
+            //            if (sId.indexOf("planNavItem") > 0 && !oData.CanPlan) {
+            //                oItemAggregation.removeItem(sId);
+            //            }
+            //            if (sId.indexOf("approveNavItem") > 0 && !oData.CanApprove) {
+            //                oItemAggregation.removeItem(sId);
+            //            }
+            //            if (sId.indexOf("controlNavItem") > 0 && !oData.CanControl) {
+            //                oItemAggregation.removeItem(sId);
+            //            }
+            //        }
+            //    }
 
-                oSideNavigation.setVisible(true);
+            //    oSideNavigation.setVisible(true);
             };
 
             var fnConnectionError = function (oError) {
@@ -121,11 +165,14 @@ sap.ui.define([
                 if (oData.CanPlan) {
                     oRouter.navTo("PlanOverview");
                 }
-                if (oData.CanApprove) {
-                    oRouter.navTo("ApprovePlan");
-                }
-                if (oData.CanControl) {
-                    oRouter.navTo("MasterRecord");
+                else {
+                    if (oData.CanApprove) {
+                        oRouter.navTo("ApprovePlan");
+                    } else {
+                        if (oData.CanControl) {
+                            oRouter.navTo("MasterRecord");
+                        }
+                    }
                 }
             });
         }

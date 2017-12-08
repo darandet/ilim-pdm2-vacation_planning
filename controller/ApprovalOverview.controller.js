@@ -26,7 +26,6 @@ sap.ui.define([
             var oEventBus = sap.ui.getCore().getEventBus();
             oEventBus.subscribe("childNavigation", "syncViews", this._syncViews, this);
 
-
             var oModel = new JSONModel({ key: "approvalTab" });
             this.setModel(oModel, "viewSync");
 
@@ -42,7 +41,8 @@ sap.ui.define([
                 if (!oData.PlanYear) {
                     that.getRouter().navTo("PlanningClosed");
                 } else {
-                    that._raiseYearSelectEvent(oData.PlanYear)
+                    that.oManagerController.setOnlySubord('X');                    
+                    that._raiseYearSelectEvent(oData.PlanYear);
                 }
             };
 
@@ -55,8 +55,7 @@ sap.ui.define([
 
             this.oManagerController = this.getOwnerComponent().oManagerController;
             this.oManagerController.setModel(this.getOwnerComponent().getModel("oData"));
-            this.oManagerController.getManagerDefaultPeriod("/ManagingPeriodsSet('')", fnDataReceived, fnRequestError);
-            
+            this.oManagerController.getManagerDefaultPeriod("/ManagingPeriodsSet(PlanYear='',OnlySubord='')", fnDataReceived, fnRequestError);            
         },
 
         /**
@@ -100,17 +99,22 @@ sap.ui.define([
             if (sKey === 'approvalTab') {
                 oRouter.navTo('ManageApprovals');
             } else if (sKey === 'overviewTab') {
-                this.getView().bindElement({
-                    path: this.getView().getBindingContext("oData").getPath(),
-                    parameters: {
-                        expand: "ToAbsPercGraph,ToApprNumGraph,ToVacPlanDaysGraph"
-                    },
-                    model: "oData"
-                });                  
+                var oObject = this.getModel("oData").getObject(this.getView().getBindingContext("oData").getPath());
+                this._raiseYearSelectEvent(oObject.PlanYear);
                 oRouter.navTo('ApprovalsDashboard');
             }
-
         },
+        
+        onSubordPress: function (oEvent) {
+
+            //if (oEvent.getSource().getPressed()) {
+            if (oEvent.getParameter('key') === "subord") {                
+                this.oManagerController.setOnlySubord('X');
+            } else {
+                this.oManagerController.setOnlySubord('');
+            }
+            this._raiseYearSelectEvent(this.getModel("oData").getObject(this.getView().getBindingContext("oData").getPath()).PlanYear);
+        },        
 
         onShowPeriods: function (oEvent) {
             if (! this._oPeriodsPopover) {
@@ -135,7 +139,6 @@ sap.ui.define([
             }
 
             this._oPeriodsPopover.close();
-
             this._raiseYearSelectEvent(sKey);
         },
 
@@ -189,8 +192,9 @@ sap.ui.define([
 
         _raiseYearSelectEvent: function (selectedYear) {
 
-            var that = this;
+            var that      = this;
             var oEventBus = sap.ui.getCore().getEventBus();
+            var subord    = this.oManagerController.getOnlySubord();            
 
             var fnDataRequested = function () {
                 that.getModel("screenState").setProperty("/busy", true);
@@ -203,19 +207,33 @@ sap.ui.define([
             this.getOwnerComponent().oRolesLoaded.then(function (oRolesData) {
 
                 that.oManagerController.setCurrentYear(selectedYear);
-                var sPlanPath = "/ManagingPeriodsSet('" + selectedYear + "')";
-                that.getView().bindElement({
-                    path: sPlanPath,
-                    parameters: {
-                        expand: "ToInbox,ToInbox/ToVacations"
-                    },
-                    events: {
-                        dataRequested: fnDataRequested,
-                        dataReceived: fnDataReceived
-                    },
-                    model: "oData"
-                });
-
+                var sPlanPath = "/ManagingPeriodsSet(PlanYear='" + selectedYear + "',OnlySubord='" + subord + "')";
+                if (that.getModel("viewSync").getProperty('/key') === "approvalTab")
+                {
+                  that.getView().bindElement({
+                      path: sPlanPath,
+                      parameters: {
+                          expand: "ToInbox,ToInbox/ToVacations,ToManager,ToDepartment,ToStatus"
+                      },
+                      events: {
+                          dataRequested: fnDataRequested,
+                          dataReceived: fnDataReceived
+                      },
+                      model: "oData"
+                  });
+                } else if (that.getModel("viewSync").getProperty('/key') === "overviewTab") {
+                  that.getView().bindElement({
+                      path: sPlanPath,
+                      parameters: {
+                          expand: "ToAbsPercGraph,ToApprNumGraph,ToVacPlanDaysGraph,ToNoAccEmpl"
+                      },
+                      events: {
+                          dataRequested: fnDataRequested,
+                          dataReceived: fnDataReceived
+                      },
+                      model: "oData"
+                  });
+                }
 
                 oEventBus.publish("managerHeaderChanges", "yearSelection", { PlanYear: selectedYear });
             });

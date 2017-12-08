@@ -3,8 +3,11 @@ sap.ui.define([
     "jquery.sap.global",
     "sap/ui/model/json/JSONModel",
     "sap/ui/model/odata/v2/ODataModel",
+    "sap/m/Dialog",
+    "sap/m/Button",
+    "sap/m/MessageBox",    
     "ilim/pdm2/vacation_planning/model/formatter"
-], function (Controller, $, JSONModel, ODataModel, Formatter) {
+], function (Controller, $, JSONModel, ODataModel, Dialog, Button, MessageBox, Formatter) {
     "use strict";
 
     return Controller.extend("ilim.pdm2.vacation_planning.controller.PlanCreate", {
@@ -160,8 +163,17 @@ sap.ui.define([
                 var oModel = this._actionSheet.getModel("vacation");
                 var oObjectToDelete = oModel.getData();
                 this._deleteItem(oObjectToDelete);
+            } else if(sFunction === "confirm"){
+                var oModel = this._actionSheet.getModel("vacation");
+                var oObjectToConfirm = oModel.getData();
+                var sReqType = "CRQ";
+                this._modifyVacation(oObjectToConfirm, sReqType);
+            } else {
+                var oModel = this._actionSheet.getModel("vacation");
+                var oObjectToTransfer = oModel.getData();
+                var sReqType = "TRQ";
+                this._modifyVacation(oObjectToTransfer, sReqType);
             }
-
         },
 
         _updateDateRangeInput: function (oCalendar, oDateRangeInput) {
@@ -252,7 +264,8 @@ sap.ui.define([
             var oCtxObject = oDataModel.getObject(sCurrentContextPath);
 
             var sObjectKey = "";
-            sObjectKey = sObjectKey + "(PlanYear='" + oCtxObject.PlanYear + "',";
+            sObjectKey = sObjectKey + "(OnlySubord='',";
+            sObjectKey = sObjectKey + "PlanYear='" + oCtxObject.PlanYear + "',";
             sObjectKey = sObjectKey + "Pernr='" + oCtxObject.Pernr + "',";
             sObjectKey = sObjectKey + "ItemGuid=guid'" + oObject.ItemGuid + "')";
 
@@ -291,7 +304,120 @@ sap.ui.define([
             var oTableBinding = oTable.getBinding("items");
 
             oTableBinding.refresh();
-        }
+        },
+        
+        _modifyVacation: function (oObjectToModify, sRequestType) {
+
+            var oDataModel = this.getModel("oData");
+            var oEventBus = sap.ui.getCore().getEventBus();
+
+            var that = this;
+
+            var fnHandleSuccess = function (oData, response) {
+
+                that.getModel("screenState").setProperty("/busy", false);
+
+                oEventBus.publish("oDataRequest", "SendSuccess");
+
+                var bCompact = !!that.getView().$().closest(".sapUiSizeCompact").length;
+                MessageBox.success(
+                    oData.MessageText,
+                    {
+                        styleClass: bCompact ? "sapUiSizeCompact" : ""
+                    }
+                );
+            };
+
+            var fnHandleError = function (oError) {
+
+                that.getModel("screenState").setProperty("/busy", false);
+
+                var bCompact = !!that.getView().$().closest(".sapUiSizeCompact").length;
+                var oErrorResponse = JSON.parse(oError.responseText);
+                if (oError.statusCode === "400") {
+                    MessageBox.error(
+                        oErrorResponse.error.message.value,
+                        {
+                            styleClass: bCompact ? "sapUiSizeCompact" : ""
+                        }
+                    );
+                } else {
+                    MessageBox.error(
+                        that.getResourceBundle().getText("vacation.create.sendUnknownError"),
+                        {
+                            styleClass: bCompact ? "sapUiSizeCompact" : ""
+                        }
+                    );
+                }
+            };
+
+
+            if (!this.approveCommentDialog) {
+
+                var oComment = {
+                    BeginDate: oObjectToModify.BeginDate,
+                    EndDate:   oObjectToModify.EndDate,
+                    Comment:   ""
+                };
+
+                if (sRequestType === "CRQ")
+                {
+                  var oDialogFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.CommentsDialog");
+                } else {
+                  var oDialogFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.DatesCommentsDialog");
+                }
+                
+                var oCommentModel = new JSONModel(oComment);
+                this.approveCommentDialog = new Dialog({
+                    title: this.getResourceBundle().getText("common.commentsDialog.Title"),
+                    draggable: true,
+                    content: oDialogFragment,
+                    type: 'Message',
+                    beginButton: new Button({
+                        text: this.getResourceBundle().getText("common.commentsDialog.CancelButton"),
+                        type: sap.m.ButtonType.Reject,
+                        press: function () {
+                            that.approveCommentDialog.close();
+                        }
+                    }),
+                    endButton: new Button({
+                        text: this.getResourceBundle().getText("common.commentsDialog.SendButton"),
+                        type: sap.m.ButtonType.Accept,
+                        press: function () {
+
+                            that.getModel("screenState").setProperty("/busy", true);
+
+                            var oCommentModel = that.approveCommentDialog.getModel("comment");
+                            oDataModel.callFunction("/CreateRequest", {
+                                method: "POST",
+                                urlParameters: {
+                                    VacationGUID: oObjectToModify.ItemGuid,
+                                    NewBeginDate: oCommentModel.getProperty("/BeginDate"),
+                                    NewEndDate:   oCommentModel.getProperty("/EndDate"),
+                                    RequestType:  sRequestType,
+                                    Comment:      oCommentModel.getProperty("/Comment")
+                                },
+                                success: fnHandleSuccess,
+                                error: fnHandleError
+                            });
+
+                            oCommentModel.setProperty("/Comment", "");
+                            that.approveCommentDialog.close();
+                        }
+                    }),
+                    afterClose: function() {
+                        that.approveCommentDialog.destroy();
+                        that.approveCommentDialog = undefined;
+                    }
+                });
+                this.approveCommentDialog.setModel(oCommentModel, "comment");
+                this.getView().addDependent(this.approveCommentDialog);
+
+
+            }
+
+            this.approveCommentDialog.open();
+        }        
 
 
     });

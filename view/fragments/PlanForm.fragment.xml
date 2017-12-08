@@ -23,7 +23,7 @@
             <Table fixedLayout="false" items="{oData>ToVacations}" id="vacationsTable">
                 <headerToolbar>
                     <Toolbar>
-                        <DateRangeSelection id="VacationRangeInput"/>
+                        <DateRangeSelection id="VacationRangeInput" placeholder="DD.MM.YYYY - DD.MM.YYYY"/>
                         <ToolbarSpacer/>
                         <Button	type="Emphasized" text="{i18n>vacation.addButton}" press="onAddVacation"/>
                     </Toolbar>
@@ -38,6 +38,9 @@
                     <Column vAlign="Middle">
                         <Text text="{i18n>vacation.table.status}" />
                     </Column>
+                    <Column vAlign="Middle">
+                        <Text text="{i18n>vacation.table.status}" />
+                    </Column>                        
                     <Column>
                     </Column>
                 </columns>
@@ -60,9 +63,12 @@
                                             }
                                         }"
                             />
+                            <Text text="{path: 'oData>VpProc', formatter: '.formatter.vacationProc'}" />                                
                             <ObjectStatus text="{path: 'oData>VpStatus', formatter: '.formatter.vacationStatus'}"
                                           state="{path: 'oData>VpStatus', formatter: '.formatter.vacationState'}"/>
-                            <Button icon="sap-icon://edit" press="onShowActions"/>
+                            <Button icon="sap-icon://edit" 
+                                    enabled="{path: 'oData>VpProc', formatter: '.formatter.vacEditEnabled'}"
+                                    press="onShowActions"/>
                         </cells>
                     </ColumnListItem>
                 </items>

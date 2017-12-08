@@ -14,7 +14,13 @@
                     <Title text="{i18n>vacation.header.title.part1} {oData>PlanYear} {i18n>vacation.header.title.part2}"/>
                 </f:heading>
                 <f:actions>
-                    <ToggleButton icon="sap-icon://manager" text="{i18n>main.header.orgLevelToggle}"/>
+                    <SegmentedButton selectedKey="subord" select="onSubordPress">
+                      <items>
+                        <SegmentedButtonItem icon="sap-icon://manager" text="{i18n>main.header.orgLevelSubord}" key="subord" />
+                        <SegmentedButtonItem icon="sap-icon://task" text="{i18n>main.header.orgLevelAll}" key="all" />
+                      </items>
+                    </SegmentedButton>
+<!--                    <ToggleButton icon="sap-icon://manager" text="{i18n>main.header.orgLevelToggle}" press="onSubordPress" pressed="true"/>-->
                 </f:actions>
                 <f:expandedContent>
                     <Button icon="sap-icon://arrow-down"

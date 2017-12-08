@@ -43,7 +43,7 @@
                             <m:ColumnListItem>
                                 <m:cells>
                                     <m:ObjectIdentifier
-                                            text=""/>
+                                            text="{oData>LineNum}"/>
                                     <m:ObjectIdentifier
                                             text="{oData>EmployeeId}"/>
                                     <m:ObjectIdentifier

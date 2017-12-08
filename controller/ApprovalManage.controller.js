@@ -44,25 +44,158 @@ sap.ui.define([
 
             this.getRouter().navTo("ApprovalDetails");
         },
+        
+        onShowExcel: function (oEvent) {
 
-        onEmployeeSearch: function (oEvent) {
-
-            var aFilters = [];
-            var sQuery = oEvent.getSource().getValue();
-            if (sQuery && sQuery.length > 0) {
-
-                aFilters = this.oManagerController.getComplexFilter(sQuery);
-                var filter = new Filter({filters: aFilters, and: true});
-
-                // update list binding
-                var list = this.getView().byId("inboxTable");
-                var binding = list.getBinding("items");
-                binding.filter(filter);
-            }
+          var sPlanYear = this.oManagerController.getCurrentYear();
+          var sSubord   = this.oManagerController.getOnlySubord();
+          var sUrl      = "/sap/opu/odata/sap/ZHR_PDM_VACATION_PLANNING_SRV/VacationPlanXLSSet?$filter=Bukrs eq '" + 
+                              sPlanYear +
+                              "' and HasAccess eq '" +
+                              sSubord +
+                              "'&$format=xlsx";    
+          var encodeUrl = encodeURI(sUrl);
+          sap.m.URLHelper.redirect(encodeUrl, true);
 
         },
 
+        onEmployeeSearch: function (oEvent) {
+
+            this.oManagerController.setSearchline(oEvent.getSource().getValue());
+            var aFilters = this.oManagerController.getComplexFilter();
+            
+            switch (this.oManagerController.getCurrentTab()) {
+              case "plan":
+                this.getView().byId("inboxTable").getBinding("items").filter(aFilters);
+                break;
+              case "tran":
+                this.getView().byId("transferTable").getBinding("items").filter(aFilters);
+                break;
+              case "conf":
+                this.getView().byId("confirmTable").getBinding("items").filter(aFilters);
+                break;
+            }
+            
+            //var aFilters = [];
+            //var sQuery = oEvent.getSource().getValue();
+            //if (sQuery && sQuery.length > 0) {
+
+            //    aFilters = this.oManagerController.getComplexFilter(sQuery);
+            //    var filter = new Filter({filters: aFilters, and: true});
+
+                // update list binding
+            //    var list = this.getView().byId("inboxTable");
+            //    var binding = list.getBinding("items");
+            //    binding.filter(filter);
+            //}
+
+        },
+        
+        onTabSelect: function (oEvent) {
+
+          this.oManagerController.setCurrentTab(oEvent.getSource().getSelectedKey());
+        },
+
+        _getTransFilterDialog: function () {
+
+          if (!this._oTransDialog) {
+            this._oTransDialog = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.TransferFilterDialog", this);
+            this.getView().addDependent(this._oTransDialog);
+          }
+
+          return this._oTransDialog;
+        },
+
+        _getPlanFilterDialog : function () {
+
+          if (!this._oPlanDialog) {
+            this._oPlanDialog = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.PlanFilterDialog", this);
+            this.getView().addDependent(this._oPlanDialog);
+          }
+
+          return this._oPlanDialog;
+        },
+
+        _getConfFilterDialog : function () {
+
+          if (!this._oConfDialog) {
+            this._oConfDialog = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.ConfirmFilterDialog", this);
+            this.getView().addDependent(this._oConfDialog);
+          }
+
+          return this._oConfDialog;
+        },
+
+        handleConfirm: function (oEvent) {
+          this.oManagerController.clearFilters();
+
+          if (oEvent.getParameters().filterString) {
+
+              var aFilters = oEvent.getParameters().filterItems;
+
+              for (var i=0; i < aFilters.length; i++) {
+                  var val = aFilters[i].getKey();
+                  var key = aFilters[i].getParent().getKey();
+
+                  switch (key) {
+                      case "Manager":
+                        this.oManagerController.addManagerVal(val);
+                        break;
+                      case "Department":
+                        this.oManagerController.addDepartVal(val);
+                        break;
+                      case "Status":
+                        this.oManagerController.addStatusVal(val);
+                        break;
+                  }
+              }
+
+              sap.m.MessageToast.show(oEvent.getParameters().filterString);
+          }
+
+          var aFilters = this.oManagerController.getComplexFilter();
+            
+          switch (this.oManagerController.getCurrentTab())
+          {
+            case "plan":
+              this.getView().byId("inboxTable").getBinding("items").filter(aFilters);
+              break;
+            case "tran":
+              this.getView().byId("transferTable").getBinding("items").filter(aFilters);
+              break;
+            case "conf":
+              this.getView().byId("confirmTable").getBinding("items").filter(aFilters);
+              break;
+          }
+        },
+
+        onFilterPress: function (oEvent) {
+          switch (this.oManagerController.getCurrentTab()) {
+            case "plan":
+              this._getPlanFilterDialog().open();
+              break;
+            case "tran":
+              this._getTransFilterDialog().open();
+              break;
+            case "conf":
+              this._getConfFilterDialog().open();
+              break;
+          }
+        },        
+
         onApprovePlan: function (oEvent) {
+          this.onApproveInbox(oEvent, "VPL");
+        },
+
+        onApproveTransfer: function (oEvent) {
+          this.onApproveInbox(oEvent, "TRQ");
+        },
+
+        onApproveConfirm: function (oEvent) {
+          this.onApproveInbox(oEvent, "CRQ");
+        },
+
+        onApproveInbox: function(oEvent, sType) {
 
             var oSource         = oEvent.getSource();
             var sCtxPath        = oSource.getParent().getBindingContext("oData").getPath(); //Button -> Item
@@ -73,7 +206,8 @@ sap.ui.define([
             if (!this.approveCommentDialog) {
 
                 var oComment = {
-                    comment: ""
+                    Comment: "",
+                    InboxType: sType
                 };
 
                 var oDialogFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.CommentsDialog");
@@ -94,14 +228,19 @@ sap.ui.define([
                         press: function () {
 
                             var oCommentModel = that.approveCommentDialog.getModel("comment");
+                            var sReqType      = oCommentModel.getProperty("/InboxType");
                             oCurrentCtxObj.comment = oCommentModel.getProperty("/Comment");
 
-                            that._callActionOnPlan(oCurrentCtxObj, "APROV");
+                            that._callActionOnPlan(oCurrentCtxObj, "APROV", sReqType);
 
                             oCommentModel.setProperty("/Comment", "");
                             that.approveCommentDialog.close();
                         }
-                    })
+                    }),
+                    afterClose: function() {
+                        that.approveCommentDialog.destroy();
+                        that.approveCommentDialog = undefined;
+                    }                    
 
                 });
                 this.approveCommentDialog.setModel(oCommentModel, "comment");
@@ -114,6 +253,18 @@ sap.ui.define([
         },
 
         onRejectPlan: function (oEvent) {
+          this.onRejectInbox(oEvent, "VPL")
+        },
+
+        onRejectTransfer: function (oEvent) {
+          this.onRejectInbox(oEvent, "TRQ")
+        },
+
+        onRejectConfirm: function (oEvent) {
+          this.onRejectInbox(oEvent, "CRQ")
+        },
+
+        onRejectInbox: function (oEvent, sType) {
 
             var oSource         = oEvent.getSource();
             var sCtxPath        = oSource.getParent().getBindingContext("oData").getPath(); //Button -> Item
@@ -124,7 +275,8 @@ sap.ui.define([
             if (!this.rejectCommentDialog) {
 
                 var oComment = {
-                    comment: ""
+                    Comment: "",
+                    ReqType: sType
                 };
 
                 var oDialogFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.CommentsDialog");
@@ -145,14 +297,19 @@ sap.ui.define([
                         press: function () {
 
                             var oCommentModel = that.rejectCommentDialog.getModel("comment");
+                            var sReqType      = oCommentModel.getProperty("/ReqType");
                             oCurrentCtxObj.comment = oCommentModel.getProperty("/Comment");
 
-                            that._callActionOnPlan(oCurrentCtxObj, "REJEC");
+                            that._callActionOnPlan(oCurrentCtxObj, "REJEC", sReqType);
 
                             oCommentModel.setProperty("/Comment", "");
                             that.rejectCommentDialog.close();
                         }
-                    })
+                    }),
+                    afterClose: function() {
+                        that.rejectCommentDialog.destroy();
+                        that.rejectCommentDialog = undefined;
+                    }                    
 
                 });
                 this.rejectCommentDialog.setModel(oCommentModel, "comment");
@@ -168,7 +325,17 @@ sap.ui.define([
             var that = this;
             if (!that._planComments) {
 
-                var oFormFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.PlanComments");
+                switch (that.oManagerController.getCurrentTab()) {
+                  case "plan":
+                    var oFormFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.PlanComments");
+                    break;
+                  case "tran":
+                    var oFormFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.TransComments");
+                    break;
+                  case "conf":
+                    var oFormFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.ConfComments");
+                    break;
+                }
 
                 that._planComments = new Dialog({
                     title: that.getResourceBundle().getText("vacation.comments.Header"),
@@ -180,7 +347,11 @@ sap.ui.define([
                         press: function () {
                             that._planComments.close();
                         }
-                    })
+                    }),
+                    afterClose: function() {
+                        that._planComments.destroy();
+                        that._planComments = undefined;
+                    }                    
                 });
 
                 //to get access to the global model
@@ -314,28 +485,49 @@ sap.ui.define([
 
         },
 
-        _callActionOnPlan: function (oContextObject, Action) {
+        _callActionOnPlan: function (oContextObject, Action, sType) {
 
             var oDataModel = this.getView().getModel("oData");
 
-            oDataModel.callFunction("/ActionOnVacationPlan", {
-                method: "POST",
-                urlParameters: {
-                    Action:     Action,
-                    EmployeeId: oContextObject.EmployeeId,
-                    PlanYear:   oContextObject.PlanYear,
-                    Comment:    oContextObject.comment
-                },
-                success: fnHandleSuccess
-                // error: fnHandleError
-            });
-
             var fnHandleSuccess = function (oData, response) {
-                var oTable = this.getView().byId("inboxTable");
+                if (sType === "CRQ") {
+                    var oTable = this.getView().byId("confirmTable");
+                } else if (sType === "TRQ") {
+                    var oTable = this.getView().byId("transferTable");                    
+                } else {
+                    var oTable = this.getView().byId("inboxTable");                    
+                }                
                 var oTableBinding = oTable.getBinding("items");
 
                 oTableBinding.refresh();
             }.bind(this);
+            
+            if (sType === "CRQ" || sType === "TRQ")
+            {
+              oDataModel.callFunction("/ActionOnRequest", {
+                  method: "POST",
+                  urlParameters: {
+                      Action:      Action,
+                      RequestId:   oContextObject.RequestId,
+                      RequestType: sType,
+                      Comment:     oContextObject.comment
+                  },
+                  success: fnHandleSuccess
+                  // error: fnHandleError
+              });
+            } else {
+              oDataModel.callFunction("/ActionOnVacationPlan", {
+                  method: "POST",
+                  urlParameters: {
+                      Action:     Action,
+                      EmployeeId: oContextObject.EmployeeId,
+                      PlanYear:   oContextObject.PlanYear,
+                      Comment:    oContextObject.comment
+                  },
+                  success: fnHandleSuccess
+                  // error: fnHandleError
+              });
+            }            
 
         },
 
@@ -349,7 +541,9 @@ sap.ui.define([
 
         _patternMatched: function () {
 
-            var that = this;
+            var that      = this;
+            var oEventBus = sap.ui.getCore().getEventBus();
+            oEventBus.publish("childNavigation", "syncViews", { key: "approvalTab" });            
 
             this.getOwnerComponent().oRolesLoaded.then( function (oData) {
                 if (!oData.CanApprove) {

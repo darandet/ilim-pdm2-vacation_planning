@@ -1,0 +1,93 @@
+<core:FragmentDefinition
+        xmlns:core="sap.ui.core"
+        xmlns="sap.m">
+
+    <Table fixedLayout="false" class="sapUiMediumMarginTop" mode="MultiSelect"
+           items="{
+                path: 'oData>ToConfirmInbox'
+            }"
+           rememberSelections="true"
+           id="confirmTable">
+        <headerToolbar>
+            <OverflowToolbar>
+                <Title text="{i18n>main.toolbar.title}" level="H2"/>
+                <SearchField width="30%"
+                             placeholder="{i18n>main.toolbar.searchPlaceholder}"
+                             id="inboxEmployeeSearchField3"
+                             search="onEmployeeSearch"/>
+                <ToolbarSpacer/>
+                <OverflowToolbarButton type="Transparent" icon="sap-icon://multiselect-all"/>
+                <OverflowToolbarButton type="Transparent" icon="sap-icon://filter" press="onFilterPress"/>
+            </OverflowToolbar>
+        </headerToolbar>
+        <columns>
+            <Column vAlign="Middle" hAlign="Begin">
+                <Text text="{i18n>main.table.employee}" />
+            </Column>
+            <Column vAlign="Middle" hAlign="Center">
+                <Text text="{i18n>main.table.department}" />
+            </Column>
+            <Column vAlign="Middle" hAlign="Center">
+                <Text text="{i18n>main.table.employeeId}" />
+            </Column>
+            <Column vAlign="Middle" hAlign="Center">
+                <Text text="{i18n>main.table.lineManager}" />
+            </Column>
+            <Column vAlign="Middle" hAlign="Center">
+                <Text text="{i18n>main.table.confDates}" />
+            </Column>
+            <Column vAlign="Middle" hAlign="Center">
+                <Text text="{i18n>main.table.hasAccess}" />
+            </Column>
+            <Column vAlign="Middle" hAlign="Center">
+                <Text text="{i18n>main.table.statusReq}" />
+            </Column>
+            <Column hAlign="Center">
+            </Column>
+        </columns>
+        <items>
+            <ColumnListItem class="sapUiTinyPaddingTop" highlight="{inbox>highlight}">
+                <cells>
+                    <ObjectIdentifier
+                            title="{oData>EmployeeName}"
+                            text="{oData>PositionText}"/>
+                    <VBox>
+                        <Label text="{oData>OrgunitText}" />
+                        <Label text="{oData>Pbtxt}" />
+                    </VBox>
+                    <ObjectIdentifier
+                            text="{oData>EmployeeId}"/>
+                    <Text   textAlign="Center"
+                            text="{oData>ChperEname}"/>
+                    <Text   textAlign="Center"
+                            text="{path: 'oData>BeginDate', formatter: '.formatter.dateToString'} - {path: 'oData>EndDate', formatter: '.formatter.dateToString'}"/>
+                    <CheckBox enabled="false" selected="{oData>HasAccess}" />
+                    <ObjectStatus
+                            text="{parts: [{path: 'oData>PlanStatus'}, {path: 'oData>CanApprove'}],
+                                    formatter: '.formatter.vacationPlanStatus'}"
+                            state="{path: 'oData>PlanStatus', formatter: '.formatter.vacationPlanState'}"/>
+
+                    <FlexBox alignItems="Center" justifyContent="SpaceBetween">
+                        <items>
+                            <Button type="Accept" icon="sap-icon://accept"
+                                    enabled="{path: 'oData>CanApprove', formatter: '.formatter.any2Boolean'}"
+                                    press="onApproveConfirm"
+                            />
+                            <Button type="Reject"
+                                    icon="{path: 'oData>PlanStatus', formatter: '.formatter.vacationPlanRejectIcon'}"
+                                    enabled="{path: 'oData>CanReject', formatter: '.formatter.any2Boolean'}"
+                                    press="onRejectConfirm"
+                            />
+                            <Button icon="sap-icon://comment"
+                                    enabled="{path: 'oData>CanComment', formatter: '.formatter.any2Boolean'}"
+                                    press="onShowComments"
+                            />
+                        </items>
+                    </FlexBox>
+
+                </cells>
+            </ColumnListItem>
+        </items>
+    </Table>
+
+</core:FragmentDefinition>

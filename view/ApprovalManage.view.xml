@@ -2,95 +2,28 @@
         controllerName="ilim.pdm2.vacation_planning.controller.ApprovalManage"
         xmlns:mvc="sap.ui.core.mvc"
         xmlns="sap.m"
-        xmlns:f="sap.f"
+        xmlns:core="sap.ui.core"
         displayBlock="true"
         height="100%">
 
-    <Table fixedLayout="false" class="sapUiMediumMarginTop" mode="MultiSelect"
-           items="{
-                path: 'oData>/ToInbox'
-            }"
-           rememberSelections="true"
-           id="inboxTable">
-        <headerToolbar>
-            <OverflowToolbar>
-                <Title text="{i18n>main.toolbar.title}" level="H2"/>
-                <SearchField width="30%"
-                             placeholder="{i18n>main.toolbar.searchPlaceholder}"
-                             id="inboxEmployeeSearchField"
-                             liveChange="onEmployeeSearch"/>
-                <ToolbarSpacer/>
-                <OverflowToolbarButton type="Transparent" icon="sap-icon://multiselect-all"/>
-                <OverflowToolbarButton type="Transparent" icon="sap-icon://filter"/>
-                <OverflowToolbarButton type="Transparent" icon="sap-icon://excel-attachment"/>
-                <OverflowToolbarButton type="Transparent" icon="sap-icon://action-settings"/>
-                <Button icon="sap-icon://display" text="{i18n>main.toolbar.showSelected}" press="onShowSelected"/>
-            </OverflowToolbar>
-        </headerToolbar>
-        <columns>
-            <Column vAlign="Middle" hAlign="Begin">
-                <Text text="{i18n>main.table.employee}" />
-            </Column>
-            <Column vAlign="Middle" hAlign="Center">
-                <Text text="{i18n>main.table.department}" />
-            </Column>
-            <Column vAlign="Middle" hAlign="Center">
-                <Text text="{i18n>main.table.employeeId}" />
-            </Column>
-            <Column vAlign="Middle" hAlign="Center">
-                <Text text="{i18n>main.table.lineManager}" />
-            </Column>
-            <Column vAlign="Middle" hAlign="Center">
-                <Text text="{i18n>main.table.daysStats}" />
-            </Column>
-            <Column vAlign="Middle" hAlign="Center">
-                <Text text="{i18n>main.table.hasAccess}" />
-            </Column>
-            <Column vAlign="Middle" hAlign="Center">
-                <Text text="{i18n>main.table.status}" />
-            </Column>
-            <Column hAlign="Center">
-            </Column>
-        </columns>
-        <items>
-            <ColumnListItem class="sapUiTinyPaddingTop" highlight="{inbox>highlight}">
-                <cells>
-                    <ObjectIdentifier
-                            title="{oData>EmployeeName}"
-                            text="{oData>PositionText}"/>
-                    <VBox>
-                        <Label text="{oData>OrgunitText}" />
-                        <Label text="{inbox>Pbtxt}" />
-                    </VBox>
-                    <ObjectIdentifier
-                            text="{oData>EmployeeId}"/>
-                    <Text   textAlign="Center"
-                            text="{oData>ChperEname}"/>
-                    <ObjectNumber number="{oData>AbsRightSaldo}/{oData>AbsRightTotal}/{oData>AbsRightPlanned}"
-                                  unit="{i18n>main.table.units}"/>
-                    <CheckBox enabled="false" selected="{oData>HasAccess}" />
-                    <ObjectStatus
-                            text="{parts: [{path: 'oData>PlanStatus'}, {path: 'oData>CanApprove'}],
-                                    formatter: '.formatter.vacationPlanStatus'}"
-                            state="{path: 'oData>PlanStatus', formatter: '.formatter.vacationPlanState'}"/>
+    <IconTabBar
+      id="idIconTabBarMulti"
+      class="sapUiResponsiveContentPadding"
+      select="onTabSelect">
+      <items>
+        <IconTabFilter
+          icon="sap-icon://work-history" key="plan">
+          <core:Fragment fragmentName="ilim.pdm2.vacation_planning.view.fragments.PlanInbox" type="XML"/>
+        </IconTabFilter>
+        <IconTabFilter
+          icon="sap-icon://workflow-tasks" key="tran">
+          <core:Fragment fragmentName="ilim.pdm2.vacation_planning.view.fragments.TransferInbox" type="XML"/>
+        </IconTabFilter>
+        <IconTabFilter
+          icon="sap-icon://accept" key="conf">
+          <core:Fragment fragmentName="ilim.pdm2.vacation_planning.view.fragments.ConfirmInbox" type="XML"/>
+        </IconTabFilter>
+      </items>
+    </IconTabBar>
 
-                    <FlexBox alignItems="Center" justifyContent="SpaceBetween">
-                        <items>
-                            <Button type="Accept" icon="sap-icon://accept" enabled="{oData>CanApprove}"
-                                    press="onApprovePlan"
-                            />
-                            <Button type="Reject"
-                                    icon="{path: 'oData>PlanStatus', formatter: '.formatter.vacationPlanRejectIcon'}"
-                                    enabled="{oData>CanReject}"
-                                    press="onRejectPlan"
-                            />
-                            <Button icon="sap-icon://create-form" enabled="{oData>CanCreate}" press="onShowPlanForm"/>
-                            <Button icon="sap-icon://comment" enabled="{oData>CanComment}" press="onShowComments"/>
-                        </items>
-                    </FlexBox>
-
-                </cells>
-            </ColumnListItem>
-        </items>
-    </Table>
 </mvc:View>
