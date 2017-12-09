@@ -194,6 +194,93 @@ sap.ui.define([
         onApproveConfirm: function (oEvent) {
           this.onApproveInbox(oEvent, "CRQ");
         },
+        
+        onMassApprovePlan: function (oEvent) {
+          this.onMassApprove(oEvent, "VPL");
+
+        },
+
+        onMassApproveTransfer: function (oEvent) {
+          this.onMassApprove(oEvent, "TRQ");
+
+        },
+
+        onMassApproveConfirm: function (oEvent) {
+          this.onMassApprove(oEvent, "CRQ");
+
+        },
+
+        onMassApprove: function(oEvent, sType) {
+
+            var aItemsSelected  = oEvent.getSource().getParent().getParent().getSelectedItems();
+            var aItemsToApprove = [];
+            var that            = this;
+
+            for (var i = 0; i < aItemsSelected.length; i++) {
+                var sCtxPath        = aItemsSelected[i].getBindingContext("oData").getPath();
+                var oCurrentCtxObj  = aItemsSelected[i].getModel("oData").getObject(sCtxPath);
+                if ( oCurrentCtxObj.CanApprove == true ) {
+                  aItemsToApprove.push(oCurrentCtxObj);
+                }
+            }
+
+            if (aItemsToApprove.length > 0) {
+
+                if (!this.approveCommentDialog) {
+
+                    var oComment = {
+                        Comment: "",
+                        InboxType: sType
+                    };
+
+                    var oDialogFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.CommentsDialog");
+                    var oCommentModel = new JSONModel(oComment);
+                    this.approveCommentDialog = new Dialog({
+                        title: this.getResourceBundle().getText("common.commentsDialog.Title"),
+                        draggable: true,
+                        content: oDialogFragment,
+                        type: 'Message',
+                        beginButton: new Button({
+                            text: this.getResourceBundle().getText("common.commentsDialog.CancelButton"),
+                            press: function () {
+                                that.approveCommentDialog.close();
+                            }
+                        }),
+                        endButton: new Button({
+                            text: this.getResourceBundle().getText("common.commentsDialog.SendButton"),
+                            press: function () {
+
+                                var oCommentModel = that.approveCommentDialog.getModel("comment");
+                                var sReqType      = oCommentModel.getProperty("/InboxType");
+
+                                for (var i = 0; i < aItemsToApprove.length; i++) {
+                                    var sCtxPath           = aItemsToApprove[i].getBindingContext("oData").getPath();
+                                    var oCurrentCtxObj     = aItemsToApprove[i].getModel("oData").getObject(sCtxPath);
+                                    oCurrentCtxObj.comment = oCommentModel.getProperty("/Comment");
+                                    that._callActionOnPlan(oCurrentCtxObj, "APROV", sReqType);
+                                }
+
+                                oCommentModel.setProperty("/comment", "");
+                                that.approveCommentDialog.close();
+                            }
+                        }),
+                        afterClose: function() {
+                            that.approveCommentDialog.destroy();
+                            that.approveCommentDialog = undefined;
+                        }
+                    });
+
+                    this.approveCommentDialog.setModel(oCommentModel, "comment");
+                    this.getView().addDependent(this.approveCommentDialog);
+
+                }
+
+                this.approveCommentDialog.open();
+
+            } else {
+                sap.m.MessageToast.show(this.getResourceBundle().getText("common.massApprove.NothingSelected"));
+            }
+        },        
 
         onApproveInbox: function(oEvent, sType) {
 
