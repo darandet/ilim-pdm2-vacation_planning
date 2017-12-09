@@ -16,7 +16,7 @@
                              id="inboxEmployeeSearchField"
                              search="onEmployeeSearch"/>
                 <ToolbarSpacer/>
-                <OverflowToolbarButton type="Transparent" icon="sap-icon://multiselect-all"/>
+                <OverflowToolbarButton type="Transparent" icon="sap-icon://multiselect-all" press="onMassApprovePlan"/>
                 <OverflowToolbarButton type="Transparent" icon="sap-icon://filter" press="onFilterPress"/>
                 <OverflowToolbarButton type="Transparent" icon="sap-icon://excel-attachment" press="onShowExcel"/>
                 <OverflowToolbarButton type="Transparent" icon="sap-icon://action-settings"/>
