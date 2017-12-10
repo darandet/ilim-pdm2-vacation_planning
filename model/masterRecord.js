@@ -7,11 +7,11 @@ sap.ui.define([],
 
             var oResourceBundle = this.getResourceBundle();
 
-            if (sStatus === "CRTD") {
+            if (sStatus === "CRTD" || sStatus === "CLSD") {
                 return oResourceBundle.getText("masterRecord.actions.open");
             }
 
-            if (sStatus === "OPEN" || sStatus === "CLSD") {
+            if (sStatus === "OPEN" ) {
                 return oResourceBundle.getText("masterRecord.actions.close");
             }
 
@@ -20,11 +20,11 @@ sap.ui.define([],
 
         oFormatter.periodActionType = function (sStatus) {
 
-            if (sStatus === "CRTD") {
+            if (sStatus === "CRTD" || sStatus === "CLSD") {
                 return sap.m.ButtonType.Accept;
             }
 
-            if (sStatus === "OPEN" || sStatus === "CLSD") {
+            if (sStatus === "OPEN") {
                 return sap.m.ButtonType.Reject;
             }
 
@@ -33,8 +33,8 @@ sap.ui.define([],
 
         oFormatter.periodActionIcon = function (sStatus) {
 
-            if (sStatus === "CRTD") return "sap-icon://unlocked";
-            if (sStatus === "OPEN" || sStatus === "CLSD") return "sap-icon://locked";
+            if (sStatus === "CRTD" || sStatus === "CLSD") return "sap-icon://unlocked";
+            if (sStatus === "OPEN") return "sap-icon://locked";
         };
         
         
@@ -62,7 +62,8 @@ sap.ui.define([],
 
         oFormatter.periodActionEnabled = function (sStatus) {
 
-            return sStatus !== "CLSD";
+            // return sStatus !== "CLSD";
+            return true;
 
         };
 

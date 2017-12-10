@@ -242,29 +242,29 @@ sap.ui.define([
 
         _checkVacationsBeforeSend: function (aVacations) {
 
-            var bHas2Week = false;
-            var bHas1Week = false;
-            var N = 1000*60*60*24;
+            // var bHas2Week = false;
+            // var bHas1Week = false;
+            // var N = 1000*60*60*24;
+            //
+            //
+            // var fnDateDiff = function (Date1, Date2) {
+            //     return Math.round((Date2 - Date1)/N) + 1;
+            // };
+            //
+            // for(var i=0; i < aVacations.length; i++) {
+            //     if (fnDateDiff(aVacations[i].BeginDate, aVacations[i].EndDate) >= 14) {
+            //         bHas2Week = true;
+            //     }
+            //
+            // }
+            //
+            // if (!bHas2Week) {
+            //     this._showWarnings(bHas1Week, bHas2Week);
+            // } else {
+            //     this._sendPlan();
+            // }
 
-
-            var fnDateDiff = function (Date1, Date2) {
-                return Math.round((Date2 - Date1)/N) + 1;
-            };
-
-            for(var i=0; i < aVacations.length; i++) {
-                if (fnDateDiff(aVacations[i].BeginDate, aVacations[i].EndDate) >= 14) {
-                    bHas2Week = true;
-                } else if (fnDateDiff(aVacations[i].BeginDate, aVacations[i].EndDate) >= 7) {
-                    bHas1Week = true;
-                }
-
-            }
-
-            if (!bHas1Week || !bHas2Week) {
-                this._showWarnings(bHas1Week, bHas2Week);
-            } else {
-                this._sendPlan();
-            }
+            this._sendPlan();
 
         },
 
