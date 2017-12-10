@@ -1,7 +1,8 @@
 sap.ui.define([
     "ilim/pdm2/vacation_planning/controller/BaseController",
-    "sap/ui/model/json/JSONModel"
-], function (Controller, JSONModel) {
+    "sap/ui/model/json/JSONModel",
+    "ilim/pdm2/vacation_planning/model/formatter"    
+], function (Controller, JSONModel, Formatter) {
     "use strict";
 
     return Controller.extend("ilim.pdm2.vacation_planning.controller.ApprovalDetails", {
@@ -15,6 +16,8 @@ sap.ui.define([
         selectedEmployees: [],
         oManagerController: {},
 
+        formatter: Formatter,        
+        
         onInit: function() {
 
             this.getRouter().getRoute("ApprovalDetails").attachPatternMatched(this._patternMatched, this);
