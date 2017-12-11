@@ -16,7 +16,17 @@
                              id="inboxEmployeeSearchField"
                              search="onEmployeeSearch"/>
                 <ToolbarSpacer/>
-                <OverflowToolbarButton type="Transparent" icon="sap-icon://multiselect-all"/>
+                <MenuButton icon="sap-icon://multiselect-all">
+                  <menu>
+                    <Menu itemSelected="onMassApprove">
+                      <items>
+                        <MenuItem text="{i18n>main.toolbar.massApprove}" icon="sap-icon://accept" />
+                        <MenuItem text="{i18n>main.toolbar.massReject}" icon="sap-icon://decline" />
+                      </items>
+                    </Menu>
+                  </menu>
+                </MenuButton>
+<!--                <OverflowToolbarButton type="Transparent" icon="sap-icon://multiselect-all" press="onMassApprovePlan"/>-->
                 <OverflowToolbarButton type="Transparent" icon="sap-icon://filter" press="onFilterPress"/>
                 <OverflowToolbarButton type="Transparent" icon="sap-icon://excel-attachment" press="onShowExcel"/>
                 <OverflowToolbarButton type="Transparent" icon="sap-icon://action-settings"/>
@@ -74,12 +84,12 @@
                         <items>
                             <Button type="Accept" icon="sap-icon://accept"
                                     enabled="{path: 'oData>CanApprove', formatter: '.formatter.any2Boolean'}"
-                                    press="onApprovePlan"
+                                    press="onApproveInbox"
                             />
                             <Button type="Reject"
                                     icon="{path: 'oData>PlanStatus', formatter: '.formatter.vacationPlanRejectIcon'}"
                                     enabled="{path: 'oData>CanReject', formatter: '.formatter.any2Boolean'}"
-                                    press="onRejectPlan"
+                                    press="onRejectInbox"
                             />
                             <Button icon="sap-icon://create-form"
                                     enabled="{path: 'oData>CanCreate', formatter: '.formatter.any2Boolean'}"

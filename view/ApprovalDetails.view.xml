@@ -33,6 +33,9 @@
                             <Text text="{i18n>details.table.period}" />
                         </Column>
                         <Column vAlign="Middle" hAlign="Center">
+                            <Text text="{i18n>details.table.length}" />
+                        </Column>
+                        <Column vAlign="Middle" hAlign="Center">
                             <Text text="{i18n>details.table.operation}" />
                         </Column>
                     </columns>
@@ -42,7 +45,8 @@
                                 <ObjectIdentifier title="{vacations>EmployeeName}"/>
                                 <Text   textAlign="Center"
                                         text="{path: 'vacations>BeginDate', type: 'sap.ui.model.type.Date', formatOptions: {style: 'short'}} - {path: 'vacations>EndDate', type: 'sap.ui.model.type.Date', formatOptions: {style: 'short'}}"/>
-                                <ObjectStatus text="{vacations>VpProc}"/>
+                                <Text textAlign="Center" text="{vacations>Length}"/>                                
+                                <ObjectStatus text="{path: 'vacations>VpProc', formatter: '.formatter.vacationProc'}"/>
                             </cells>
                         </ColumnListItem>
                     </items>

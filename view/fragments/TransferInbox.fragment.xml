@@ -16,7 +16,16 @@
                              id="inboxEmployeeSearchField2"
                              search="onEmployeeSearch"/>
                 <ToolbarSpacer/>
-                <OverflowToolbarButton type="Transparent" icon="sap-icon://multiselect-all"/>
+                <MenuButton icon="sap-icon://multiselect-all">
+                  <menu>
+                    <Menu itemSelected="onMassApprove">
+                      <items>
+                        <MenuItem text="{i18n>main.toolbar.massApprove}" icon="sap-icon://accept" />
+                        <MenuItem text="{i18n>main.toolbar.massReject}" icon="sap-icon://decline" />
+                      </items>
+                    </Menu>
+                  </menu>
+                </MenuButton>
                 <OverflowToolbarButton type="Transparent" icon="sap-icon://filter" press="onFilterPress"/>
             </OverflowToolbar>
         </headerToolbar>
@@ -72,12 +81,12 @@
                         <items>
                             <Button type="Accept" icon="sap-icon://accept"
                                     enabled="{path: 'oData>CanApprove', formatter: '.formatter.any2Boolean'}"
-                                    press="onApproveTransfer"
+                                    press="onApproveInbox"
                             />
                             <Button type="Reject"
                                     icon="{path: 'oData>PlanStatus', formatter: '.formatter.vacationPlanRejectIcon'}"
                                     enabled="{path: 'oData>CanReject', formatter: '.formatter.any2Boolean'}"
-                                    press="onRejectTransfer"                                    
+                                    press="onRejectInbox"                                    
                             />
                             <Button icon="sap-icon://comment"
                                     enabled="{path: 'oData>CanComment', formatter: '.formatter.any2Boolean'}"
