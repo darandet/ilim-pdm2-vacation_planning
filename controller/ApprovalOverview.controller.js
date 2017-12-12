@@ -96,10 +96,11 @@ sap.ui.define([
             var sKey = oEvent.getParameter('key');
             var oRouter = this.getRouter();
 
+            var oObject = this.getModel("oData").getObject(this.getView().getBindingContext("oData").getPath());
             if (sKey === 'approvalTab') {
+                this._raiseYearSelectEvent(oObject.PlanYear);
                 oRouter.navTo('ManageApprovals');
             } else if (sKey === 'overviewTab') {
-                var oObject = this.getModel("oData").getObject(this.getView().getBindingContext("oData").getPath());
                 this._raiseYearSelectEvent(oObject.PlanYear);
                 oRouter.navTo('ApprovalsDashboard');
             }
@@ -225,7 +226,7 @@ sap.ui.define([
                   that.getView().bindElement({
                       path: sPlanPath,
                       parameters: {
-                          expand: "ToAbsPercGraph,ToApprNumGraph,ToVacPlanDaysGraph,ToNoAccEmpl"
+                          expand: "ToAbsPercGraph,ToApprNumGraph,ToVacPlanDaysGraph"
                       },
                       events: {
                           dataRequested: fnDataRequested,

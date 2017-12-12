@@ -61,7 +61,7 @@
             </l:BlockLayoutCell>
 
             <l:BlockLayoutCell width="1" titleAlignment="Begin"
-                               title="{i18n>dashboard.graphic.absencePercent}">
+                               title="{i18n>dashboard.graphic.vacDaysPlanned}">
                 <viz:VizFrame id="idVizFrame3" height="300px" width="100%" vizType='bar'
                               vizProperties="{
                                  valueAxis: {
@@ -69,7 +69,7 @@
                                      visible: false
                                    },
                                    label: {
-                                     visible: false
+                                     visible: true
                                    }
                                  },
                                  categoryAxis: {
@@ -89,7 +89,7 @@
                                    }
                                  },
                                  legend: {
-                                   visible: true
+                                   visible: false
                                  },
                                  toolTip : {
                                    visible: false
@@ -98,20 +98,46 @@
                                    behaviorType: 'noHoverBehavior'
                                  },
                                  plotArea: {
-                                   referenceLine: {
-                                     line: {
-                                       valueAxis: [{
-                                         value: 3,
-                                         visible: true,
-                                         size: 1,
-                                         type: 'dotted',
-                                         label: {
-                                           text: 'Target',
-                                           visible: false
-                                         }
-                                       }]
-                                     }
-                                   }
+                                    dataPointStyle: {
+                                        rules: [
+                                            {
+                                                dataContext: { Category: 'Доступно' },
+                                                properties: {
+                                                    color: 'sapUiChartPaletteQualitativeHue1'
+                                                }
+                                            },
+                                            {
+                                                dataContext: { Category: 'Available' },
+                                                properties: {
+                                                    color: 'sapUiChartPaletteQualitativeHue1'
+                                                }
+                                            },
+                                            {
+                                                dataContext: { Category: 'Запланировано сотрудниками' },
+                                                properties: {
+                                                    color: 'sapUiChartPaletteQualitativeHue2'
+                                                }
+                                            },
+                                            {
+                                                dataContext: { Category: 'Planned' },
+                                                properties: {
+                                                    color: 'sapUiChartPaletteQualitativeHue2'
+                                                }
+                                            },
+                                            {
+                                                dataContext: { Category: 'Согласовано' },
+                                                properties: {
+                                                    color: 'sapUiChartPaletteQualitativeHue3'
+                                                }
+                                            },
+                                            {
+                                                dataContext: { Category: 'Approved' },
+                                                properties: {
+                                                    color: 'sapUiChartPaletteQualitativeHue3'
+                                                }
+                                            }
+                                        ]
+                                    }
                                  }
                                }">
                     <viz:dataset>
@@ -197,7 +223,7 @@
             </l:BlockLayoutCell>
 
             <l:BlockLayoutCell width="2" titleAlignment="Begin"
-                               title="{i18n>dashboard.graphic.vacDaysPlanned}">
+                               title="{i18n>dashboard.graphic.absencePercent}">
                 <viz:VizFrame id="idVizFrame" height="300px" width="100%" vizType='column'
                               vizProperties="{
                                    valueAxis: {

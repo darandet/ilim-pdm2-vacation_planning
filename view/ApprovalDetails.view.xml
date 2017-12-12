@@ -51,9 +51,9 @@
                         </ColumnListItem>
                     </items>
                 </Table>
-                <PlanningCalendar viewKey="M" appoitmentsReducedHeight="true" appointmentsVisualization="Filled"
+                <ilim:VacPlanPlanningCalendar viewKey="M" appoitmentsReducedHeight="true" appointmentsVisualization="Filled"
                                   showIntervalHeaders="false" rows="{path: 'calendar>/'}">
-                    <views>
+                    <ilim:views>
                         <PlanningCalendarView
                                 key="M"
                                 intervalType="Month"
@@ -62,8 +62,8 @@
                                 intervalsM="6"
                                 intervalsL="9"
                                 showSubIntervals="false"/>
-                    </views>
-                    <rows>
+                    </ilim:views>
+                    <ilim:rows>
                         <PlanningCalendarRow
                                 title="{calendar>EmployeeName}"
                                 appointments="{calendar>ToVacations}">
@@ -75,8 +75,8 @@
                                 </unified:CalendarAppointment>
                             </appointments>
                         </PlanningCalendarRow>
-                    </rows>
-                </PlanningCalendar>
+                    </ilim:rows>
+                </ilim:VacPlanPlanningCalendar>
             </ilim:VacPlanCarousel>
         </content>
     </Panel>

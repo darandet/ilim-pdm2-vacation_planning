@@ -1,8 +1,9 @@
 sap.ui.define([
     "ilim/pdm2/vacation_planning/controller/BaseController",
     "sap/ui/model/json/JSONModel",
-    "sap/m/MessageBox"
-], function (Controller, JSONModel, MessageBox) {
+    "sap/m/MessageBox",
+    "sap/tnt/NavigationListItem"
+], function (Controller, JSONModel, MessageBox, NavItem) {
     "use strict";
 
     return Controller.extend("ilim.pdm2.vacation_planning.shell.Shell", {
