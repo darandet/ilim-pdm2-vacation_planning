@@ -57,7 +57,7 @@
                         <PlanningCalendarView
                                 key="M"
                                 intervalType="Month"
-                                description="months view"
+                                description="{i18n>details.calendar.view.Month}"
                                 intervalsS="2"
                                 intervalsM="6"
                                 intervalsL="9"

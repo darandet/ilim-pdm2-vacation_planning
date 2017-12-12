@@ -144,6 +144,10 @@ sap.ui.define(["ilim/pdm2/vacation_planning/model/planningActions"],
 
         oFormatter.vacationPlanRejectIcon = function (sStatus) {
 
+            if (!sStatus) {
+                return "sap-icon://reset";
+            }
+
             if (sStatus.substr(2, 2) > "04") {
                 return "sap-icon://reset";
             } else {

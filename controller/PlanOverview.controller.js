@@ -119,6 +119,15 @@ sap.ui.define([
             that._planComments.open();
         },
 
+        onShowHistory: function () {
+
+            var crossAppNav = sap.ushell.Container.getService("CrossApplicationNavigation");
+            var extendUrl = "ZApprovalHistorySem-display&/PlanVac";
+            crossAppNav.toExternal({
+                target: { shellHash: extendUrl }
+            })
+        },
+
         onShowPeriods: function (oEvent) {
 
             if (! this._oPeriodsPopover) {
@@ -153,7 +162,7 @@ sap.ui.define([
             var oDataModel = this.getModel("oData");
             var sCurrentPath = this.getView().getBindingContext("oData").getPath();
             
-            var aVacations = this._convertModelVacationsToArray(oDataModel, sCurrentPath)
+            var aVacations = this._convertModelVacationsToArray(oDataModel, sCurrentPath);
             
             this._checkVacationsBeforeSend(aVacations);
         },
@@ -233,7 +242,9 @@ sap.ui.define([
             var aVacations = [];
 
             for (var i=0; i < aVacationsKeys.length; i++) {
-                aVacations.push(oModel.getObject("/" + aVacationsKeys[i]));
+                if (oModel.getObject("/" + aVacationsKeys[i])) {
+                    aVacations.push(oModel.getObject("/" + aVacationsKeys[i]));
+                }
             }
 
             return aVacations;
@@ -242,29 +253,33 @@ sap.ui.define([
 
         _checkVacationsBeforeSend: function (aVacations) {
 
-            // var bHas2Week = false;
-            // var bHas1Week = false;
-            // var N = 1000*60*60*24;
-            //
-            //
-            // var fnDateDiff = function (Date1, Date2) {
-            //     return Math.round((Date2 - Date1)/N) + 1;
-            // };
-            //
-            // for(var i=0; i < aVacations.length; i++) {
-            //     if (fnDateDiff(aVacations[i].BeginDate, aVacations[i].EndDate) >= 14) {
-            //         bHas2Week = true;
-            //     }
-            //
-            // }
-            //
-            // if (!bHas2Week) {
-            //     this._showWarnings(bHas1Week, bHas2Week);
-            // } else {
-            //     this._sendPlan();
-            // }
+            var bHas2Week = false;
+            var bHas1Week = false;
+            var N = 1000*60*60*24;
+            var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
 
-            this._sendPlan();
+
+            var fnDateDiff = function (Date1, Date2) {
+                return Math.round((Date2 - Date1)/N) + 1;
+            };
+
+            for(var i=0; i < aVacations.length; i++) {
+                if (fnDateDiff(aVacations[i].BeginDate, aVacations[i].EndDate) >= 14) {
+                    bHas2Week = true;
+                }
+
+            }
+
+            if (!bHas2Week) {
+                MessageBox.error(
+                    this.getResourceBundle().getText("vacation.checks.no2WeekMessage"),
+                    {
+                        styleClass: bCompact ? "sapUiSizeCompact" : ""
+                    }
+                );
+            } else {
+                this._sendPlan();
+            }
 
         },
 

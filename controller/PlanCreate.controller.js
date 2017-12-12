@@ -17,11 +17,6 @@ sap.ui.define([
 
         sVacationItemsPath: "/VacationPlanPosSet",
 
-        /**
-         * Called when a controller is instantiated and its View controls (if available) are already created.
-         * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
-         * @memberOf ilim.pdm2.vacation_planning.PlanCreate
-         */
         onInit: function() {
 
 
@@ -42,32 +37,6 @@ sap.ui.define([
             oEventBus.subscribe("headerChanges", "planReceived", this._updatePlan, this);
 
             oEventBus.subscribe("oDataRequest", "SendSuccess", this._refreshTableAfterSend, this);
-        },
-
-        /**
-         * Similar to onAfterRendering, but this hook is invoked before the controller's View is re-rendered
-         * (NOT before the first rendering! onInit() is used for that one!).
-         * @memberOf ilim.pdm2.vacation_planning.PlanCreate
-         */
-        onBeforeRendering: function() {
-
-        },
-
-        /**
-         * Called when the View has been rendered (so its HTML is part of the document). Post-rendering manipulations of the HTML could be done here.
-         * This hook is the same one that SAPUI5 controls get after being rendered.
-         * @memberOf ilim.pdm2.vacation_planning.PlanCreate
-         */
-        onAfterRendering: function() {
-
-        },
-
-        /**
-         * Called when the Controller is destroyed. Use this one to free resources and finalize activities.
-         * @memberOf ilim.pdm2.vacation_planning.PlanCreate
-         */
-        onExit: function() {
-
         },
 
         onDateRangeSelect: function (oEvent) {
@@ -159,19 +128,18 @@ sap.ui.define([
                 }
             }
 
+            var oModel = this._actionSheet.getModel("vacation");
+            var sReqType;
             if (sFunction === "delete") {
-                var oModel = this._actionSheet.getModel("vacation");
                 var oObjectToDelete = oModel.getData();
                 this._deleteItem(oObjectToDelete);
             } else if(sFunction === "confirm"){
-                var oModel = this._actionSheet.getModel("vacation");
                 var oObjectToConfirm = oModel.getData();
-                var sReqType = "CRQ";
+                sReqType = "CRQ";
                 this._modifyVacation(oObjectToConfirm, sReqType);
             } else {
-                var oModel = this._actionSheet.getModel("vacation");
                 var oObjectToTransfer = oModel.getData();
-                var sReqType = "TRQ";
+                sReqType = "TRQ";
                 this._modifyVacation(oObjectToTransfer, sReqType);
             }
         },
@@ -201,12 +169,12 @@ sap.ui.define([
             var oContentStateModel = this.getModel("contentState");
 
             if (sChannel === "headerChanges" && sEvent === "yearSelection") {
-                //var oCalModel = this.getModel("calendar");
-                // var oCalData = {
-                //     minDate: new Date(oData.key),
-                //     maxDate: new Date(oData.key, "11", "31")
-                // };
-                // oCalModel.setData(oCalData);
+                var oCalModel = this.getModel("calendar");
+                var oCalData = {
+                    minDate: new Date(oData.key),
+                    maxDate: new Date(oData.key, "11", "31")
+                };
+                oCalModel.setData(oCalData);
 
             } else if (sChannel === "headerChanges" && sEvent === "planLoading") {
                 oContentStateModel.setProperty("/busy", true);
@@ -237,6 +205,7 @@ sap.ui.define([
             };
 
             var oNewVacation = {
+                OnlySubord: "",
                 PlanYear: Year,
                 Pernr: Pernr,
                 ItemGuid: sDummyGUID,
@@ -250,6 +219,9 @@ sap.ui.define([
             };
 
             oDataModel.create(this.sVacationItemsPath, oNewVacation, {
+                success: function () {
+                    oDataModel.refresh(false ,true)
+                },
                 error: this._showErrorInContainer.bind(this)
             });
 
@@ -269,7 +241,11 @@ sap.ui.define([
             sObjectKey = sObjectKey + "Pernr='" + oCtxObject.Pernr + "',";
             sObjectKey = sObjectKey + "ItemGuid=guid'" + oObject.ItemGuid + "')";
 
-            oDataModel.remove(this.sVacationItemsPath + sObjectKey);
+            oDataModel.remove(this.sVacationItemsPath + sObjectKey, {
+                success: function () {
+                    oDataModel.refresh(false, true)
+                }
+            });
         },
 
         _showErrorInContainer: function (Error) {
@@ -360,11 +336,12 @@ sap.ui.define([
                     Comment:   ""
                 };
 
+                var oDialogFragment;
                 if (sRequestType === "CRQ")
                 {
-                  var oDialogFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.CommentsDialog");
+                  oDialogFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.CommentsDialog");
                 } else {
-                  var oDialogFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.DatesCommentsDialog");
+                  oDialogFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.DatesCommentsDialog");
                 }
                 
                 var oCommentModel = new JSONModel(oComment);

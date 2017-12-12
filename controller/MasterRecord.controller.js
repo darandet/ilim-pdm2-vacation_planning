@@ -114,7 +114,7 @@ sap.ui.define([
 
             var oMasterRecord = oDataModel.getObject(sPath);
 
-            if (oMasterRecord.VpStatus === "CRTD") {
+            if (oMasterRecord.VpStatus === "CRTD" || oMasterRecord.VpStatus === "CLSD") {
                 oMasterRecord.Action = "OPEN"
             } else if (oMasterRecord.VpStatus === "OPEN") {
                 oMasterRecord.Action = "CLOSE"

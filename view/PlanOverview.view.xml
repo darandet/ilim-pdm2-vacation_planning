@@ -70,7 +70,7 @@
                 <Button text="{i18n>vacation.footer.button.route}" press="onShowRoute"/>
                 <Button text="{i18n>vacation.footer.button.comments}" press="onShowComments"/>
                 <Button text="{i18n>vacation.footer.button.vacationPlan}"/>
-                <Button text="{i18n>vacation.footer.button.history}"/>
+                <Button text="{i18n>vacation.footer.button.history}" press="onShowHistory"/>
                 <ToolbarSpacer/>
                 <Button type="Accept" text="{i18n>vacation.footer.button.sendPlan}" press="onSendPlan"/>
             </OverflowToolbar>

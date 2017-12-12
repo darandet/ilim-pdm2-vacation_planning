@@ -143,8 +143,6 @@ sap.ui.define([
               sap.m.MessageToast.show(oEvent.getParameters().filterString);
           }
 
-          var aFilters = this.oManagerController.getComplexFilter();
-
           switch (this.oManagerController.getCurrentTab())
           {
             case "plan":
@@ -394,17 +392,19 @@ sap.ui.define([
 
         onShowComments: function (oEvent) {
             var that = this;
+            var oFormFragment;
+
             if (!that._planComments) {
 
                 switch (that.oManagerController.getCurrentTab()) {
                   case "plan":
-                    var oFormFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.PlanComments");
+                    oFormFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.PlanComments");
                     break;
                   case "tran":
-                    var oFormFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.TransComments");
+                    oFormFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.TransComments");
                     break;
                   case "conf":
-                    var oFormFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.ConfComments");
+                    oFormFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.ConfComments");
                     break;
                 }
 
@@ -586,16 +586,16 @@ sap.ui.define([
             var oDataModel = this.getView().getModel("oData");
 
             var fnHandleSuccess = function (oData, response) {
-
+                var oTable;
                 this.iRowsProcessed++;
 
                 if (this.iRowsProcessed >= this.iRowsToProcess) {
                     if (sType === "CRQ") {
-                        var oTable = this.getView().byId("confirmTable");
+                        oTable = this.getView().byId("confirmTable");
                     } else if (sType === "TRQ") {
-                        var oTable = this.getView().byId("transferTable");
+                        oTable = this.getView().byId("transferTable");
                     } else {
-                        var oTable = this.getView().byId("inboxTable");
+                        oTable = this.getView().byId("inboxTable");
                     }
                     var oTableBinding = oTable.getBinding("items");
 
@@ -607,16 +607,16 @@ sap.ui.define([
             }.bind(this);
 
             var fnHandleError = function (oData, response) {
-
+                var oTable;
                 this.iRowsProcessed++;
 
                 if (this.iRowsProcessed >= this.iRowsToProcess && this.iRowsToProcess > 1) {
                     if (sType === "CRQ") {
-                        var oTable = this.getView().byId("confirmTable");
+                        oTable = this.getView().byId("confirmTable");
                     } else if (sType === "TRQ") {
-                        var oTable = this.getView().byId("transferTable");
+                        oTable = this.getView().byId("transferTable");
                     } else {
-                        var oTable = this.getView().byId("inboxTable");
+                        oTable = this.getView().byId("inboxTable");
                     }
                     var oTableBinding = oTable.getBinding("items");
 
@@ -660,7 +660,6 @@ sap.ui.define([
 
         _filterInboxByYear: function (sChannel, sEvent, oData) {
 
-            //РћС‡РёСЃС‚РёС‚СЊ РїРѕР»Рµ РїРѕРёСЃРєР° СЃРѕС‚СЂСѓРґРЅРёРєР°
             var oSearchField = this.getView().byId("inboxEmployeeSearchField");
             oSearchField.setValue("");
 
@@ -675,17 +674,6 @@ sap.ui.define([
             this.getOwnerComponent().oRolesLoaded.then( function (oData) {
                 if (!oData.CanApprove) {
                     that.getRouter().navTo("NoAuthorization");
-            //     } else {
-            //         if (that.oManagerController.getCurrentYear()) {
-            //             that._filterInboxByYear(null, null, {PlanYear: that.oManagerController.getCurrentYear()});
-            //         } else {
-            //
-            //             that.oManagerController.oWhenPeriodIsLoaded.then( function (oData) {
-            //
-            //                 that._filterInboxByYear(null, null, oData);
-            //
-            //             });
-            //         }
                 }
             });
 
@@ -703,38 +691,14 @@ sap.ui.define([
             var oCtxObject = oDataModel.getObject(sCurrentContextPath);
 
             var sObjectKey = "";
-            sObjectKey = sObjectKey + "(PlanYear='" + oCtxObject.PlanYear + "',";
+            sObjectKey = sObjectKey + "(OnlySubord='',";
+            sObjectKey = sObjectKey + "PlanYear='" + oCtxObject.PlanYear + "',";
             sObjectKey = sObjectKey + "Pernr='" + oCtxObject.Pernr + "',";
             sObjectKey = sObjectKey + "ItemGuid=guid'" + oObject.ItemGuid + "')";
 
             oDataModel.remove(this.sVacationItemsPath + sObjectKey);
         }
 
-        /**
-         * Similar to onAfterRendering, but this hook is invoked before the controllers View is re-rendered
-         * (NOT before the first rendering! onInit() is used for that one!).
-         * @memberOf ilim.pdm2.vacation_planning.ApprovalManager
-         */
-        //  onBeforeRendering: function() {
-        //
-        //  },
-
-        /**
-         * Called when the View has been rendered (so its HTML is part of the document). Post-rendering manipulations of the HTML could be done here.
-         * This hook is the same one that SAPUI5 controls get after being rendered.
-         * @memberOf ilim.pdm2.vacation_planning.ApprovalManager
-         */
-        //  onAfterRendering: function() {
-        //
-        //  },
-
-        /**
-         * Called when the Controller is destroyed. Use this one to free resources and finalize activities.
-         * @memberOf ilim.pdm2.vacation_planning.ApprovalManager
-         */
-        //  onExit: function() {
-        //
-        //  }
     });
 
 });
