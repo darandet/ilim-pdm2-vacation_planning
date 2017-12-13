@@ -73,6 +73,12 @@ sap.ui.define([],
 
         };
 
+        oFormatter.periodRequestsEnabled = function (sStatus) {
+
+            return sStatus === "CLSD";
+
+        };
+
         return oFormatter;
 
     });

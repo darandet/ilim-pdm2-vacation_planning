@@ -1,0 +1,33 @@
+<core:FragmentDefinition
+        xmlns:core="sap.ui.core"
+        xmlns="sap.m">
+
+    <Table items="{oData>ToAllowedPersa}">
+        <headerToolbar>
+            <OverflowToolbar>
+                <Select id="PersonnelAreaSelect" forceSelection="false" selectedKey="{allowedZones>PersonnelArea}" items="{oData>ToPersa}">
+                    <items>
+                        <core:Item text="{oData>Pbtxt}" key="{oData>Persa}"/>
+                    </items>
+                </Select>
+                <Button icon="sap-icon://drop-down-list" class="sapUiTinyMarginBegin" type="Emphasized" press="addAllowedZone">
+                    <tooltip>
+                        <core:TooltipBase text="{i18n>masterRecord.allowedZones.AddZone}"/>
+                    </tooltip>
+                </Button>
+            </OverflowToolbar>
+        </headerToolbar>
+        <columns>
+            <Column vAlign="Middle" hAlign="Center">
+                <Text text="{i18n>masterRecord.allowedZones.personnelArea}" />
+            </Column>
+        </columns>
+        <items>
+            <ColumnListItem>
+                <cells>
+                    <Text text="{oData>PersonnelAreaText}"/>
+                </cells>
+            </ColumnListItem>
+        </items>
+    </Table>
+</core:FragmentDefinition>

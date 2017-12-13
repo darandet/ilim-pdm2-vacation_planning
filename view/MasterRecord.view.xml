@@ -41,7 +41,7 @@
                     <ColumnListItem>
                         <cells>
                             <Text text="{oData>PlanYear}"/>
-                            <Text text="{oData>Bukrs}"/>
+                            <Text text="{oData>Butxt}"/>
                             <ObjectStatus text="{path: 'oData>VpStatus', formatter: '.formatter.periodStatus'}"
                                           state="{path: 'oData>VpStatus', formatter: '.formatter.periodState'}"/>
                             <l:HorizontalLayout>
@@ -53,6 +53,9 @@
                                 <Button icon="sap-icon://delete" class="sapUiTinyMarginBegin"
                                         enabled="{path: 'oData>VpStatus', formatter: '.formatter.periodDeleteEnabled'}"
                                         press="onDeleteMasterRecord"/>
+                                <Button icon="sap-icon://add-activity-2" class="sapUiTinyMarginBegin"
+                                        enabled="{path: 'oData>VpStatus', formatter: '.formatter.periodRequestsEnabled'}"
+                                        press="onAllowRequests"/>
                             </l:HorizontalLayout>
                         </cells>
                     </ColumnListItem>

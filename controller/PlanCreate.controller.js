@@ -169,12 +169,12 @@ sap.ui.define([
             var oContentStateModel = this.getModel("contentState");
 
             if (sChannel === "headerChanges" && sEvent === "yearSelection") {
-                var oCalModel = this.getModel("calendar");
-                var oCalData = {
-                    minDate: new Date(oData.key),
-                    maxDate: new Date(oData.key, "11", "31")
-                };
-                oCalModel.setData(oCalData);
+                // var oCalModel = this.getModel("calendar");
+                // var oCalData = {
+                //     minDate: new Date(oData.key),
+                //     maxDate: new Date(oData.key, "11", "31")
+                // };
+                // oCalModel.setData(oCalData);
 
             } else if (sChannel === "headerChanges" && sEvent === "planLoading") {
                 oContentStateModel.setProperty("/busy", true);

@@ -144,6 +144,55 @@ sap.ui.define([
             this._updateMasterRecord(oMasterRecord, oDataModel, "delete")
         },
 
+        onAllowRequests: function (oEvent) {
+
+            if (!this._AllowedRequestZonesDialog) {
+
+                var oFormFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.AllowedRequestZones");
+
+                that._AllowedRequestZonesDialog = new Dialog({
+                    title: this.getResourceBundle().getText("masterRecord.allowedZones.Title"),
+                    contentWidth: "35%",
+                    draggable: true,
+                    content: oFormFragment,
+                    endButton: new Button({
+                        text: this.getResourceBundle().getText("masterRecord.createDialog.CancelButton"),
+                        press: function () {
+                            this._AllowedRequestZonesDialog.close();
+                        }.bind(this)
+                    })
+                });
+
+                //to get access to the global model
+                this.getView().addDependent(that._AllowedRequestZonesDialog);
+
+                var oDialogModel = new JSONModel();
+
+                this._AllowedRequestZonesDialog.setModel(oDialogModel, "allowedZones");
+            }
+
+            var oButton = oEvent.getSource();
+            var oDataModel = this.getModel("oData");
+            var sPath = oButton.getParent().getParent().getBindingContextPath(); //Layout => Cell => Line
+
+            var oMasterRecord = oDataModel.getObject(sPath);
+            this._AllowedRequestZonesDialog.getMode("allowedZones").setData({
+                PlanYear: oMasterRecord.PlanYear,
+                Bukrs: oMasterRecord.Bukrs,
+                PersonnelArea: "",
+                PersonnelAreaText: ""
+            });
+            this._AllowedRequestZonesDialog.open();
+        },
+
+        addAllowedZone: function () {
+            var oData = this._AllowedRequestZonesDialog.getModel("allowedZones");
+
+            var oDataModel = this.getModel("oData");
+
+            oDataModel.create("/AllowedPersaActions", oData);
+        },
+
         _postMasterRecord: function () {
             var oData = this._mRecordCreateDialog.getModel("masterRecord").getData();
             var that = this;
