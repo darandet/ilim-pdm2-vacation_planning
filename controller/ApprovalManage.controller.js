@@ -142,17 +142,17 @@ sap.ui.define([
 
               sap.m.MessageToast.show(oEvent.getParameters().filterString);
           }
-
+            
           switch (this.oManagerController.getCurrentTab())
           {
             case "plan":
-              this.getView().byId("inboxTable").getBinding("items").filter(aFilters);
+              this.getView().byId("inboxTable").getBinding("items").filter(this.oManagerController.getComplexFilter());
               break;
             case "tran":
-              this.getView().byId("transferTable").getBinding("items").filter(aFilters);
+              this.getView().byId("transferTable").getBinding("items").filter(this.oManagerController.getComplexFilter());
               break;
             case "conf":
-              this.getView().byId("confirmTable").getBinding("items").filter(aFilters);
+              this.getView().byId("confirmTable").getBinding("items").filter(this.oManagerController.getComplexFilter());
               break;
           }
 
