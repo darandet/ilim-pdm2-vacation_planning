@@ -4,7 +4,7 @@
 
     <Table fixedLayout="false" class="sapUiMediumMarginTop" mode="MultiSelect"
            items="{
-                path: 'oData>ToInbox'
+                path: 'oData>ToTransferInbox'
             }"
            rememberSelections="true"
            id="transferTable">
@@ -43,7 +43,7 @@
                 <Text text="{i18n>main.table.lineManager}" />
             </Column>
             <Column vAlign="Middle" hAlign="Center">
-                <Text text="{i18n>main.table.daysStats}" />
+                <Text text="{i18n>main.table.vacDates}" />
             </Column>
             <Column vAlign="Middle" hAlign="Center">
                 <Text text="{i18n>main.table.hasAccess}" />
