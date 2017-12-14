@@ -212,8 +212,8 @@ sap.ui.define([
             for (var i = 0; i < aItemsSelected.length; i++) {
                 var sCtxPath        = aItemsSelected[i].getBindingContext("oData").getPath();
                 var oCurrentCtxObj  = aItemsSelected[i].getModel("oData").getObject(sCtxPath);
-                if (( sOper === "APROV" && oCurrentCtxObj.CanApprove == true ) ||
-                    ( sOper === "REJEC" && oCurrentCtxObj.CanReject == true  )) {
+                if (( sOper === "APROV" && oCurrentCtxObj.CanApprove === true ) ||
+                    ( sOper === "REJEC" && oCurrentCtxObj.CanReject === true  )) {
                   aItemsToApprove.push(oCurrentCtxObj);
                 }
             }
@@ -523,10 +523,10 @@ sap.ui.define([
             var that = this;
 
             var fnHandleSuccess = function (oData, response) {
-                var oTable = this.getView().byId("inboxTable");
-                var oTableBinding = oTable.getBinding("items");
+                this.onBehalfCommentDialog.setBusy(false);
+                this.onBehalfCommentDialog.close();
 
-                oTableBinding.refresh();
+                this._refreshTableBinding("inboxTable");
             }.bind(this);
 
             if (!this.onBehalfCommentDialog) {
@@ -556,6 +556,8 @@ sap.ui.define([
                             var sPlanPath       = that.planCreationForm.getBindingContext("oData").getPath();
                             var oCurrentCtxObj  = oDataModel.getObject(sPlanPath);
 
+                            this.onBehalfCommentDialog.setBusy(true);
+
                             oDataModel.callFunction("/ActionOnVacationPlan", {
                                 method: "POST",
                                 urlParameters: {
@@ -564,12 +566,16 @@ sap.ui.define([
                                     PlanYear:   oCurrentCtxObj.PlanYear,
                                     Comment:    oCommentModel.getProperty("/Comment")
                                 },
-                                success: fnHandleSuccess
+                                success: fnHandleSuccess,
+                                error: function (oError) {
+                                    this.onBehalfCommentDialog.setBusy(false);
+                                    this._showErrorInContainer(oError);
+                                } .bind(this)
                             });
 
                             oCommentModel.setProperty("/Comment", "");
-                            that.onBehalfCommentDialog.close();
-                        }
+                            // that.onBehalfCommentDialog.close();
+                        }.bind(this)
                     })
                 });
 
@@ -591,36 +597,36 @@ sap.ui.define([
 
                 if (this.iRowsProcessed >= this.iRowsToProcess) {
                     if (sType === "CRQ") {
-                        oTable = this.getView().byId("confirmTable");
+                        this._refreshTableBinding("confirmTable");
                     } else if (sType === "TRQ") {
-                        oTable = this.getView().byId("transferTable");
+                        this._refreshTableBinding("transferTable");
                     } else {
-                        oTable = this.getView().byId("inboxTable");
+                        this._refreshTableBinding("inboxTable");
                     }
-                    var oTableBinding = oTable.getBinding("items");
 
-                    oTableBinding.refresh();
                     this.iRowsToProcess = 1;
                     this.iRowsProcessed = 0;
                 }
 
             }.bind(this);
 
-            var fnHandleError = function (oData, response) {
-                var oTable;
+            var fnHandleError = function (oError) {
                 this.iRowsProcessed++;
+
+                if (this.iRowsToProcess === 1) {
+                    this._showErrorInBox(oError);
+                    return;
+                }
 
                 if (this.iRowsProcessed >= this.iRowsToProcess && this.iRowsToProcess > 1) {
                     if (sType === "CRQ") {
-                        oTable = this.getView().byId("confirmTable");
+                        this._refreshTableBinding("confirmTable");
                     } else if (sType === "TRQ") {
-                        oTable = this.getView().byId("transferTable");
+                        this._refreshTableBinding("transferTable");
                     } else {
-                        oTable = this.getView().byId("inboxTable");
+                        this._refreshTableBinding("inboxTable");
                     }
-                    var oTableBinding = oTable.getBinding("items");
 
-                    oTableBinding.refresh();
                     this.iRowsToProcess = 1;
                     this.iRowsProcessed = 0;
                 }
@@ -697,6 +703,35 @@ sap.ui.define([
             sObjectKey = sObjectKey + "ItemGuid=guid'" + oObject.ItemGuid + "')";
 
             oDataModel.remove(this.sVacationItemsPath + sObjectKey);
+        },
+
+        _showErrorInBox: function (oError) {
+
+            var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
+            var oErrorResponse = JSON.parse(oError.responseText);
+            if (oError.statusCode === "400") {
+                MessageBox.error(
+                    oErrorResponse.error.message.value,
+                    {
+                        styleClass: bCompact ? "sapUiSizeCompact" : ""
+                    }
+                );
+            } else {
+                MessageBox.error(
+                    that.getResourceBundle().getText("vacation.create.sendUnknownError"),
+                    {
+                        styleClass: bCompact ? "sapUiSizeCompact" : ""
+                    }
+                );
+            }
+
+        },
+        
+        _refreshTableBinding: function (sTableId) {
+            var oTable = this.getView().byId(sTableId);
+            var oTableBinding = oTable.getBinding("items");
+
+            oTableBinding.refresh();
         }
 
     });

@@ -148,15 +148,14 @@ sap.ui.define([
 
             if (!this._AllowedRequestZonesDialog) {
 
-                var oFormFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.AllowedRequestZones");
+                var prefix = this.getView().createId("").replacte("--",""); //to use getView() on fragment elements
+                var oFormFragment = sap.ui.xmlfragment(prefix, "ilim.pdm2.vacation_planning.view.fragments.AllowedRequestZones", this);
 
-                that._AllowedRequestZonesDialog = new Dialog({
+                this._AllowedRequestZonesDialog = new Dialog({
                     title: this.getResourceBundle().getText("masterRecord.allowedZones.Title"),
-                    contentWidth: "35%",
-                    draggable: true,
                     content: oFormFragment,
                     endButton: new Button({
-                        text: this.getResourceBundle().getText("masterRecord.createDialog.CancelButton"),
+                        text: this.getResourceBundle().getText("masterRecord.allowedZones.CloseButton"),
                         press: function () {
                             this._AllowedRequestZonesDialog.close();
                         }.bind(this)
@@ -164,7 +163,7 @@ sap.ui.define([
                 });
 
                 //to get access to the global model
-                this.getView().addDependent(that._AllowedRequestZonesDialog);
+                this.getView().addDependent(this._AllowedRequestZonesDialog);
 
                 var oDialogModel = new JSONModel();
 
@@ -175,8 +174,13 @@ sap.ui.define([
             var oDataModel = this.getModel("oData");
             var sPath = oButton.getParent().getParent().getBindingContextPath(); //Layout => Cell => Line
 
+            this._AllowedRequestZonesDialog.bindElement({
+                path: sPath,
+                model: "oData"
+            });
+
             var oMasterRecord = oDataModel.getObject(sPath);
-            this._AllowedRequestZonesDialog.getMode("allowedZones").setData({
+            this._AllowedRequestZonesDialog.getModel("allowedZones").setData({
                 PlanYear: oMasterRecord.PlanYear,
                 Bukrs: oMasterRecord.Bukrs,
                 PersonnelArea: "",
@@ -186,11 +190,32 @@ sap.ui.define([
         },
 
         addAllowedZone: function () {
-            var oData = this._AllowedRequestZonesDialog.getModel("allowedZones");
-
+            var oComboBox = this.getView().byId("PersonnelAreaSelect");
+            var oPersonnelAreasTable = this.getView().byId("PersonnelAreasTable");
+            var oBindedData = this._AllowedRequestZonesDialog.getModel("allowedZones").getData();
             var oDataModel = this.getModel("oData");
 
-            oDataModel.create("/AllowedPersaActions", oData);
+            var aKeys = oComboBox.getSelectedKeys();
+            oDataModel.getDeferredGroups().push("newPersonnelAreas");
+
+            for (var i=0; i < aKeys.length; i++) {
+                var oNewArea = {
+                    PlanYear: oBindedData.PlanYear,
+                    Bukrs: oBindedData.Bukrs,
+                    PersonnelArea: aKeys[i],
+                    PersonnelText: ""
+                };
+                oDataModel.create("/AllowedPersaActionsSet", oNewArea, {
+                    groupId: "newPersonnelAreas"
+                });
+            }
+
+            oDataModel.submitChanges({
+                groupId: "newPersonnelAreas",
+                success: function () {
+                    oComboBox.removeAllSelectedItems();
+                }
+            })
         },
 
         _postMasterRecord: function () {
