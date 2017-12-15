@@ -19,6 +19,12 @@
           <ViewSettingsItem text="{oData>StatusName}" key="{oData>PlanStatus}"/>
         </items>
       </ViewSettingsFilterItem>
+      <ViewSettingsFilterItem text="{i18n>main.table.hasAccessLong}" key="Access" multiSelect="false">
+        <items>
+          <ViewSettingsItem text="{i18n>main.filter.hasAccess}" key="true"/>
+          <ViewSettingsItem text="{i18n>main.filter.noAccess}" key="false"/>
+        </items>
+      </ViewSettingsFilterItem>
     </filterItems>
   </ViewSettingsDialog>
 </core:FragmentDefinition>

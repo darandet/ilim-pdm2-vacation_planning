@@ -10,19 +10,21 @@ sap.ui.define([
             constructor: function () {
                 this.selectedYear = "";
                 this.onlySubord   = "";
-                this.aSelectionFilters = [];
                 this.oModel = {};
                 this.oWhenPeriodIsLoaded = {};
                 this.aSelectedEmplCntx = [];
                 this.aPDepartments = [];
                 this.aPStatuses = [];
                 this.aPManagers = [];
+                this.aPAccess = [];
                 this.aTDepartments = [];
                 this.aTStatuses = [];
                 this.aTManagers = [];
+                this.aTAccess = [];
                 this.aCDepartments = [];
                 this.aCStatuses = [];
                 this.aCManagers = [];
+                this.aCAccess = [];
                 this.sTab = "plan";
                 this.sPSearchline = "";
                 this.sTSearchline = "";
@@ -89,22 +91,43 @@ sap.ui.define([
                 }
             },
 
+            addAccessVal: function (sVal) {
+                switch (this.sTab) {
+                    case "plan":
+                        if (sVal === "true") this.aPAccess.push(true);
+                        if (sVal === "false") this.aPAccess.push(false);
+                        break;
+                    case "tran":
+                        if (sVal === "true") this.aTAccess.push(true);
+                        if (sVal === "false") this.aTAccess.push(false);
+                        break;
+                    case "conf":
+                        if (sVal === "true") this.aCAccess.push(true);
+                        if (sVal === "false") this.aCAccess.push(false);
+                        break;
+                }
+
+            },
+
             clearFilters: function () {
                 switch (this.sTab) {
                   case "plan":
                     this.aPDepartments = [];
                     this.aPStatuses = [];
                     this.aPManagers = [];
+                    this.aPAccess = [];
                     break;
                   case "tran":
                     this.aTDepartments = [];
                     this.aTStatuses = [];
                     this.aTManagers = [];
+                    this.aTAccess = [];
                     break;
                   case "conf":
                     this.aCDepartments = [];
                     this.aCStatuses = [];
                     this.aCManagers = [];
+                    this.aCAccess = [];
                     break;
                 }
             },
@@ -135,6 +158,7 @@ sap.ui.define([
                 var aStatuses = [];
                 var aDepartments = [];
                 var aManagers = [];
+                var aAccess = [];
                 var sSearch = "";
                 var EmployeeFilter;
 
@@ -143,18 +167,21 @@ sap.ui.define([
                     aStatuses    = this.aPStatuses;
                     aDepartments = this.aPDepartments;
                     aManagers    = this.aPManagers;
+                    aAccess      = this.aPAccess;
                     sSearch      = this.sPSearchline;
                     break;
                   case "tran":
                     aStatuses    = this.aTStatuses;
                     aDepartments = this.aTDepartments;
                     aManagers    = this.aTManagers;
+                    aAccess      = this.aTAccess;
                     sSearch      = this.sTSearchline;
                     break;
                   case "conf":
                     aStatuses    = this.aCStatuses;
                     aDepartments = this.aCDepartments;
                     aManagers    = this.aCManagers;
+                    aAccess      = this.aCAccess;
                     sSearch      = this.sCSearchline;
                     break;
                 }
@@ -194,26 +221,17 @@ sap.ui.define([
                     }
                 }
 
+                if (aAccess.length > 0) {
+                    for (var i = 0; i < aAccess.length; i++) {
+                        filter = new Filter("HasAccess", sap.ui.model.FilterOperator.EQ, aAccess[i]);
+                        aFilters.push(filter);
+                    }
+
+                }
+
                 return aFilters;
 
             },                
-                
-            //getComplexFilter: function (sEmployee) {
-            //    var aFilters = [];
-            //    var EmployeeFilter;
-            //    var YearFilter = new Filter("PlanYear", sap.ui.model.FilterOperator.EQ, this.getCurrentYear());
-
-            //    if (isNaN(sEmployee)) {
-            //        EmployeeFilter = new Filter("EmployeeName", sap.ui.model.FilterOperator.Contains, sEmployee);
-            //    } else {
-            //        EmployeeFilter = new Filter("EmployeeId", sap.ui.model.FilterOperator.EQ, sEmployee);
-            //    }
-
-            //    aFilters.push(YearFilter);
-            //    aFilters.push(EmployeeFilter);
-            //    return aFilters;
-
-            //},
 
             getManagerDefaultPeriod: function (sPath, fnResolve, fnReject) {
                 var that = this;

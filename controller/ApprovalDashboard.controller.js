@@ -24,6 +24,74 @@ sap.ui.define([
             oEventBus.subscribe("managerHeaderChanges", "yearSelection", this._filterDashboardByYear, this);
 
             this.oManagerController = this.getOwnerComponent().oManagerController;
+
+            //Set VizChart Settings
+            var oDaysPlannedChart = this.getView().byId("DaysPlannedChart");
+            oDaysPlannedChart.setVizProperties({
+                valueAxis: {
+                    title: {
+                        visible: false
+                    },
+                    label: {
+                        visible: false
+                    }
+                },
+                categoryAxis: {
+                    title: {
+                        visible: false
+                    },
+                    label: {
+                        visible: true
+                    }
+                },
+                title: {
+                    visible: false
+                },
+                legendGroup: {
+                    layout: {
+                        position: 'bottom'
+                    }
+                },
+                legend: {
+                    visible: false
+                },
+                toolTip : {
+                    visible: false
+                },
+                interaction: {
+                    behaviorType: 'noHoverBehavior'
+                },
+                plotArea: {
+                    dataPointStyle: {
+                        rules: [
+                            {
+                                dataContext: {
+                                    Category: this.getResourceBundle().getText("dashboard.graphic.chartSettings.DaysAvailable")
+                                },
+                                properties: {
+                                    color: "sapUiChartPaletteQualitativeHue1"
+                                }
+                            },
+                            {
+                                dataContext: {
+                                    Category: this.getResourceBundle().getText("dashboard.graphic.chartSettings.DaysPlanned")
+                                },
+                                properties: {
+                                    color: "sapUiChartPaletteQualitativeHue2"
+                                }
+                            },
+                            {
+                                dataContext: {
+                                    Category: this.getResourceBundle().getText("dashboard.graphic.chartSettings.DaysApproved")
+                                },
+                                properties: {
+                                    color: 'sapUiChartPaletteQualitativeHue3'
+                                }
+                            }
+                        ]
+                    }
+                }
+            })
         },
 
         onDownloadT7: function () {
@@ -64,29 +132,6 @@ sap.ui.define([
             var aFilters = [];
             var filter = new Filter("PlanYear", sap.ui.model.FilterOperator.EQ, oData.PlanYear);
 
-            //aFilters.push(filter);
-
-            // update list binding
-            //var list = this.getView().byId("noAccessEmployeesTable");
-            //var binding = list.getBinding("items");
-            //if (binding) {
-            //    binding.filter(filter);
-            //}
-            
-            //binding = this.getView().byId("idVizFrame").getDataset().getBinding("data");
-            //if (binding) {
-            //    binding.filter(filter);
-            //}                
-            
-            //binding = this.getView().byId("idVizFrame2").getDataset().getBinding("data");
-            //if (binding) {
-            //    binding.filter(filter);
-            //}                
-            
-            //binding = this.getView().byId("idVizFrame3").getDataset().getBinding("data");
-            //if (binding) {
-            //    binding.filter(filter);
-            //}                            
-        } 
+        }
     });
 });

@@ -129,14 +129,17 @@ sap.ui.define([
 
                   switch (key) {
                       case "Manager":
-                        this.oManagerController.addManagerVal(val);
-                        break;
+                          this.oManagerController.addManagerVal(val);
+                          break;
                       case "Department":
-                        this.oManagerController.addDepartVal(val);
-                        break;
+                          this.oManagerController.addDepartVal(val);
+                          break;
                       case "Status":
-                        this.oManagerController.addStatusVal(val);
-                        break;
+                          this.oManagerController.addStatusVal(val);
+                          break;
+                      case "Access":
+                          this.oManagerController.addAccessVal(val);
+                          break;
                   }
               }
 
@@ -574,7 +577,7 @@ sap.ui.define([
 
                             oCommentModel.setProperty("/Comment", "");
                             this.onBehalfCommentDialog.close();                            
-                            
+
                         }.bind(this)
                     }),
                     afterClose: function() {
