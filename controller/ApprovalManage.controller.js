@@ -522,6 +522,7 @@ sap.ui.define([
             var that = this;
 
             var fnHandleSuccess = function (oData, response) {
+
                 this.planCreationForm.setBusy(false);
                 this.planCreationForm.close();
                 this._refreshTableBinding("inboxTable");
@@ -729,7 +730,7 @@ sap.ui.define([
             }
 
         },
-
+          
         _refreshTableBinding: function (sTableId) {
             var oTable = this.getView().byId(sTableId);
             var oTableBinding = oTable.getBinding("items");

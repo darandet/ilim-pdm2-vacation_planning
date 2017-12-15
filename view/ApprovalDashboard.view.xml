@@ -15,7 +15,7 @@
             <l:BlockLayoutCell width="1" titleAlignment="Begin"
                                title="{i18n>dashboard.noAccessEmployees.title}">
                 <m:Table fixedLayout="false" id="noAccessEmployeesTable" items="{path: 'oData>ToNoAccEmpl'}"
-                         growing="true" growingThreshold="6">
+                         growing="true" growingThreshold="4">
                     <m:headerToolbar>
                         <m:OverflowToolbar>
                             <m:ToolbarSpacer/>
@@ -69,7 +69,7 @@
                                      visible: false
                                    },
                                    label: {
-                                     visible: true
+                                     visible: false
                                    }
                                  },
                                  categoryAxis: {
@@ -77,7 +77,7 @@
                                      visible: false
                                    },
                                    label: {
-                                     visible: false
+                                     visible: true
                                    }
                                  },
                                  title: {
@@ -157,8 +157,6 @@
                         <viz.feeds:FeedItem uid="valueAxis" type="Measure"
                                             values="Days" />
                         <viz.feeds:FeedItem uid="categoryAxis" type="Dimension"
-                                            values="Category" />
-                        <viz.feeds:FeedItem uid="color" type="Dimension"
                                             values="Category" />
                     </viz:feeds>
                 </viz:VizFrame>
@@ -255,22 +253,6 @@
                                    },
                                    interaction: {
                                      behaviorType: 'noHoverBehavior'
-                                   },
-                                   plotArea: {
-                                     referenceLine: {
-                                       line: {
-                                         valueAxis: [{
-                                           value: 3,
-                                           visible: true,
-                                           size: 1,
-                                           type: 'dotted',
-                                           label: {
-                                             text: 'Target',
-                                             visible: false
-                                           }
-                                         }]
-                                       }
-                                     }
                                    }
                                  }">
                     <viz:dataset>

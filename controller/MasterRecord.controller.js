@@ -144,6 +144,80 @@ sap.ui.define([
             this._updateMasterRecord(oMasterRecord, oDataModel, "delete")
         },
 
+        onAllowRequests: function (oEvent) {
+
+            if (!this._AllowedRequestZonesDialog) {
+
+                var prefix = this.getView().createId("").replacte("--",""); //to use getView() on fragment elements
+                var oFormFragment = sap.ui.xmlfragment(prefix, "ilim.pdm2.vacation_planning.view.fragments.AllowedRequestZones", this);
+
+                this._AllowedRequestZonesDialog = new Dialog({
+                    title: this.getResourceBundle().getText("masterRecord.allowedZones.Title"),
+                    content: oFormFragment,
+                    endButton: new Button({
+                        text: this.getResourceBundle().getText("masterRecord.allowedZones.CloseButton"),
+                        press: function () {
+                            this._AllowedRequestZonesDialog.close();
+                        }.bind(this)
+                    })
+                });
+
+                //to get access to the global model
+                this.getView().addDependent(this._AllowedRequestZonesDialog);
+
+                var oDialogModel = new JSONModel();
+
+                this._AllowedRequestZonesDialog.setModel(oDialogModel, "allowedZones");
+            }
+
+            var oButton = oEvent.getSource();
+            var oDataModel = this.getModel("oData");
+            var sPath = oButton.getParent().getParent().getBindingContextPath(); //Layout => Cell => Line
+
+            this._AllowedRequestZonesDialog.bindElement({
+                path: sPath,
+                model: "oData"
+            });
+
+            var oMasterRecord = oDataModel.getObject(sPath);
+            this._AllowedRequestZonesDialog.getModel("allowedZones").setData({
+                PlanYear: oMasterRecord.PlanYear,
+                Bukrs: oMasterRecord.Bukrs,
+                PersonnelArea: "",
+                PersonnelAreaText: ""
+            });
+            this._AllowedRequestZonesDialog.open();
+        },
+
+        addAllowedZone: function () {
+            var oComboBox = this.getView().byId("PersonnelAreaSelect");
+            var oPersonnelAreasTable = this.getView().byId("PersonnelAreasTable");
+            var oBindedData = this._AllowedRequestZonesDialog.getModel("allowedZones").getData();
+            var oDataModel = this.getModel("oData");
+
+            var aKeys = oComboBox.getSelectedKeys();
+            oDataModel.getDeferredGroups().push("newPersonnelAreas");
+
+            for (var i=0; i < aKeys.length; i++) {
+                var oNewArea = {
+                    PlanYear: oBindedData.PlanYear,
+                    Bukrs: oBindedData.Bukrs,
+                    PersonnelArea: aKeys[i],
+                    PersonnelText: ""
+                };
+                oDataModel.create("/AllowedPersaActionsSet", oNewArea, {
+                    groupId: "newPersonnelAreas"
+                });
+            }
+
+            oDataModel.submitChanges({
+                groupId: "newPersonnelAreas",
+                success: function () {
+                    oComboBox.removeAllSelectedItems();
+                }
+            })
+        },
+
         _postMasterRecord: function () {
             var oData = this._mRecordCreateDialog.getModel("masterRecord").getData();
             var that = this;
