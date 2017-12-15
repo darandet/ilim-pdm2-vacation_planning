@@ -142,7 +142,7 @@ sap.ui.define([
 
               sap.m.MessageToast.show(oEvent.getParameters().filterString);
           }
-            
+
           switch (this.oManagerController.getCurrentTab())
           {
             case "plan":
@@ -467,7 +467,6 @@ sap.ui.define([
                         text: this.getResourceBundle().getText("vacation.footer.button.sendPlan"),
                         type: "Accept",
                         press: function () {
-                            this.planCreationForm.close();
                             this._sendPlanOnBehalf();
                         }.bind(this)
                     })
@@ -523,9 +522,9 @@ sap.ui.define([
             var that = this;
 
             var fnHandleSuccess = function (oData, response) {
-                this.onBehalfCommentDialog.setBusy(false);
-                this.onBehalfCommentDialog.close();
 
+                this.planCreationForm.setBusy(false);
+                this.planCreationForm.close();
                 this._refreshTableBinding("inboxTable");
             }.bind(this);
 
@@ -556,7 +555,7 @@ sap.ui.define([
                             var sPlanPath       = that.planCreationForm.getBindingContext("oData").getPath();
                             var oCurrentCtxObj  = oDataModel.getObject(sPlanPath);
 
-                            this.onBehalfCommentDialog.setBusy(true);
+                            this.planCreationForm.setBusy(true);
 
                             oDataModel.callFunction("/ActionOnVacationPlan", {
                                 method: "POST",
@@ -568,15 +567,20 @@ sap.ui.define([
                                 },
                                 success: fnHandleSuccess,
                                 error: function (oError) {
-                                    this.onBehalfCommentDialog.setBusy(false);
+                                    this.planCreationForm.setBusy(false);
                                     this._showErrorInContainer(oError);
-                                } .bind(this)
+                                }.bind(this)
                             });
 
                             oCommentModel.setProperty("/Comment", "");
-                            // that.onBehalfCommentDialog.close();
+                            this.onBehalfCommentDialog.close();                            
+                            
                         }.bind(this)
-                    })
+                    }),
+                    afterClose: function() {
+                        that.onBehalfCommentDialog.destroy();
+                        that.onBehalfCommentDialog = undefined;
+                    }
                 });
 
                 this.onBehalfCommentDialog.setModel(oCommentModel, "comment");
@@ -726,7 +730,7 @@ sap.ui.define([
             }
 
         },
-        
+          
         _refreshTableBinding: function (sTableId) {
             var oTable = this.getView().byId(sTableId);
             var oTableBinding = oTable.getBinding("items");
