@@ -12,15 +12,16 @@
       select="onTabSelect">
       <items>
         <IconTabFilter
-          icon="sap-icon://work-history" key="plan">
+          icon="sap-icon://work-history" key="plan" tooltip="{i18n>details.tooltip.Plan}">
           <core:Fragment fragmentName="ilim.pdm2.vacation_planning.view.fragments.PlanInbox" type="XML"/>
         </IconTabFilter>
+        <IconTabSeparator icon="sap-icon://vertical-grip"/>
         <IconTabFilter
-          icon="sap-icon://workflow-tasks" key="tran">
+          icon="sap-icon://workflow-tasks" key="tran" tooltip="{i18n>details.tooltip.Transfer}">
           <core:Fragment fragmentName="ilim.pdm2.vacation_planning.view.fragments.TransferInbox" type="XML"/>
         </IconTabFilter>
         <IconTabFilter
-          icon="sap-icon://accept" key="conf">
+          icon="sap-icon://accept" key="conf" tooltip="{i18n>details.tooltip.Confirm}">
           <core:Fragment fragmentName="ilim.pdm2.vacation_planning.view.fragments.ConfirmInbox" type="XML"/>
         </IconTabFilter>
       </items>

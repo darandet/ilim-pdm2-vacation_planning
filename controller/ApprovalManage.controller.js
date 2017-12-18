@@ -487,7 +487,7 @@ sap.ui.define([
             this.planCreationForm.bindElement({
                 path: sPlanPath,
                 parameters: {
-                    expand: "ToVacations"
+                    expand: "ToVacations,ToHolidays"
                 },
                 model: "oData"
             });

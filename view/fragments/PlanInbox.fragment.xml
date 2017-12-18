@@ -16,7 +16,7 @@
                              id="inboxEmployeeSearchField"
                              search="onEmployeeSearch"/>
                 <ToolbarSpacer/>
-                <MenuButton icon="sap-icon://multiselect-all">
+                <MenuButton icon="sap-icon://multiselect-all" tooltip="{i18n>details.tooltip.MassAction}">
                   <menu>
                     <Menu itemSelected="onMassApprove">
                       <items>
@@ -28,7 +28,8 @@
                 </MenuButton>
 <!--                <OverflowToolbarButton type="Transparent" icon="sap-icon://multiselect-all" press="onMassApprovePlan"/>-->
                 <OverflowToolbarButton type="Transparent" icon="sap-icon://filter" press="onFilterPress"/>
-                <OverflowToolbarButton type="Transparent" icon="sap-icon://excel-attachment" press="onShowExcel"/>
+                <OverflowToolbarButton type="Transparent" icon="sap-icon://excel-attachment" press="onShowExcel"
+                                       tooltip="{i18n>details.tooltip.Excel}"/>
                 <Button icon="sap-icon://display" text="{i18n>main.toolbar.showSelected}" press="onShowSelected"/>
             </OverflowToolbar>
         </headerToolbar>
@@ -83,20 +84,20 @@
                         <items>
                             <Button type="Accept" icon="sap-icon://accept"
                                     enabled="{path: 'oData>CanApprove', formatter: '.formatter.any2Boolean'}"
-                                    press="onApproveInbox"
+                                    press="onApproveInbox" tooltip="{i18n>details.tooltip.Approve}"
                             />
                             <Button type="Reject"
                                     icon="{path: 'oData>PlanStatus', formatter: '.formatter.vacationPlanRejectIcon'}"
                                     enabled="{path: 'oData>CanReject', formatter: '.formatter.any2Boolean'}"
-                                    press="onRejectInbox"
+                                    press="onRejectInbox" tooltip="{i18n>details.tooltip.Reject}"
                             />
                             <Button icon="sap-icon://create-form"
                                     enabled="{path: 'oData>CanCreate', formatter: '.formatter.any2Boolean'}"
-                                    press="onShowPlanForm"
+                                    press="onShowPlanForm" tooltip="{i18n>details.tooltip.OnBehalf}"
                             />
                             <Button icon="sap-icon://comment"
                                     enabled="{path: 'oData>CanComment', formatter: '.formatter.any2Boolean'}"
-                                    press="onShowComments"
+                                    press="onShowComments" tooltip="{i18n>details.tooltip.Comment}"
                             />
                         </items>
                     </FlexBox>

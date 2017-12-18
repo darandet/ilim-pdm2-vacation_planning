@@ -88,38 +88,9 @@
         <l:BlockLayoutRow>
             <l:BlockLayoutCell width="1" titleAlignment="Begin"
                                title="{i18n>dashboard.graphic.numberApproved}">
-                <viz:VizFrame id="idVizFrame2" height="300px" width="100%" vizType='donut'
+                <viz:VizFrame id="ApprovedCountChart" height="300px" width="100%" vizType='donut'
                               vizProperties="{
-                                 valueAxis: {
-                                   title: {
-                                     visible: false
-                                   },
-                                   label: {
-                                     visible: false
-                                   }
-                                 },
-                                 categoryAxis: {
-                                   title: {
-                                     visible: false
-                                   }
-                                 },
-                                 title: {
-                                   visible: false
-                                 },
-                                 legendGroup: {
-                                   layout: {
-                                     position: 'bottom'
-                                   }
-                                 },
-                                 legend: {
-                                   visible: true
-                                 },
-                                 toolTip : {
-                                   visible: false
-                                 },
-                                 interaction: {
-                                   behaviorType: 'noHoverBehavior'
-                                 }
+
                                }">
                     <viz:dataset>
                         <viz.data:FlattenedDataset data="{path: 'oData>ToApprNumGraph'}">
@@ -145,39 +116,7 @@
 
             <l:BlockLayoutCell width="2" titleAlignment="Begin"
                                title="{i18n>dashboard.graphic.absencePercent}">
-                <viz:VizFrame id="idVizFrame" height="300px" width="100%" vizType='column'
-                              vizProperties="{
-                                   valueAxis: {
-                                     title: {
-                                       visible: false
-                                     },
-                                     label: {
-                                       visible: false
-                                     }
-                                   },
-                                   categoryAxis: {
-                                     title: {
-                                       visible: false
-                                     }
-                                   },
-                                   title: {
-                                     visible: false
-                                   },
-                                   legendGroup: {
-                                     layout: {
-                                       position: 'bottom'
-                                     }
-                                   },
-                                   legend: {
-                                     visible: false
-                                   },
-                                   toolTip : {
-                                     visible: false
-                                   },
-                                   interaction: {
-                                     behaviorType: 'noHoverBehavior'
-                                   }
-                                 }">
+                <viz:VizFrame id="AbsencePercentChart" height="300px" width="100%" vizType='column'>
                     <viz:dataset>
                         <viz.data:FlattenedDataset data="{path: 'oData>ToAbsPercGraph'}">
                             <viz.data:dimensions>

@@ -188,7 +188,7 @@ sap.ui.define([
                 that.getView().bindElement({
                     path: sPlanPath,
                     parameters: {
-                        expand: "ToVacations,ToAbsenceRight,ToApprRoute"
+                        expand: "ToVacations,ToAbsenceRight,ToApprRoute,ToHolidays"
                     },
                     model: "oData",
                     events: {

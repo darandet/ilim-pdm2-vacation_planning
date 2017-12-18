@@ -1,8 +1,9 @@
 sap.ui.define([
     "ilim/pdm2/vacation_planning/controller/BaseController",
     "sap/ui/model/json/JSONModel",
-    "sap/ui/model/Filter"
-], function (Controller, JSONModel, Filter) {
+    "sap/ui/model/Filter",
+    "sap/viz/ui5/format/ChartFormatter"
+], function (Controller, JSONModel, Filter, ChartFormatter) {
     "use strict";
 
     return Controller.extend("ilim.pdm2.vacation_planning.controller.ApprovalDashboard", {
@@ -89,9 +90,91 @@ sap.ui.define([
                                 }
                             }
                         ]
+                    },
+                    dataLabel: {
+                        visible: true,
+                        position: "outsideFirst"
+                    }
+
+                }
+            });
+
+
+            var oAbsencePercentChart = this.getView().byId("AbsencePercentChart");
+            oAbsencePercentChart.setVizProperties({
+                valueAxis: {
+                    title: {
+                        visible: false
+                    },
+                    label: {
+                        visible: true
+                    }
+                },
+                categoryAxis: {
+                    title: {
+                        visible: false
+                    }
+                },
+                title: {
+                    visible: false
+                },
+                legendGroup: {
+                    layout: {
+                        position: 'bottom'
+                    }
+                },
+                legend: {
+                    visible: false
+                },
+                toolTip : {
+                    visible: false
+                },
+                interaction: {
+                    behaviorType: 'noHoverBehavior'
+                },
+                plotArea: {
+                    dataLabel: {
+                        visible: true,
+                        position: "outside",
+                        formatString: ChartFormatter.DefaultPattern.SHORTFLOAT
                     }
                 }
+            });
+
+            var oApprovedCountChart = this.getView().byId("ApprovedCountChart");
+            oApprovedCountChart.setVizProperties({
+                valueAxis: {
+                    title: {
+                        visible: false
+                    },
+                    label: {
+                        visible: false
+                    }
+                },
+                categoryAxis: {
+                    title: {
+                        visible: false
+                    }
+                },
+                title: {
+                    visible: false
+                },
+                legendGroup: {
+                    layout: {
+                        position: 'bottom'
+                    }
+                },
+                legend: {
+                    visible: true
+                },
+                toolTip : {
+                    visible: false
+                },
+                interaction: {
+                    behaviorType: 'noHoverBehavior'
+                }
             })
+
         },
 
         onDownloadT7: function () {
@@ -120,8 +203,12 @@ sap.ui.define([
                     that.getRouter().navTo("NoAuthorization");
                 } else {
                     that.oManagerController.oWhenPeriodIsLoaded.then( function (oData) {                        
-                        //oEventBus.publish("childNavigation", "graphAppears");
-                        //that._filterDashboardByYear(null, null, oData);
+                        var sBindingPath = that.getView().getBindingContext("oData").getPath();
+                        that.getModel("oData").read(sBindingPath + "/ToRelevantMasterRecord", {
+                            success: function (oData) {
+                                that._setAbsenceReferenceLine(oData.MaxPercent);
+                            }
+                        });
                     });
                 }
             });
@@ -132,6 +219,29 @@ sap.ui.define([
             var aFilters = [];
             var filter = new Filter("PlanYear", sap.ui.model.FilterOperator.EQ, oData.PlanYear);
 
+        },
+
+        _setAbsenceReferenceLine: function (AbsencePercent) {
+
+            var oAbsencePercentChart = this.getView().byId("AbsencePercentChart");
+
+            var oVizProperties = oAbsencePercentChart.getVizProperties();
+            oVizProperties.referenceLine = {
+                line: {
+                    valueAxis: [{
+                        value: AbsencePercent,
+                        visible: true,
+                        size: 1,
+                        type: "dotted",
+                        label: {
+                            text: AbsencePercent,
+                            visible: true
+                        }
+                    }]
+                }
+            };
+
+            oAbsencePercentChart.setVizProperties(oVizProperties);
         }
     });
 });

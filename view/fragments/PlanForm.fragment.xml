@@ -13,13 +13,31 @@
 
     <l:Grid defaultSpan="L7 M12 S12" class="sapUiSmallMarginTop" hSpacing="0.5">
         <l:content>
-            <u:Calendar width="99%"
-                        id="calendar"
-                        intervalSelection="true"
-                        months="2"
-                        select="onDateRangeSelect"
-                        maxDate="{calendar>/maxDate}" minDate="{calendar>/minDate}">
-            </u:Calendar>
+            <FlexBox direction="Column">
+                <items>
+                    <u:Calendar width="99%"
+                                id="calendar"
+                                intervalSelection="true"
+                                months="2"
+                                select="onDateRangeSelect"
+                                specialDates="{oData>ToHolidays}"
+                                maxDate="{calendar>/maxDate}" minDate="{calendar>/minDate}"
+                                legend="CalendarLegend">
+                        <u:SpecialDates>
+                            <u:DateTypeRange type="Type02" startDate="{oData>Date}"/>
+                        </u:SpecialDates>
+                    </u:Calendar>
+                    <u:CalendarLegend id="CalendarLegend" columnWidth="160px">
+                        <u:items>
+                            <u:CalendarLegendItem text="{i18n>vacations.legend.Holidays}" type="Type02"/>
+                        </u:items>
+                        <u:layoutData>
+                            <l:GridData span="L4 M12 S12"/>
+                        </u:layoutData>
+                    </u:CalendarLegend>
+                </items>
+            </FlexBox>
+
             <Table fixedLayout="false" items="{oData>ToVacations}" id="vacationsTable">
                 <headerToolbar>
                     <Toolbar>
