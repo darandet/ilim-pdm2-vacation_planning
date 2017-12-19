@@ -14,6 +14,8 @@ sap.ui.define(["ilim/pdm2/vacation_planning/model/planningActions"],
                     return oResourceBundle.getText("vacation.employee.status.Rejected");
                 case "VP09":
                     return oResourceBundle.getText("vacation.employee.status.Approved");
+                case undefined:
+                    return "";
                 default:
                     return oResourceBundle.getText("vacation.employee.status.onApproval");
             }

@@ -107,7 +107,7 @@ sap.ui.define([
                         visible: false
                     },
                     label: {
-                        visible: true
+                        visible: false
                     }
                 },
                 categoryAxis: {
@@ -203,12 +203,16 @@ sap.ui.define([
                     that.getRouter().navTo("NoAuthorization");
                 } else {
                     that.oManagerController.oWhenPeriodIsLoaded.then( function (oData) {                        
-                        var sBindingPath = that.getView().getBindingContext("oData").getPath();
-                        that.getModel("oData").read(sBindingPath + "/ToRelevantMasterRecord", {
-                            success: function (oData) {
-                                that._setAbsenceReferenceLine(oData.MaxPercent);
-                            }
-                        });
+                        var oCurrentBinding = that.getView().getBindingContext("oData");
+                        var sBindingPath;
+                        if (oCurrentBinding) {
+                            that.getModel("oData").read(sBindingPath + "/ToRelevantMasterRecord", {
+                                success: function (oData) {
+                                    that._setAbsenceReferenceLine(oData.MaxPercent);
+                                }
+                            });
+                        } else {
+                        }
                     });
                 }
             });
@@ -216,9 +220,24 @@ sap.ui.define([
 
         _filterDashboardByYear: function (sChannel, sEvent, oData) {
 
-            var aFilters = [];
-            var filter = new Filter("PlanYear", sap.ui.model.FilterOperator.EQ, oData.PlanYear);
-
+            var oCurrentBinding = this.getView().getBindingContext("oData");
+            var sBindingPath;
+            if (oCurrentBinding) {
+                sBindingPath = oCurrentBinding.getPath();
+                this.getModel("oData").read(sBindingPath + "/ToRelevantMasterRecord", {
+                    success: function (oData) {
+                        that._setAbsenceReferenceLine(oData.MaxPercent);
+                    }
+                });
+            } else {
+                var sSubord = this.oManagerController.getOnlySubord();
+                sBindingPath = "/ManagingPeriodsSet(PlanYear='" + oData.PlanYear + "',OnlySubord='" + sSubord + "')/ToRelevantMasterRecord";
+                this.getModel("oData").read(sBindingPath, {
+                    success: function (oData) {
+                        this._setAbsenceReferenceLine(oData.MaxPercent);
+                    }.bind(this)
+                })
+            }
         },
 
         _setAbsenceReferenceLine: function (AbsencePercent) {
@@ -226,7 +245,7 @@ sap.ui.define([
             var oAbsencePercentChart = this.getView().byId("AbsencePercentChart");
 
             var oVizProperties = oAbsencePercentChart.getVizProperties();
-            oVizProperties.referenceLine = {
+            oVizProperties.plotArea.referenceLine = {
                 line: {
                     valueAxis: [{
                         value: AbsencePercent,

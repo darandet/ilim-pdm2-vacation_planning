@@ -41,7 +41,7 @@
                                             withMargin="false"
                                             busy="{screenState>/busy}"/>
                                     <Label text = "{i18n>vacation.header.numeric.saldo} {
-                                                                                            path: 'oData>ToAbsenceRight/SaldoOnDate'
+                                                                                            path: 'oData>ToAbsenceRight/SaldoOnDate',
                                                                                             type: 'sap.ui.model.type.Date',
                                                                                             formatOptions: {
                                                                                                 style: 'short'
@@ -75,7 +75,7 @@
             <OverflowToolbar>
                 <Button text="{i18n>vacation.footer.button.route}" press="onShowRoute"/>
                 <Button text="{i18n>vacation.footer.button.comments}" press="onShowComments"/>
-                <Button text="{i18n>vacation.footer.button.vacationPlan}"/>
+                <Button text="{i18n>vacation.footer.button.vacationPlan}" press="onShowPostedVacations"/>
                 <Button text="{i18n>vacation.footer.button.history}" press="onShowHistory"/>
                 <ToolbarSpacer/>
                 <Button type="Accept" text="{i18n>vacation.footer.button.sendPlan}" press="onSendPlan"/>

@@ -128,6 +128,38 @@ sap.ui.define([
             })
         },
 
+        onShowPostedVacations: function () {
+
+            if (!this._postedVacations) {
+
+                var oFormFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.PostedVacations");
+
+                that._postedVacations = new Dialog({
+                    title: that.getResourceBundle().getText("vacation.posted.Title"),
+                    draggable: true,
+                    content: oFormFragment,
+                    endButton: new Button({
+                        text: that.getResourceBundle().getText("common.dialog.button.close"),
+                        press: function () {
+                            that._postedVacations.close();
+                        }
+                    })
+                });
+
+                //to get access to the global model
+                that.getView().addDependent(that._postedVacations);
+
+            }
+
+            var sPlanPath = that.getView().getBindingContext("oData").getPath();
+            that._postedVacations.bindElement({
+                path: sPlanPath,
+                model: "oData"
+            });
+            that._postedVacations.open();
+
+        },
+
         onShowPeriods: function (oEvent) {
 
             if (! this._oPeriodsPopover) {

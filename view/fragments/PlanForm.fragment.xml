@@ -23,11 +23,11 @@
                                 specialDates="{oData>ToHolidays}"
                                 maxDate="{calendar>/maxDate}" minDate="{calendar>/minDate}"
                                 legend="CalendarLegend">
-                        <u:SpecialDates>
+                        <u:specialDates>
                             <u:DateTypeRange type="Type02" startDate="{oData>Date}"/>
-                        </u:SpecialDates>
+                        </u:specialDates>
                     </u:Calendar>
-                    <u:CalendarLegend id="CalendarLegend" columnWidth="160px">
+                    <u:CalendarLegend id="CalendarLegend" columnWidth="200px">
                         <u:items>
                             <u:CalendarLegendItem text="{i18n>vacations.legend.Holidays}" type="Type02"/>
                         </u:items>
