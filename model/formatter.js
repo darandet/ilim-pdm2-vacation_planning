@@ -102,8 +102,8 @@ sap.ui.define(["ilim/pdm2/vacation_planning/model/planningActions"],
 
         };
 
-        oFormatter.confirmEnabled = function (sStatus) {
-            if (sStatus === undefined) {
+        oFormatter.confirmEnabled = function (sStatus, Allowed) {
+            if (sStatus === undefined || !Allowed) {
                 return false;
             }
 
@@ -111,8 +111,8 @@ sap.ui.define(["ilim/pdm2/vacation_planning/model/planningActions"],
 
         };
 
-        oFormatter.transferEnabled = function (sStatus) {
-            if (sStatus === undefined) {
+        oFormatter.transferEnabled = function (sStatus, Allowed) {
+            if (sStatus === undefined || !Allowed) {
                 return false;
             }
 
