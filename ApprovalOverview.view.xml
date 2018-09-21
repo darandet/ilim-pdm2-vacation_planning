@@ -1,0 +1,58 @@
+<mvc:View
+        controllerName="ilim.pdm2.vacation_planning.controller.ApprovalOverview"
+        xmlns:mvc="sap.ui.core.mvc"
+        xmlns="sap.m"
+        xmlns:f="sap.f"
+        displayBlock="true"
+        height="100%"
+        busy="{screenState>/busy}">
+
+    <f:DynamicPage height="100%" toggleHeaderOnTitleClick="false" showFooter="false" id="ManagerSpaceId">
+        <f:title>
+            <f:DynamicPageTitle>
+                <f:heading>
+                    <Title text="{i18n>vacation.header.title.part1} {oData>PlanYear} {i18n>vacation.header.title.part2}"/>
+                </f:heading>
+                <f:actions>
+                    <SegmentedButton selectedKey="subord" select="onSubordPress">
+                      <items>
+                        <SegmentedButtonItem icon="sap-icon://manager" text="{i18n>main.header.orgLevelSubord}" key="subord" />
+                        <SegmentedButtonItem icon="sap-icon://task" text="{i18n>main.header.orgLevelAll}" key="all" />
+                      </items>
+                    </SegmentedButton>
+<!--                    <ToggleButton icon="sap-icon://manager" text="{i18n>main.header.orgLevelToggle}" press="onSubordPress" pressed="true"/>-->
+                </f:actions>
+                <f:expandedContent>
+                    <Button icon="sap-icon://arrow-down"
+                            type="Transparent"
+                            press="onShowPeriods"/>
+                </f:expandedContent>
+            </f:DynamicPageTitle>
+        </f:title>
+        <f:header>
+            <f:DynamicPageHeader pinnable="false">
+                <f:content>
+                    <FlexBox 	direction="Row"
+                                alignItems="Center"
+                                justifyContent="Center"
+                                fitContainer="true">
+                        <items>
+                            <SegmentedButton selectedKey="{viewSync>/key}" width="18rem" select="onViewChange"
+                                             id="ViewChangeButton">
+                                <items>
+                                    <SegmentedButtonItem key="approvalTab" icon="sap-icon://hr-approval"
+                                                         text="{i18n>main.header.switch.ApprovalView}"
+                                                         id="ApprovalManageViewButton"/>
+                                    <SegmentedButtonItem key="overviewTab" icon="sap-icon://bbyd-dashboard"
+                                                         text="{i18n>main.header.switch.DashboardView}"
+                                                         id="ApprovalDashboardViewButton"/>
+                                </items>
+                            </SegmentedButton>
+                        </items>
+                    </FlexBox>
+                </f:content>
+            </f:DynamicPageHeader>
+        </f:header>
+    </f:DynamicPage>
+
+</mvc:View>

@@ -1,0 +1,83 @@
+<mvc:View
+        controllerName="ilim.pdm2.vacation_planning.controller.ApprovalDetails"
+        xmlns:mvc="sap.ui.core.mvc"
+        xmlns="sap.m"
+        xmlns:f="sap.f"
+        xmlns:ilim="ilim.pdm2.vacation_planning.controls"
+        xmlns:unified="sap.ui.unified"
+        displayBlock="true"
+        height="100%"
+        id="ApprovalDetails">
+
+    <Panel backgroundDesign="Transparent">
+        <headerToolbar>
+            <Toolbar>
+                <content>
+                    <Button type="Back" press="onBackToInbox"/>
+                    <ToolbarSpacer/>
+                    <Title text="{i18n>details.header}" level="H2"/>
+                    <ToolbarSpacer/>
+                </content>
+            </Toolbar>
+        </headerToolbar>
+        <content>
+            <ilim:VacPlanCarousel arrowsPlacement="PageIndicator" pageIndicatorPlacement="Top"
+                                  leftIcon="sap-icon://table-view" rightIcon="sap-icon://accelerated">
+                <Table fixedLayout="false" id="vacationsTable" class="sapUiSmallMarginTop"
+                       items="{vacations>/}">
+                    <columns>
+                        <Column vAlign="Middle" hAlign="Center">
+                            <Text text="{i18n>details.table.employee}" />
+                        </Column>
+                        <Column vAlign="Middle" hAlign="Center">
+                            <Text text="{i18n>details.table.period}" />
+                        </Column>
+                        <Column vAlign="Middle" hAlign="Center">
+                            <Text text="{i18n>details.table.length}" />
+                        </Column>
+                        <Column vAlign="Middle" hAlign="Center">
+                            <Text text="{i18n>details.table.operation}" />
+                        </Column>
+                    </columns>
+                    <items>
+                        <ColumnListItem class="sapUiTinyPaddingTop">
+                            <cells>
+                                <ObjectIdentifier title="{vacations>EmployeeName}"/>
+                                <Text   textAlign="Center"
+                                        text="{path: 'vacations>BeginDate', type: 'sap.ui.model.type.Date', formatOptions: {style: 'short'}} - {path: 'vacations>EndDate', type: 'sap.ui.model.type.Date', formatOptions: {style: 'short'}}"/>
+                                <Text textAlign="Center" text="{vacations>Length}"/>                                
+                                <ObjectStatus text="{path: 'vacations>VpProc', formatter: '.formatter.vacationProc'}"/>
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+                <ilim:VacPlanPlanningCalendar viewKey="M" appoitmentsReducedHeight="true" appointmentsVisualization="Filled"
+                                  showIntervalHeaders="false" rows="{path: 'calendar>/'}">
+                    <ilim:views>
+                        <PlanningCalendarView
+                                key="M"
+                                intervalType="Month"
+                                description="{i18n>details.calendar.view.Month}"
+                                intervalsS="2"
+                                intervalsM="6"
+                                intervalsL="9"
+                                showSubIntervals="false"/>
+                    </ilim:views>
+                    <ilim:rows>
+                        <PlanningCalendarRow
+                                title="{calendar>EmployeeName}"
+                                appointments="{calendar>ToVacations}">
+                            <appointments>
+                                <unified:CalendarAppointment
+                                        startDate="{calendar>BeginDate}"
+                                        endDate="{calendar>EndDate}"
+                                        type="{calendar>Type}">
+                                </unified:CalendarAppointment>
+                            </appointments>
+                        </PlanningCalendarRow>
+                    </ilim:rows>
+                </ilim:VacPlanPlanningCalendar>
+            </ilim:VacPlanCarousel>
+        </content>
+    </Panel>
+</mvc:View>

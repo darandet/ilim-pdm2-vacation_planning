@@ -1,0 +1,36 @@
+<core:FragmentDefinition
+        xmlns:core="sap.ui.core"
+        xmlns="sap.m">
+
+    <Table items="{oData>ToAllowedPersa}" id="PersonnelAreasTable">
+        <headerToolbar>
+            <OverflowToolbar>
+                <MultiComboBox id="PersonnelAreaSelect" items="{oData>ToPersa}">
+                    <core:Item text="{oData>Pbtxt}" key="{oData>Persa}"/>
+                    <layoutData><OverflowToolbarLayoutData shrinkable="true"/></layoutData>
+                </MultiComboBox>
+                <ToolbarSpacer/>
+                <Button icon="sap-icon://add" press="addAllowedZone" tooltip="{i18n>masterRecord.allowedZones.AddZone}">
+                    <layoutData><OverflowToolbarLayoutData moveToOverflow="false"/></layoutData>
+                </Button>
+            </OverflowToolbar>
+        </headerToolbar>
+        <columns>
+            <Column vAlign="Middle" hAlign="Center" width="90%">
+                <Text text="{i18n>masterRecord.allowedZones.personnelArea}" />
+            </Column>
+            <Column vAlign="Middle" hAlign="Center" width="10%">
+            </Column>
+        </columns>
+        <items>
+            <ColumnListItem>
+                <cells>
+                    <Text text="{oData>PersonnelAreaText}"/>
+                    <Button icon="sap-icon://delete"
+                            enabled="true"
+                            press="deleteAllowedZone"/>
+                </cells>
+            </ColumnListItem>
+        </items>
+    </Table>
+</core:FragmentDefinition>

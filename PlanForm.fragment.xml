@@ -1,0 +1,107 @@
+<core:FragmentDefinition
+        xmlns="sap.m"
+        xmlns:core="sap.ui.core"
+        xmlns:u="sap.ui.unified"
+        xmlns:l="sap.ui.layout">
+
+
+    <FlexBox height="3rem" alignItems="Center" justifyContent="Center">
+        <items>
+            <MessageStrip id="MessageContainer" showIcon="true" visible="false" type="Error"/>
+        </items>
+    </FlexBox>
+
+    <l:Grid defaultSpan="L7 M12 S12" class="sapUiSmallMarginTop" hSpacing="0.5">
+        <l:content>
+            <FlexBox direction="Column">
+                <items>
+                    <u:Calendar width="99%"
+                                id="calendar"
+                                intervalSelection="true"
+                                months="2"
+                                select="onDateRangeSelect"
+                                specialDates="{oData>ToHolidays}"
+                                maxDate="{calendar>/maxDate}" minDate="{calendar>/minDate}"
+                                legend="CalendarLegend">
+                        <u:specialDates>
+                            <u:DateTypeRange type="Type02" startDate="{oData>Date}"/>
+                        </u:specialDates>
+                    </u:Calendar>
+                    <u:CalendarLegend id="CalendarLegend" columnWidth="200px">
+                        <u:items>
+                            <u:CalendarLegendItem text="{i18n>vacations.legend.Holidays}" type="Type02"/>
+                        </u:items>
+                        <u:layoutData>
+                            <l:GridData span="L4 M12 S12"/>
+                        </u:layoutData>
+                    </u:CalendarLegend>
+                </items>
+            </FlexBox>
+
+            <Table fixedLayout="false" items="{oData>ToVacations}" id="vacationsTable">
+                <headerToolbar>
+                    <Toolbar>
+                        <DateRangeSelection id="VacationRangeInput" placeholder="DD.MM.YYYY - DD.MM.YYYY"/>
+                        <ToolbarSpacer/>
+                        <Button	type="Emphasized" text="{i18n>vacation.addButton}" press="onAddVacation"/>
+                    </Toolbar>
+                </headerToolbar>
+                <columns>
+                    <Column vAlign="Middle" >
+                        <Text text="{i18n>vacation.table.begda}" />
+                        <footer>
+                          <Text text="{i18n>vacation.table.total}" />
+                        </footer>
+                    </Column>
+                    <Column vAlign="Middle" minScreenWidth="Tablet" demandPopin="true">
+                        <Text text="{i18n>vacation.table.endda}" />
+                    </Column>
+                    <Column vAlign="Middle" minScreenWidth="Tablet" demandPopin="true">
+                        <Text text="{i18n>vacation.table.status}" />
+                    </Column>
+                    <Column vAlign="Middle" minScreenWidth="Tablet" demandPopin="true">
+                        <Text text="{i18n>vacation.table.status}" />
+                        <footer>
+                          <Text text="{path: 'oData>AbsPlanned', formatter: '.formatter.roundDays'} {i18n>vacation.header.numeric.scale}" />
+                        </footer>
+                    </Column>
+                    <Column>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <Text text="{
+                                            path: 'oData>BeginDate',
+                                            type: 'sap.ui.model.type.Date',
+                                            formatOptions: {
+                                                style: 'medium'
+                                            }
+                                    }"
+                            />
+                            <Text text="{
+                                            path: 'oData>EndDate',
+                                            type: 'sap.ui.model.type.Date',
+                                            formatOptions: {
+                                                style: 'medium'
+                                            }
+                                        }"
+                            />
+                            <Text text="{path: 'oData>VpProc', formatter: '.formatter.vacationProc'}" />
+                            <ObjectStatus text="{path: 'oData>VpStatus', formatter: '.formatter.vacationStatus'}"
+                                          state="{path: 'oData>VpStatus', formatter: '.formatter.vacationState'}"/>
+                            <Button icon="sap-icon://edit"
+                                    enabled="{path: 'oData>VpProc', formatter: '.formatter.vacEditEnabled'}"
+                                    press="onShowActions"/>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+                <layoutData>
+                    <l:GridData span="L5 M12 S12" />
+                </layoutData>
+            </Table>
+
+        </l:content>
+    </l:Grid>
+
+</core:FragmentDefinition>

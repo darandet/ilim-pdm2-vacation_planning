@@ -1,0 +1,41 @@
+<core:FragmentDefinition
+        xmlns:core="sap.ui.core"
+        xmlns="sap.m">
+
+    <Table items="{oData>ToPostedVacations}" id="PostedVacationsTable">
+        <columns>
+            <Column vAlign="Middle" hAlign="Center">
+                <Text text="{i18n>vacation.posted.AbsenceText}" />
+            </Column>
+            <Column vAlign="Middle" hAlign="Center">
+                <Text text="{i18n>vacation.posted.BeginDate}" />
+            </Column>
+            <Column vAlign="Middle" hAlign="Center">
+                <Text text="{i18n>vacation.posted.EndDate}" />
+            </Column>
+        </columns>
+        <items>
+            <ColumnListItem>
+                <cells>
+                    <Text text="{oData>AwartText}"/>
+                    <Text text="{
+                                    path: 'oData>BeginDate',
+                                    type: 'sap.ui.model.type.Date',
+                                    formatOptions: {
+                                        style: 'short'
+                                    }
+                                }"
+                    />
+                    <Text text="{
+                                    path: 'oData>EndDate',
+                                    type: 'sap.ui.model.type.Date',
+                                    formatOptions: {
+                                        style: 'short'
+                                    }
+                                }"
+                    />
+                </cells>
+            </ColumnListItem>
+        </items>
+    </Table>
+</core:FragmentDefinition>

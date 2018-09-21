@@ -1,0 +1,15 @@
+<core:FragmentDefinition
+        xmlns="sap.m"
+        xmlns:core="sap.ui.core">
+
+    <ResponsivePopover title="{i18n>main.periodPopup.header}" class="sapUiPopupWithPadding"
+                       placement="Bottom" >
+        <content>
+            <SelectList
+                    items="{oData>/ManagingPeriodsSet}"
+                    itemPress="onYearSelect">
+                <core:Item key="{oData>PlanYear}" text="{oData>PlanYear}" />
+            </SelectList>
+        </content>
+    </ResponsivePopover>
+</core:FragmentDefinition>

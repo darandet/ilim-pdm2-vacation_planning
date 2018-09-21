@@ -1,0 +1,24 @@
+<core:FragmentDefinition
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core">
+  <ViewSettingsDialog
+    confirm="handleConfirm">
+    <filterItems>
+      <ViewSettingsFilterItem text="{i18n>main.table.lineManager}" key="Manager" items="{path: 'oData>ToTransferManager'}">
+        <items>
+          <ViewSettingsItem text="{oData>ChperEname}" key="{oData>Chper}"/>
+        </items>
+      </ViewSettingsFilterItem>
+      <ViewSettingsFilterItem text="{i18n>main.table.department}" key="Department" items="{path: 'oData>ToTransferDepartment'}">
+        <items>
+          <ViewSettingsItem text="{oData>OrgunitId} - {oData>OrgunitText}" key="{oData>OrgunitId}"/>
+        </items>
+      </ViewSettingsFilterItem>
+      <ViewSettingsFilterItem text="{i18n>main.table.status}" key="Status" items="{path: 'oData>ToTransferStatus'}">
+        <items>
+          <ViewSettingsItem text="{oData>StatusName}" key="{oData>PlanStatus}"/>
+        </items>
+      </ViewSettingsFilterItem>
+    </filterItems>
+  </ViewSettingsDialog>
+</core:FragmentDefinition>

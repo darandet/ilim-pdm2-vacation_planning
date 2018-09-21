@@ -1,0 +1,114 @@
+<core:FragmentDefinition
+        xmlns:core="sap.ui.core"
+        xmlns="sap.m"
+        xmlns:html="http://www.w3.org/1999/xhtml">
+
+    <Table fixedLayout="false" class="sapUiMediumMarginTop responsive-table" mode="MultiSelect"
+           items="{
+                path: 'oData>ToInbox',
+                parameters : {expand:'ToVacations'}
+            }"
+           rememberSelections="true"
+           growing="true"
+           growingThreshold="20"
+           id="inboxTable">
+        <headerToolbar>
+            <OverflowToolbar>
+                <Title text="{i18n>main.toolbar.title}" level="H2"/>
+                <SearchField width="30%"
+                             placeholder="{i18n>main.toolbar.searchPlaceholder}"
+                             id="inboxEmployeeSearchField"
+                             search="onEmployeeSearch"/>
+                <ToolbarSpacer/>
+                <MenuButton icon="sap-icon://multiselect-all" tooltip="{i18n>details.tooltip.MassAction}">
+                  <menu>
+                    <Menu itemSelected="onMassApprove">
+                      <items>
+                        <MenuItem text="{i18n>main.toolbar.massApprove}" icon="sap-icon://accept" />
+                        <MenuItem text="{i18n>main.toolbar.massReject}" icon="sap-icon://decline" />
+                      </items>
+                    </Menu>
+                  </menu>
+                </MenuButton>
+<!--                <OverflowToolbarButton type="Transparent" icon="sap-icon://multiselect-all" press="onMassApprovePlan"/>-->
+                <OverflowToolbarButton type="Transparent" icon="sap-icon://filter" press="onFilterPress"/>
+                <OverflowToolbarButton type="Transparent" icon="sap-icon://excel-attachment" press="onShowExcel"
+                                       tooltip="{i18n>details.tooltip.Excel}"/>
+                <Button icon="sap-icon://display" text="{i18n>main.toolbar.showSelected}" press="onShowSelected"/>
+            </OverflowToolbar>
+        </headerToolbar>
+        <columns>
+            <Column vAlign="Middle" hAlign="Begin">
+                <Text text="{i18n>main.table.employee}" />
+            </Column>
+            <Column vAlign="Middle" hAlign="Center">
+                <Text text="{i18n>main.table.department}" />
+            </Column>
+            <Column vAlign="Middle" hAlign="Center">
+                <Text text="{i18n>main.table.employeeId}" />
+            </Column>
+            <Column vAlign="Middle" hAlign="Center">
+                <Text text="{i18n>main.table.lineManager}" />
+            </Column>
+            <Column vAlign="Middle" hAlign="Center">
+                <Text text="{i18n>main.table.daysStats}" />
+            </Column>
+            <Column vAlign="Middle" hAlign="Center">
+                <Text text="{i18n>main.table.hasAccess}" />
+            </Column>
+            <Column vAlign="Middle" hAlign="Center">
+                <Text text="{i18n>main.table.status}" />
+            </Column>
+            <Column hAlign="Center">
+            </Column>
+        </columns>
+        <items>
+            <ColumnListItem class="sapUiTinyPaddingTop" highlight="{inbox>highlight}">
+                <cells>
+                    <ObjectIdentifier
+                            title="{oData>EmployeeName}"
+                            text="{oData>PositionText}"/>
+                    <VBox>
+                        <Label text="{oData>OrgunitText}" />
+                        <Label text="{oData>Pbtxt}" />
+                    </VBox>
+                    <ObjectIdentifier
+                            text="{oData>EmployeeId}"/>
+                    <Text   textAlign="Center"
+                            text="{oData>ChperEname}"/>
+                    <ObjectNumber number="{path: 'oData>AbsRightSaldo', formatter: '.formatter.roundDays'}/{path: 'oData>AbsRightTotal', formatter: '.formatter.roundDays'}/{path: 'oData>AbsRightPlanned', formatter: '.formatter.roundDays'}"
+                                  unit="{i18n>main.table.units}"/>
+                    <CheckBox enabled="false" selected="{oData>HasAccess}" />
+                    <ObjectStatus
+                            text="{parts: [{path: 'oData>PlanStatus'}, {path: 'oData>CanApprove'}],
+                                    formatter: '.formatter.vacationPlanStatus'}"
+                            state="{path: 'oData>PlanStatus', formatter: '.formatter.vacationPlanState'}"/>
+
+                    <FlexBox alignItems="Center" justifyContent="SpaceBetween">
+                        <items>
+                            <Button type="Accept" icon="sap-icon://accept"
+                                    enabled="{path: 'oData>CanApprove', formatter: '.formatter.any2Boolean'}"
+                                    press="onApproveInbox" tooltip="{i18n>details.tooltip.Approve}"
+                            />
+                            <Button type="Reject"
+                                    icon="{path: 'oData>PlanStatus', formatter: '.formatter.vacationPlanRejectIcon'}"
+                                    enabled="{path: 'oData>CanReject', formatter: '.formatter.any2Boolean'}"
+                                    press="onRejectInbox" tooltip="{i18n>details.tooltip.Reject}"
+                            />
+                            <Button icon="sap-icon://create-form"
+                                    enabled="{path: 'oData>CanCreate', formatter: '.formatter.any2Boolean'}"
+                                    press="onShowPlanForm" tooltip="{i18n>details.tooltip.OnBehalf}"
+                            />
+                            <Button icon="sap-icon://comment"
+                                    enabled="{path: 'oData>CanComment', formatter: '.formatter.any2Boolean'}"
+                                    press="onShowComments" tooltip="{i18n>details.tooltip.Comment}"
+                            />
+                        </items>
+                    </FlexBox>
+
+                </cells>
+            </ColumnListItem>
+        </items>
+    </Table>
+
+</core:FragmentDefinition>

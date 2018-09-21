@@ -1,0 +1,67 @@
+<mvc:View
+        controllerName="ilim.pdm2.vacation_planning.controller.MasterRecord"
+        xmlns:mvc="sap.ui.core.mvc"
+        xmlns="sap.m"
+        xmlns:l="sap.ui.layout"
+        displayBlock="true"
+        height="100%">
+
+    <FlexBox class="sapUiLargeMarginTop"
+             alignItems="Center"
+             justifyContent="Center">
+        <items>
+            <Table fixedLayout="false" class="sapUiTinyMarginTop"
+                   items="{ path: 'oData>/MasterRecordSet',
+                            filters: [{
+                                path: 'Context',
+                                operator: 'EQ',
+                                value1: 'CNTRL'
+                            }]
+                        }">
+                <headerToolbar>
+                    <Toolbar>
+                        <ToolbarSpacer/>
+                        <Button	type="Emphasized" text="{i18n>masterRecord.table.createPeriod}" press="onPeriodCreate"/>
+                    </Toolbar>
+                </headerToolbar>
+                <columns>
+                    <Column vAlign="Middle" hAlign="Center">
+                        <Text text="{i18n>masterRecord.table.year}" />
+                    </Column>
+                    <Column vAlign="Middle" hAlign="Center">
+                        <Text text="{i18n>masterRecord.table.bukrs}" />
+                    </Column>
+                    <Column vAlign="Middle" hAlign="Center">
+                        <Text text="{i18n>masterRecord.table.status}" />
+                    </Column>
+                    <Column hAlign="Center">
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <Text text="{oData>PlanYear}"/>
+                            <Text text="{oData>Butxt}"/>
+                            <ObjectStatus text="{path: 'oData>VpStatus', formatter: '.formatter.periodStatus'}"
+                                          state="{path: 'oData>VpStatus', formatter: '.formatter.periodState'}"/>
+                            <l:HorizontalLayout>
+                                <Button icon="{path: 'oData>VpStatus', formatter: '.formatter.periodActionIcon'}"
+                                        text="{path: 'oData>VpStatus', formatter: '.formatter.periodAction'}"
+                                        type="{path: 'oData>VpStatus', formatter: '.formatter.periodActionType'}"
+                                        enabled="{path: 'oData>VpStatus', formatter: '.formatter.periodActionEnabled'}"
+                                        press="onUpdateMasterRecord"/>
+                                <Button icon="sap-icon://delete" class="sapUiTinyMarginBegin"
+                                        enabled="{path: 'oData>VpStatus', formatter: '.formatter.periodDeleteEnabled'}"
+                                        press="onDeleteMasterRecord"/>
+                                <Button icon="sap-icon://journey-change" class="sapUiTinyMarginBegin"
+                                        enabled="true"
+                                        press="onAllowRequests"/>
+                            </l:HorizontalLayout>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </items>
+    </FlexBox>
+
+</mvc:View>

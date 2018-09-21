@@ -1,0 +1,26 @@
+<mvc:View
+        controllerName="ilim.pdm2.vacation_planning.shell.Shell"
+        xmlns:tnt="sap.tnt"
+        xmlns:mvc="sap.ui.core.mvc"
+        xmlns:core="sap.ui.core"
+        xmlns="sap.m"
+        displayBlock="true">
+
+    <tnt:ToolPage id="idAppContent" sideExpanded="true">
+        <tnt:header>
+          <tnt:ToolHeader>
+            <Button id="sideNavigationToggleButton"
+                icon="sap-icon://menu2"
+                type="Transparent"
+                press="onSideNavButtonPress">
+              <layoutData>
+                <OverflowToolbarLayoutData priority="NeverOverflow" />
+              </layoutData>
+            </Button>
+          </tnt:ToolHeader>
+        </tnt:header>
+        <tnt:sideContent>
+            <core:Fragment fragmentName="ilim.pdm2.vacation_planning.shell.fragments.Navigation" type="XML"/>
+        </tnt:sideContent>
+    </tnt:ToolPage>
+</mvc:View>

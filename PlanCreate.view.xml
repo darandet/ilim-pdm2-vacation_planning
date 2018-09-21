@@ -1,0 +1,13 @@
+<mvc:View
+        controllerName="ilim.pdm2.vacation_planning.controller.PlanCreate"
+        xmlns:mvc="sap.ui.core.mvc"
+        xmlns="sap.m"
+        xmlns:u="sap.ui.unified"
+        xmlns:l="sap.ui.layout"
+        xmlns:core="sap.ui.core"
+        displayBlock="true"
+        busy="{contentState>/busy}">
+
+
+    <core:Fragment fragmentName="ilim.pdm2.vacation_planning.view.fragments.PlanForm" type="XML"/>
+</mvc:View>

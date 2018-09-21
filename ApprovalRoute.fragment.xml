@@ -1,0 +1,27 @@
+<core:FragmentDefinition
+        xmlns:m="sap.m"
+        xmlns="sap.suite.ui.commons"
+        xmlns:core="sap.ui.core">
+
+    <Timeline
+            id="idRouteTimeline"
+            axisOrientation="Vertical"
+            enableScroll="false"
+            enableDoubleSided="false"
+            lazyLoading="false"
+            textHeight="automatic"
+            sort="false"
+            showHeaderBar="false"
+            showIcons="false"
+            content="{oData>ToApprRoute}">
+        <content>
+            <TimelineItem
+                    userNameClickable="false"
+                    text="{oData>ApproverRoleText}"
+                    userName="{oData>ApproverName}"
+                    dateTime="">
+            </TimelineItem>
+        </content>
+    </Timeline>
+
+</core:FragmentDefinition>

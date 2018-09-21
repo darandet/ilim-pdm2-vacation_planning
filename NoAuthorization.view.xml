@@ -1,0 +1,10 @@
+<mvc:View
+        xmlns:mvc="sap.ui.core.mvc"
+        xmlns="sap.m"
+        displayBlock="true"
+        height="100%">
+
+    <MessagePage description="{i18n>vacation.NoAuthorization.description}"
+                 icon="sap-icon://sys-cancel"
+                 text="{i18n>vacation.NoAuthorization.text}"/>
+</mvc:View>

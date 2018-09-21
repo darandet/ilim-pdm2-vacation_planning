@@ -1,0 +1,22 @@
+<core:FragmentDefinition
+        xmlns="sap.m"
+        xmlns:core="sap.ui.core">
+
+    <ResponsivePopover title="{i18n>vacation.periodPopup.header}" class="sapUiPopupWithPadding"
+                       placement="Bottom" >
+        <content>
+            <SelectList
+                    items="{
+                        path: 'oData>/MasterRecordSet',
+                        filters: [{
+                            path: 'Context',
+                            operator: 'EQ',
+                            value1: 'PLAN'
+                        }]
+                    }"
+                    itemPress="onYearSelect">
+                <core:Item key="{oData>PlanYear}" text="{oData>PlanYear}" />
+            </SelectList>
+        </content>
+    </ResponsivePopover>
+</core:FragmentDefinition>

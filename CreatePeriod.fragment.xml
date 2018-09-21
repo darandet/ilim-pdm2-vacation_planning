@@ -1,0 +1,49 @@
+<core:FragmentDefinition
+        xmlns="sap.m"
+        xmlns:f="sap.ui.layout.form"
+        xmlns:core="sap.ui.core">
+
+    <MessageStrip
+            text="{i18n>masterRecord.createDialog.messageAboutMails}"
+            type="Information"
+            showIcon="true"
+            class="sapUiSmallMargin">
+    </MessageStrip>
+    <f:SimpleForm id="CreatePeriodForm"
+                  editable="true"
+                  layout="ResponsiveGridLayout"
+                  breakpointM="300"
+                  labelSpanXL="5"
+                  labelSpanL="5"
+                  labelSpanM="5"
+                  labelSpanS="12"
+                  adjustLabelSpan="false"
+                  emptySpanXL="0"
+                  emptySpanL="0"
+                  emptySpanM="0"
+                  emptySpanS="0"
+                  columnsXL="1"
+                  columnsL="1"
+                  columnsM="1"
+                  singleContainerFullSize="false" >
+        <f:content>
+            <Label text="{i18n>masterRecord.createDialog.balanceUnit}"/>
+            <Select id="balanceUnit" forceSelection="false" selectedKey="{masterRecord>/bukrs}" items="{oData>/BukrsListSet}">
+                <items>
+                    <core:Item text="{oData>Butxt}" key="{oData>Bukrs}"/>
+                </items>
+            </Select>
+            <Label text="{i18n>masterRecord.createDialog.planningYear}"/>
+            <Input maxLength="4" type="Number" value="{masterRecord>/year}"/>
+            <Label text="{i18n>masterRecord.createDialog.planningDeadline}"/>
+            <DatePicker valueFormat="dd.MM.yyyy"
+                        displayFormat="long"
+                        value="{path: 'masterRecord>/deadline', type:'sap.ui.model.type.Date'}"/>
+            <Label text="{i18n>masterRecord.createDialog.absencePercent}"/>
+            <Input maxLength="2" type="Number" value="{masterRecord>/absence}"/>
+            <Label/>
+            <CheckBox text="{i18n>masterRecord.createDialog.sendNotifications}" selected="{masterRecord>/notify}"/>
+        </f:content>
+    </f:SimpleForm>
+
+</core:FragmentDefinition>

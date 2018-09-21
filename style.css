@@ -1,0 +1,58 @@
+.ilimMessageContainer {
+
+    -webkit-transition: opacity 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    transition: opacity 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
+@media (max-width:667px) {
+  .sapUiBody .sapTntToolPageHeader {
+      height: 2rem;
+  }
+  .sapUiBody .sapTntToolHeader.sapMTB {
+      height: 2rem;
+  }
+
+  .sapUiBody .sapFDynamicPage-Std-Phone .sapFDynamicPageTitleWrapper.sapFDynamicPageTitleSnapped>.sapFDynamicPageTitle {
+      padding: 0.2rem 0rem 0.2rem 1rem;
+  }
+  .sapUiBody .sapFDynamicPageTitleMain>.sapFDynamicPageTitleMainInner .sapMTitle {
+      font-size: 1.1rem;
+  }
+  .sapUiBody .sapFDynamicPageTitle {
+    min-height: 2rem;
+  }
+  .sapUiBody .sapTntToolPageWithHeader .sapTntToolPageContentWrapper {
+      max-height: calc(100% - 2rem);
+  }
+
+  .sapUiBody .sapMTitleStyleH1 {
+      font-size: 1.1rem;
+  }
+  .sapUiBody .sapFDynamicPageHeaderContent > .sapMFlexBox{
+    flex-wrap: wrap;
+  }
+  .sapUiBody .sapFDynamicPageHeaderContent > .sapMFlexBox .sapMFlexBox {
+     justify-content: flex-start;
+    text-align: left;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .sapUiBody .sapMLabel{
+    white-space: initial;
+  }
+  .sapMListTbl .sapMText, .sapMListTbl .sapMLabel {
+      font-size: 0.7rem;
+  }
+
+  .tablets-block > div{
+    display: block !important;
+  }
+
+}
+
+.responsive-table{
+    overflow-x: auto;
+  }
+  .responsive-table table{
+    min-width: 965px;
+  }

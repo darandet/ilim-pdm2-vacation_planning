@@ -1,0 +1,9 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core"
+                         xmlns:mvc="sap.ui.core.mvc"
+                         xmlns="sap.m">
+
+    <Panel>
+        <TextArea value="{comment>/Comment}" cols="50" maxLength="255" rows="3" placeholder="{i18n>common.commentsDialog.Placeholder}"/>
+    </Panel>
+
+</core:FragmentDefinition>

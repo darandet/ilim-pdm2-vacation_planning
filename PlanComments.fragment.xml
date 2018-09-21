@@ -1,0 +1,22 @@
+<core:FragmentDefinition
+        xmlns="sap.m"
+        xmlns:core="sap.ui.core">
+
+    <List items="{oData>ToComments}">
+        <FeedListItem
+                sender="{oData>EmployeeName}"
+                iconDensityAware="false"
+                info="{oData>RoleText}"
+                timestamp="{
+                    path: 'oData>CommentTimestamp',
+                    type: 'sap.ui.model.type.DateTime',
+                    formatOptions: {
+                      style: 'medium',
+                      UTC: true
+                    }
+                }"
+                text="{oData>CommentText}"
+                icon="/sap/opu/odata/sap/ZHR_PDM_VACATION_PLANNING_SRV/VacationPlanCommentsSet(OnlySubord='',PlanYear='',CommentTimestamp=datetime'9999-12-31T00%3A00%3A00',EmployeeId='{oData>EmployeeId}')/$value"
+        />
+    </List>
+</core:FragmentDefinition>

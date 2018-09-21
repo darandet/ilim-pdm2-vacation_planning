@@ -1,0 +1,10 @@
+<mvc:View
+        xmlns:mvc="sap.ui.core.mvc"
+        xmlns="sap.m"
+        displayBlock="true"
+        height="100%">
+
+    <MessagePage description="{i18n>vacation.planningClosed.description}"
+                 icon="sap-icon://locked"
+                 text="{i18n>vacation.planningClosed.text}"/>
+</mvc:View>

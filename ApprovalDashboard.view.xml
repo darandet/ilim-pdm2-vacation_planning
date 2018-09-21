@@ -1,0 +1,151 @@
+<mvc:View
+        controllerName="ilim.pdm2.vacation_planning.controller.ApprovalDashboard"
+        xmlns:mvc="sap.ui.core.mvc"
+        xmlns:l="sap.ui.layout"
+        xmlns:m="sap.m"
+        xmlns:viz="sap.viz.ui5.controls"
+        xmlns:viz.data="sap.viz.ui5.data"
+        xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+        displayBlock="true"
+        height="100%">
+
+
+    <l:BlockLayout width="100%" background="Dashboard">
+        <l:BlockLayoutRow class="tablets-block">
+            <l:BlockLayoutCell width="1" titleAlignment="Begin"
+                               title="{i18n>dashboard.noAccessEmployees.title}">
+                <m:Table fixedLayout="false" id="noAccessEmployeesTable" items="{path: 'oData>ToNoAccEmpl'}"
+                         growing="true" growingThreshold="4">
+                    <m:headerToolbar>
+                        <m:OverflowToolbar>
+                            <m:ToolbarSpacer/>
+                            <m:Button icon="sap-icon://pdf-attachment"
+                                      text="{i18n>dashboard.noAccessEmployees.T7ButtonTextPDF}"
+                                      press="onDownloadT7pdf" >
+                                <m:layoutData>
+                                    <m:OverflowToolbarLayoutData priority="NeverOverflow" />
+                                </m:layoutData>
+                            </m:Button>
+                            <m:Button icon="sap-icon://excel-attachment"
+                                      text="{i18n>dashboard.noAccessEmployees.T7ButtonTextXLS}"
+                                      press="onDownloadT7xls" >
+                                <m:layoutData>
+                                    <m:OverflowToolbarLayoutData priority="NeverOverflow" />
+                                </m:layoutData>
+                            </m:Button>
+                        </m:OverflowToolbar>
+                    </m:headerToolbar>
+                    <m:columns>
+                        <m:Column vAlign="Middle" hAlign="Center">
+                            <m:Text text="{i18n>dashboard.noAccessEmployees.numberSign}" />
+                        </m:Column>
+                        <m:Column vAlign="Middle" hAlign="Center" minScreenWidth="Tablet" demandPopin="true">
+                            <m:Text text="{i18n>dashboard.noAccessEmployees.EmployeeId}" />
+                        </m:Column>
+                        <m:Column vAlign="Middle" hAlign="Center" minScreenWidth="Tablet" demandPopin="true">
+                            <m:Text text="{i18n>dashboard.noAccessEmployees.Employee}" />
+                        </m:Column>
+                        <m:Column vAlign="Middle" hAlign="Center" minScreenWidth="Tablet" demandPopin="true">
+                            <m:Text text="{i18n>dashboard.noAccessEmployees.Department}" />
+                        </m:Column>
+                    </m:columns>
+                    <m:items>
+                        <m:ColumnListItem>
+                            <m:cells>
+                                <m:ObjectIdentifier
+                                        text="{oData>LineNum}"/>
+                                <m:ObjectIdentifier
+                                        text="{oData>EmployeeId}"/>
+                                <m:ObjectIdentifier
+                                        title="{oData>EmployeeName}"
+                                        text="{oData>PositionText}"/>
+                                <m:ObjectIdentifier
+                                        text="{oData>OrgunitText}"/>
+                            </m:cells>
+                        </m:ColumnListItem>
+                    </m:items>
+                </m:Table>
+            </l:BlockLayoutCell>
+
+            <l:BlockLayoutCell width="1" titleAlignment="Begin"
+                               title="{i18n>dashboard.graphic.vacDaysPlanned}">
+                <viz:VizFrame id="DaysPlannedChart" height="300px" width="100%" vizType='bar'>
+                    <viz:dataset>
+                        <viz.data:FlattenedDataset data="{path: 'oData>ToVacPlanDaysGraph'}">
+                            <viz.data:dimensions>
+                                <viz.data:DimensionDefinition name="Category"
+                                                              value="{Dimension}" />
+                            </viz.data:dimensions>
+                            <viz.data:measures>
+                                <viz.data:MeasureDefinition name="Days"
+                                                            value="{Measure}" />
+                            </viz.data:measures>
+                        </viz.data:FlattenedDataset>
+                    </viz:dataset>
+
+                    <viz:feeds>
+                        <viz.feeds:FeedItem uid="valueAxis" type="Measure"
+                                            values="Days" />
+                        <viz.feeds:FeedItem uid="categoryAxis" type="Dimension"
+                                            values="Category" />
+                    </viz:feeds>
+                </viz:VizFrame>
+            </l:BlockLayoutCell>
+        </l:BlockLayoutRow>
+        <l:BlockLayoutRow class="tablets-block">
+            <l:BlockLayoutCell width="1" titleAlignment="Begin"
+                               title="{i18n>dashboard.graphic.numberApproved}">
+                <viz:VizFrame id="ApprovedCountChart" height="300px" width="100%" vizType='donut'
+                              vizProperties="{
+
+                               }">
+                    <viz:dataset>
+                        <viz.data:FlattenedDataset data="{path: 'oData>ToApprNumGraph'}">
+                            <viz.data:dimensions>
+                                <viz.data:DimensionDefinition name="Category"
+                                                              value="{Dimension}" />
+                            </viz.data:dimensions>
+                            <viz.data:measures>
+                                <viz.data:MeasureDefinition name="Number"
+                                                            value="{Measure}" />
+                            </viz.data:measures>
+                        </viz.data:FlattenedDataset>
+                    </viz:dataset>
+
+                    <viz:feeds>
+                        <viz.feeds:FeedItem uid="size" type="Measure"
+                                            values="Number" />
+                        <viz.feeds:FeedItem uid="color" type="Dimension"
+                                            values="Category" />
+                    </viz:feeds>
+                </viz:VizFrame>
+            </l:BlockLayoutCell>
+
+            <l:BlockLayoutCell width="2" titleAlignment="Begin"
+                               title="{i18n>dashboard.graphic.absencePercent}">
+                <viz:VizFrame id="AbsencePercentChart" height="300px" width="100%" vizType='column'>
+                    <viz:dataset>
+                        <viz.data:FlattenedDataset data="{path: 'oData>ToAbsPercGraph'}">
+                            <viz.data:dimensions>
+                                <viz.data:DimensionDefinition name="Months"
+                                                              value="{Dimension}" />
+                            </viz.data:dimensions>
+                            <viz.data:measures>
+                                <viz.data:MeasureDefinition name="Percent"
+                                                            value="{Measure}" />
+                            </viz.data:measures>
+                        </viz.data:FlattenedDataset>
+                    </viz:dataset>
+
+                    <viz:feeds>
+                        <viz.feeds:FeedItem id='valueAxisFeed' uid="valueAxis" type="Measure"
+                                            values="Percent" />
+                        <viz.feeds:FeedItem id='categoryAxisFeed' uid="categoryAxis" type="Dimension"
+                                            values="Months" />
+                    </viz:feeds>
+                </viz:VizFrame>
+            </l:BlockLayoutCell>
+        </l:BlockLayoutRow>
+    </l:BlockLayout>
+
+</mvc:View>

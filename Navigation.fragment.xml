@@ -1,0 +1,27 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:tnt="sap.tnt">
+
+    <tnt:SideNavigation id="sideNavigation" visible="true" sideExpanded="true">
+        <tnt:item>
+            <tnt:NavigationList itemSelect="onSideNavigation">
+<!--                 <tnt:NavigationListItem key="NavToPlan" text="{i18n>sideNavigation.item.planVacation}"
+                                        icon="sap-icon://appointment"
+                                        id="planNavItem"/>
+                <tnt:NavigationListItem key="NavToApprov" text="{i18n>sideNavigation.item.approvePlan}"
+                                        icon="sap-icon://sap-box"
+                                        id="approveNavItem"/>
+                <tnt:NavigationListItem key="NavToControl" text="{i18n>sideNavigation.item.masterRecords}"
+                                        icon="sap-icon://approvals"
+                                        id="controlNavItem"/> -->
+            </tnt:NavigationList>
+        </tnt:item>
+        <tnt:fixedItem>
+            <tnt:NavigationList itemSelect="onSideNavigation">
+                <tnt:NavigationListItem key="switchState" text="{i18n>sideNavigation.item.Collapse}" icon="sap-icon://menu2"/>
+            </tnt:NavigationList>
+        </tnt:fixedItem>
+    </tnt:SideNavigation>
+
+</core:FragmentDefinition>
