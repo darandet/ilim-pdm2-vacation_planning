@@ -10,6 +10,10 @@ sap.ui.define([
                 functions: ["delete"]
             },
 
+            VP02: {
+                functions: ["delete"]
+            },
+
             VP04: {
                 functions: ["delete"]
             },

@@ -6,7 +6,7 @@
         <DateRangeSelection
           id="TransferDateRange"
           delimiter=" - "
-          dateValue="{comment>/BeginDate}"
+          dateValue= "{comment>/BeginDate}"
           secondDateValue="{comment>/EndDate}"
         />
         <TextArea value="{comment>/Comment}" cols="50" maxLength="255" rows="3" placeholder="{i18n>common.commentsDialog.Placeholder}"/>

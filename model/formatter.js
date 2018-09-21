@@ -3,7 +3,7 @@ sap.ui.define(["ilim/pdm2/vacation_planning/model/planningActions"],
 
         var oFormatter = {};
 
-        oFormatter.vacationStatus = function (sStatus) {
+        oFormatter.vacationStatus_old = function (sStatus) {
             var oResourceBundle = this.getView().getModel("i18n").getResourceBundle();
 
             switch (sStatus) {
@@ -12,6 +12,37 @@ sap.ui.define(["ilim/pdm2/vacation_planning/model/planningActions"],
                     return oResourceBundle.getText("vacation.employee.status.draft");
                 case "VP04":
                     return oResourceBundle.getText("vacation.employee.status.Rejected");
+                case "VP09":
+                    return oResourceBundle.getText("vacation.employee.status.Approved");
+                case undefined:
+                    return "";
+                default:
+                    return oResourceBundle.getText("vacation.employee.status.onApproval");
+            }
+
+        };
+
+        oFormatter.vacationStatus = function (sStatus) {
+            var oResourceBundle = this.getView().getModel("i18n").getResourceBundle();
+
+            switch (sStatus) {
+
+                case "VP01":
+                    return oResourceBundle.getText("vacation.employee.status.draft");
+                case "VP02":
+                    return oResourceBundle.getText("vacation.employee.status.draft");
+                case "VP03":
+                    return oResourceBundle.getText("vacation.employee.status.VP03");
+                case "VP04":
+                    return oResourceBundle.getText("vacation.employee.status.Rejected");
+                case "VP05":
+                    return oResourceBundle.getText("vacation.employee.status.VP05");
+                case "VP06":
+                    return oResourceBundle.getText("vacation.employee.status.VP06");
+                case "VP07":
+                    return oResourceBundle.getText("vacation.employee.status.VP07");
+                case "VP08":
+                    return oResourceBundle.getText("vacation.employee.status.VP08");
                 case "VP09":
                     return oResourceBundle.getText("vacation.employee.status.Approved");
                 case undefined:
@@ -37,7 +68,7 @@ sap.ui.define(["ilim/pdm2/vacation_planning/model/planningActions"],
             }
 
         };
-    
+
         oFormatter.vacationProc = function (sProc) {
 
             var oResourceBundle = this.getView().getModel("i18n").getResourceBundle();
@@ -62,12 +93,12 @@ sap.ui.define(["ilim/pdm2/vacation_planning/model/planningActions"],
                 case "CONF":
                     return false;
                 case "TRAN":
-                    return false;
+                    return true;
                 default:
                     return false;
             }
-        };    
-    
+        };
+
         oFormatter.dateToString = function (dDate) {
 
           var ret        = new sap.ui.model.type.String();
@@ -81,8 +112,29 @@ sap.ui.define(["ilim/pdm2/vacation_planning/model/planningActions"],
           }
 
           return ret;
-       };    
-    
+        };
+
+        oFormatter.roundDays = function (rDays) {
+
+            var ret = 0;
+
+            if (rDays) {
+                ret = Math.floor(rDays);
+            }
+
+            return ret;
+        };
+
+        oFormatter.dateToAbapDate = function (dDate) {
+
+            var ret      = dDate;
+            var TZOffset = new Date(0).getTimezoneOffset()*60*1000;
+            ret.setTime(ret.getTime() -TZOffset);
+
+            return ret;
+        };
+
+
         oFormatter.any2Boolean = function (sValue) {
 
             if (sValue) {
@@ -90,7 +142,7 @@ sap.ui.define(["ilim/pdm2/vacation_planning/model/planningActions"],
             } else {
               return false;
             }
-        };    
+        };
 
         oFormatter.deleteEnabled = function (sStatus) {
 
@@ -102,8 +154,8 @@ sap.ui.define(["ilim/pdm2/vacation_planning/model/planningActions"],
 
         };
 
-        oFormatter.confirmEnabled = function (sStatus, Allowed) {
-            if (sStatus === undefined || !Allowed) {
+        oFormatter.confirmEnabled = function (sStatus, Allowed, sVpProc) {
+            if (sStatus === undefined || !Allowed || sVpProc === 'CONF') {
                 return false;
             }
 
@@ -111,8 +163,9 @@ sap.ui.define(["ilim/pdm2/vacation_planning/model/planningActions"],
 
         };
 
-        oFormatter.transferEnabled = function (sStatus, Allowed) {
-            if (sStatus === undefined || !Allowed) {
+        oFormatter.transferEnabled = function (sStatus, Allowed, sVpProc) {
+
+            if (sStatus === undefined || !Allowed || sVpProc !== 'PLAN' ) {
                 return false;
             }
 

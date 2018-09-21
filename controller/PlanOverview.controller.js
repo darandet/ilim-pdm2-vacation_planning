@@ -3,21 +3,15 @@ sap.ui.define([
     "sap/m/Dialog",
     "sap/m/Button",
     "sap/ui/model/json/JSONModel",
-    "sap/m/MessageBox"
-], function (Controller, Dialog, Button, JSONModel, MessageBox) {
+    "sap/m/MessageBox",
+    "ilim/pdm2/vacation_planning/model/formatter"
+], function (Controller, Dialog, Button, JSONModel, MessageBox, Formatter) {
     "use strict";
 
     return Controller.extend("ilim.pdm2.vacation_planning.controller.PlanOverview", {
 
-        /**
-         * @namespace ilim.pdm2.vacation_planning.PlanOverview
-         */
+        formatter: Formatter,
 
-        /**
-         * Called when a controller is instantiated and its View controls (if available) are already created.
-         * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
-         * @memberOf ilim.pdm2.vacation_planning.PlanOverview
-         */
         onInit: function() {
 
             var that = this;
@@ -35,28 +29,17 @@ sap.ui.define([
 
         },
 
-        /**
-         * Similar to onAfterRendering, but this hook is invoked before the controller's View is re-rendered
-         * (NOT before the first rendering! onInit() is used for that one!).
-         * @memberOf ilim.pdm2.vacation_planning.PlanOverview
-         */
+
         onBeforeRendering: function() {
 
         },
 
-        /**
-         * Called when the View has been rendered (so its HTML is part of the document). Post-rendering manipulations of the HTML could be done here.
-         * This hook is the same one that SAPUI5 controls get after being rendered.
-         * @memberOf ilim.pdm2.vacation_planning.PlanOverview
-         */
+
         onAfterRendering: function() {
 
         },
 
-        /**
-         * Called when the Controller is destroyed. Use this one to free resources and finalize activities.
-         * @memberOf ilim.pdm2.vacation_planning.PlanOverview
-         */
+
         onExit: function() {
 
         },
@@ -135,7 +118,7 @@ sap.ui.define([
                 var oFormFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.PostedVacations");
 
                 this._postedVacations = new Dialog({
-                    title: that.getResourceBundle().getText("vacation.posted.Title"),
+                    title: this.getResourceBundle().getText("vacation.posted.Title"),
                     draggable: true,
                     content: oFormFragment,
                     endButton: new Button({
@@ -190,12 +173,10 @@ sap.ui.define([
         },
 
         onSendPlan: function () {
-            
+
             var oDataModel = this.getModel("oData");
             var sCurrentPath = this.getView().getBindingContext("oData").getPath();
-            
             var aVacations = this._convertModelVacationsToArray(oDataModel, sCurrentPath);
-            
             this._checkVacationsBeforeSend(aVacations);
         },
 
@@ -204,7 +185,6 @@ sap.ui.define([
 
             var that = this;
             var oEventBus = sap.ui.getCore().getEventBus();
-            
             var fnDataRequested = function () {
                 that.getModel("screenState").setProperty("/busy", true);
                 oEventBus.publish("headerChanges", "planLoading");
@@ -214,7 +194,7 @@ sap.ui.define([
                 that.getModel("screenState").setProperty("/busy", false);
                 oEventBus.publish("headerChanges", "planReceived");
             };
-            
+
             this.getOwnerComponent().oRolesLoaded.then(function (oData) {
                 var sPlanPath = "/VacationPlanHdrSet(PlanYear='" + selectedYear + "',Pernr='" + oData.EmployeeId + "')";
                 that.getView().bindElement({
@@ -319,7 +299,6 @@ sap.ui.define([
 
             var sNo1WeekVacation = "<li>" + this.getResourceBundle().getText("vacation.checks.no1WeekMessage") + "</li>";
             var sNo2WeekVacation = "<li>" + this.getResourceBundle().getText("vacation.checks.no2WeekMessage") + "</li>";
-
             var sMessageText = "<p><strong>" + this.getResourceBundle().getText("vacation.checks.commonTextDetailed") + "</strong></p>\n<ul>";
             var sFinalQuestion = "<p>" + this.getResourceBundle().getText("vacation.checks.finalQuestion") + "</p>";
 
@@ -364,7 +343,8 @@ sap.ui.define([
             oWarningDialog.addStyleClass("sapUiContentPadding");
             oWarningDialog.open();
         },
-        
+
+
         _sendPlan: function () {
 
             var oDataModel = this.getModel("oData");
@@ -464,7 +444,6 @@ sap.ui.define([
             }
 
             this.approveCommentDialog.open();
-            
         }
 
     });

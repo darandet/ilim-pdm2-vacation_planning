@@ -5,7 +5,7 @@ sap.ui.define([
     "sap/ui/model/odata/v2/ODataModel",
     "sap/m/Dialog",
     "sap/m/Button",
-    "sap/m/MessageBox",    
+    "sap/m/MessageBox",
     "ilim/pdm2/vacation_planning/model/formatter"
 ], function (Controller, $, JSONModel, ODataModel, Dialog, Button, MessageBox, Formatter) {
     "use strict";
@@ -169,6 +169,8 @@ sap.ui.define([
             var oContentStateModel = this.getModel("contentState");
 
             if (sChannel === "headerChanges" && sEvent === "yearSelection") {
+                var oCalendar = this.getView().byId("calendar");
+                oCalendar.focusDate(new Date(oData.key, 0, 1));
                 // var oCalModel = this.getModel("calendar");
                 // var oCalData = {
                 //     minDate: new Date(oData.key),
@@ -271,7 +273,7 @@ sap.ui.define([
                 oMessageContainer.close();
             };
 
-            setTimeout(hideMessage, 5000); //CSS delay doesn't work
+            setTimeout(hideMessage, 5000); //CSS delay doesnt work
         },
 
         _refreshTableAfterSend: function () {
@@ -281,7 +283,7 @@ sap.ui.define([
 
             oTableBinding.refresh();
         },
-        
+
         _modifyVacation: function (oObjectToModify, sRequestType) {
 
             var oDataModel = this.getModel("oData");
@@ -343,8 +345,9 @@ sap.ui.define([
                 } else {
                   oDialogFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.DatesCommentsDialog");
                 }
-                
+
                 var oCommentModel = new JSONModel(oComment);
+
                 this.approveCommentDialog = new Dialog({
                     title: this.getResourceBundle().getText("common.commentsDialog.Title"),
                     draggable: true,
@@ -365,14 +368,16 @@ sap.ui.define([
                             that.getModel("screenState").setProperty("/busy", true);
 
                             var oCommentModel = that.approveCommentDialog.getModel("comment");
+
                             oDataModel.callFunction("/CreateRequest", {
                                 method: "POST",
                                 urlParameters: {
-                                    VacationGUID: oObjectToModify.ItemGuid,
-                                    NewBeginDate: oCommentModel.getProperty("/BeginDate"),
-                                    NewEndDate:   oCommentModel.getProperty("/EndDate"),
+                                    Comment:      oCommentModel.getProperty("/Comment"),
                                     RequestType:  sRequestType,
-                                    Comment:      oCommentModel.getProperty("/Comment")
+                                    NewBeginDate: that.formatter.dateToAbapDate(oCommentModel.getProperty("/BeginDate")),
+                                    NewEndDate:   that.formatter.dateToAbapDate(oCommentModel.getProperty("/EndDate")),
+                                    VacationGUID: oObjectToModify.ItemGuid,
+                                    BaseVacation: oObjectToModify.VpProc
                                 },
                                 success: fnHandleSuccess,
                                 error: fnHandleError
@@ -394,7 +399,7 @@ sap.ui.define([
             }
 
             this.approveCommentDialog.open();
-        }        
+        }
 
 
     });

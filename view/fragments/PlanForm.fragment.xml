@@ -47,18 +47,24 @@
                     </Toolbar>
                 </headerToolbar>
                 <columns>
-                    <Column vAlign="Middle">
+                    <Column vAlign="Middle" >
                         <Text text="{i18n>vacation.table.begda}" />
+                        <footer>
+                          <Text text="{i18n>vacation.table.total}" />
+                        </footer>
                     </Column>
-                    <Column vAlign="Middle">
+                    <Column vAlign="Middle" minScreenWidth="Tablet" demandPopin="true">
                         <Text text="{i18n>vacation.table.endda}" />
                     </Column>
-                    <Column vAlign="Middle">
+                    <Column vAlign="Middle" minScreenWidth="Tablet" demandPopin="true">
                         <Text text="{i18n>vacation.table.status}" />
                     </Column>
-                    <Column vAlign="Middle">
+                    <Column vAlign="Middle" minScreenWidth="Tablet" demandPopin="true">
                         <Text text="{i18n>vacation.table.status}" />
-                    </Column>                        
+                        <footer>
+                          <Text text="{path: 'oData>AbsPlanned', formatter: '.formatter.roundDays'} {i18n>vacation.header.numeric.scale}" />
+                        </footer>
+                    </Column>
                     <Column>
                     </Column>
                 </columns>
@@ -81,10 +87,10 @@
                                             }
                                         }"
                             />
-                            <Text text="{path: 'oData>VpProc', formatter: '.formatter.vacationProc'}" />                                
+                            <Text text="{path: 'oData>VpProc', formatter: '.formatter.vacationProc'}" />
                             <ObjectStatus text="{path: 'oData>VpStatus', formatter: '.formatter.vacationStatus'}"
                                           state="{path: 'oData>VpStatus', formatter: '.formatter.vacationState'}"/>
-                            <Button icon="sap-icon://edit" 
+                            <Button icon="sap-icon://edit"
                                     enabled="{path: 'oData>VpProc', formatter: '.formatter.vacEditEnabled'}"
                                     press="onShowActions"/>
                         </cells>
@@ -94,6 +100,7 @@
                     <l:GridData span="L5 M12 S12" />
                 </layoutData>
             </Table>
+
         </l:content>
     </l:Grid>
 

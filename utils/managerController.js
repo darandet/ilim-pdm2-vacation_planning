@@ -28,13 +28,13 @@ sap.ui.define([
                 this.sTab = "plan";
                 this.sPSearchline = "";
                 this.sTSearchline = "";
-                this.sCSearchline = "";                  
+                this.sCSearchline = "";
             },
 
             setCurrentYear: function (sYear) {
                 this.selectedYear = sYear;
             },
-                
+
             setSearchline: function (sVal) {
                 switch (this.sTab) {
                   case "plan":
@@ -131,14 +131,14 @@ sap.ui.define([
                     break;
                 }
             },
-                
+
             setOnlySubord: function (sSubord) {
                 this.onlySubord = sSubord;
             },
 
             getOnlySubord: function () {
                 return this.onlySubord;
-            },                
+            },
 
             getCurrentYear: function () {
                 return this.selectedYear;
@@ -146,11 +146,53 @@ sap.ui.define([
 
             setCurrentTab: function (sTab) {
                 this.sTab = sTab;
-            },                
-                
+            },
+
             getCurrentTab: function () {
                 return this.sTab;
-            },                
+            },
+
+            getPStatuses: function() {
+                return this.aPStatuses;
+            },
+
+            getPDepartments: function() {
+                return this.aPDepartments;
+            },
+
+            getPManagers: function() {
+                return this.aPManagers;
+            },
+
+            getPAccess: function() {
+                return this.aPAccess;
+            },
+
+            getPEmployeeId: function() {
+
+                var ret = "";
+
+                if (this.sPSearchline.length > 0) {
+                    if (/^\d+$/.test(this.sPSearchline)) {
+                        ret = this.sPSearchline;
+                    }
+                }
+
+                return ret;
+            },
+
+            getPEmployeeNameUp: function() {
+
+                var ret = "";
+
+                if (this.sPSearchline.length > 0) {
+                    if (!(/^\d+$/.test(this.sPSearchline))) {
+                        ret = this.sPSearchline;
+                    }
+                }
+
+                return ret;
+            },
 
             getComplexFilter: function () {
 
@@ -221,17 +263,14 @@ sap.ui.define([
                     }
                 }
 
-                if (aAccess.length > 0) {
-                    for (var i = 0; i < aAccess.length; i++) {
-                        filter = new Filter("HasAccess", sap.ui.model.FilterOperator.EQ, aAccess[i]);
-                        aFilters.push(filter);
-                    }
-
+                if (aAccess.length === 1) {
+                    filter = new Filter("HasAccess", sap.ui.model.FilterOperator.EQ, aAccess[0]);
+                    aFilters.push(filter);
                 }
 
                 return aFilters;
 
-            },                
+            },
 
             getManagerDefaultPeriod: function (sPath, fnResolve, fnReject) {
                 var that = this;

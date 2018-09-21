@@ -11,7 +11,7 @@
 
 
     <l:BlockLayout width="100%" background="Dashboard">
-        <l:BlockLayoutRow>
+        <l:BlockLayoutRow class="tablets-block">
             <l:BlockLayoutCell width="1" titleAlignment="Begin"
                                title="{i18n>dashboard.noAccessEmployees.title}">
                 <m:Table fixedLayout="false" id="noAccessEmployeesTable" items="{path: 'oData>ToNoAccEmpl'}"
@@ -19,9 +19,16 @@
                     <m:headerToolbar>
                         <m:OverflowToolbar>
                             <m:ToolbarSpacer/>
+                            <m:Button icon="sap-icon://pdf-attachment"
+                                      text="{i18n>dashboard.noAccessEmployees.T7ButtonTextPDF}"
+                                      press="onDownloadT7pdf" >
+                                <m:layoutData>
+                                    <m:OverflowToolbarLayoutData priority="NeverOverflow" />
+                                </m:layoutData>
+                            </m:Button>
                             <m:Button icon="sap-icon://excel-attachment"
-                                      text="{i18n>dashboard.noAccessEmployees.T7ButtonText}"
-                                      press="onDownloadT7" >
+                                      text="{i18n>dashboard.noAccessEmployees.T7ButtonTextXLS}"
+                                      press="onDownloadT7xls" >
                                 <m:layoutData>
                                     <m:OverflowToolbarLayoutData priority="NeverOverflow" />
                                 </m:layoutData>
@@ -32,13 +39,13 @@
                         <m:Column vAlign="Middle" hAlign="Center">
                             <m:Text text="{i18n>dashboard.noAccessEmployees.numberSign}" />
                         </m:Column>
-                        <m:Column vAlign="Middle" hAlign="Center">
+                        <m:Column vAlign="Middle" hAlign="Center" minScreenWidth="Tablet" demandPopin="true">
                             <m:Text text="{i18n>dashboard.noAccessEmployees.EmployeeId}" />
                         </m:Column>
-                        <m:Column vAlign="Middle" hAlign="Center">
+                        <m:Column vAlign="Middle" hAlign="Center" minScreenWidth="Tablet" demandPopin="true">
                             <m:Text text="{i18n>dashboard.noAccessEmployees.Employee}" />
                         </m:Column>
-                        <m:Column vAlign="Middle" hAlign="Center">
+                        <m:Column vAlign="Middle" hAlign="Center" minScreenWidth="Tablet" demandPopin="true">
                             <m:Text text="{i18n>dashboard.noAccessEmployees.Department}" />
                         </m:Column>
                     </m:columns>
@@ -85,7 +92,7 @@
                 </viz:VizFrame>
             </l:BlockLayoutCell>
         </l:BlockLayoutRow>
-        <l:BlockLayoutRow>
+        <l:BlockLayoutRow class="tablets-block">
             <l:BlockLayoutCell width="1" titleAlignment="Begin"
                                title="{i18n>dashboard.graphic.numberApproved}">
                 <viz:VizFrame id="ApprovedCountChart" height="300px" width="100%" vizType='donut'

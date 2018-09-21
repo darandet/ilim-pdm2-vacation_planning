@@ -16,7 +16,8 @@
                     enabled="{
                                 parts: [
                                     {path: 'vacation>/VpStatus'},
-                                    {path: 'vacation>/RequestsAllowed'}
+                                    {path: 'vacation>/RequestsAllowed'},
+                                    {path: 'vacation>/VpProc'}
                                 ],
                                 formatter: '.formatter.confirmEnabled'
                             }">
@@ -28,7 +29,8 @@
                     enabled="{
                                 parts: [
                                     {path: 'vacation>/VpStatus'},
-                                    {path: 'vacation>/RequestsAllowed'}
+                                    {path: 'vacation>/RequestsAllowed'},
+                                    {path: 'vacation>/VpProc'}
                                 ],
                                 formatter: '.formatter.transferEnabled'
                             }">

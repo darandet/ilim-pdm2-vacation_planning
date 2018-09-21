@@ -8,15 +8,7 @@ sap.ui.define([
 
     return Controller.extend("ilim.pdm2.vacation_planning.controller.ApprovalDashboard", {
 
-        /**
-         * @namespace ilim.pdm2.vacation_planning.ApprovalDashboard
-         */
 
-        /**
-         * Called when a controller is instantiated and its View controls (if available) are already created.
-         * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
-         * @memberOf ilim.pdm2.vacation_planning.ApprovalDashboard
-         */
         onInit: function() {
 
             this.getRouter().getRoute("ApprovalsDashboard").attachPatternMatched(this._patternMatched, this);
@@ -177,21 +169,27 @@ sap.ui.define([
 
         },
 
-        onDownloadT7: function () {
+        onDownloadT7pdf: function () {
 
             var sYear = this.oManagerController.getCurrentYear();
-            var sSubord = this.oManagerController.getOnlySubord();            
+            var sSubord = this.oManagerController.getOnlySubord();
             var sServicePath = this.getOwnerComponent().getManifestEntry("sap.app").dataSources.MainService.uri;
-            var sODataKey = "(PlanYear='" + sYear +"',EmployeeId='',OnlySubord='" + sSubord + "')";
+            var sODataKey = "(PlanYear='" + sYear +"',EmployeeId='',OnlySubord='" + sSubord + "',FileType='PDF')";
 
             window.open(sServicePath + "/NoAccessEmployeesSet" + sODataKey +  "/$value");
         },
 
-        /**
-         * @event ApprovalDashboard#syncViews
-         * @property {string} key - передаёт ключ кнопки, которая должна быть активирована
-         * @private
-         */
+        onDownloadT7xls: function () {
+
+            var sYear = this.oManagerController.getCurrentYear();
+            var sSubord = this.oManagerController.getOnlySubord();
+            var sServicePath = this.getOwnerComponent().getManifestEntry("sap.app").dataSources.MainService.uri;
+            var sODataKey = "(PlanYear='" + sYear +"',EmployeeId='',OnlySubord='" + sSubord + "',FileType='XLS')";
+
+            window.open(sServicePath + "/NoAccessEmployeesSet" + sODataKey +  "/$value");
+        },
+
+
         _patternMatched: function () {
             var oEventBus = sap.ui.getCore().getEventBus();
             oEventBus.publish("childNavigation", "syncViews", { key: "overviewTab" });
@@ -202,11 +200,10 @@ sap.ui.define([
                 if (!oData.CanApprove) {
                     that.getRouter().navTo("NoAuthorization");
                 } else {
-                    that.oManagerController.oWhenPeriodIsLoaded.then( function (oData) {                        
+                    that.oManagerController.oWhenPeriodIsLoaded.then( function (oData) {
                         var oCurrentBinding = that.getView().getBindingContext("oData");
-                        var sBindingPath;
                         if (oCurrentBinding) {
-                            that.getModel("oData").read(sBindingPath + "/ToRelevantMasterRecord", {
+                            that.getModel("oData").read(oCurrentBinding.getPath() + "/ToRelevantMasterRecord", {
                                 success: function (oData) {
                                     that._setAbsenceReferenceLine(oData.MaxPercent);
                                 }
@@ -220,11 +217,17 @@ sap.ui.define([
 
         _filterDashboardByYear: function (sChannel, sEvent, oData) {
 
+            var that = this;
             var oCurrentBinding = this.getView().getBindingContext("oData");
             var sBindingPath;
+            var oModel = this.getModel("oData");
+
+            if (!oModel) {
+              oModel = this.getOwnerComponent().getModel("oData");
+            }
             if (oCurrentBinding) {
                 sBindingPath = oCurrentBinding.getPath();
-                this.getModel("oData").read(sBindingPath + "/ToRelevantMasterRecord", {
+                oModel.read(sBindingPath + "/ToRelevantMasterRecord", {
                     success: function (oData) {
                         that._setAbsenceReferenceLine(oData.MaxPercent);
                     }
@@ -232,7 +235,7 @@ sap.ui.define([
             } else {
                 var sSubord = this.oManagerController.getOnlySubord();
                 sBindingPath = "/ManagingPeriodsSet(PlanYear='" + oData.PlanYear + "',OnlySubord='" + sSubord + "')/ToRelevantMasterRecord";
-                this.getModel("oData").read(sBindingPath, {
+                oModel.read(sBindingPath, {
                     success: function (oData) {
                         this._setAbsenceReferenceLine(oData.MaxPercent);
                     }.bind(this)
