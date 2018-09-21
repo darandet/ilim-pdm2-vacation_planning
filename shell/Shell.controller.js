@@ -14,7 +14,7 @@ sap.ui.define([
             var that = this;
 
             this.getRouter().getRoute("HomePage").attachPatternMatched(this._patternMatched, this);
-            
+
             var fnDataReceived = function (oData, response) {
 
                 var oSideNavigation = that.getView().byId('sideNavigation');
@@ -47,15 +47,15 @@ sap.ui.define([
                 }
 
                 oSideNavigation.setVisible(true);
-            };            
-            
+            };
+
             var fnConnectionError = function (oError) {
 
                 MessageBox.error(oError.message, {
                     title: oError.statusText,
                     details: oError.responseText
                 });
-            };       
+            };
 
             this.getOwnerComponent().oRolesLoaded = new Promise( function (fnResolve, fnReject) {
 
@@ -67,8 +67,8 @@ sap.ui.define([
                     });
 
             });
-            
-            this.getOwnerComponent().oRolesLoaded.then(fnDataReceived, fnConnectionError);                        
+
+            this.getOwnerComponent().oRolesLoaded.then(fnDataReceived, fnConnectionError);
 
         },
 
@@ -97,21 +97,28 @@ sap.ui.define([
 
         },
 
+        onSideNavButtonPress: function () {
+
+            this.getView().byId("idAppContent").setSideExpanded(!this.getView().byId("idAppContent").getSideExpanded());
+        },
+
         _patternMatched: function () {
 
             var oRouter = this.getRouter();
             this.getOwnerComponent().oRolesLoaded.then(function (oData) {
-                if (oData.CanPlan) {
-                    oRouter.navTo("PlanOverview");
-                }
-                else {
-                    if (oData.CanApprove) {
-                        oRouter.navTo("ApprovePlan");
-                    } else {
-                        if (oData.CanControl) {
-                            oRouter.navTo("MasterRecord");
+                if (!sap.ui.Device.system.phone) {
+                    if (oData.CanPlan) {
+                        oRouter.navTo("PlanOverview");
+                    }
+                    else {
+                        if (oData.CanApprove) {
+                            oRouter.navTo("ApprovePlan");
                         } else {
-                            oRouter.navTo("NoAuthorization");
+                            if (oData.CanControl) {
+                                oRouter.navTo("MasterRecord");
+                            } else {
+                                oRouter.navTo("NoAuthorization");
+                            }
                         }
                     }
                 }

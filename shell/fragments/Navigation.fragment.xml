@@ -3,7 +3,7 @@
     xmlns:core="sap.ui.core"
     xmlns:tnt="sap.tnt">
 
-    <tnt:SideNavigation id="sideNavigation" visible="true">
+    <tnt:SideNavigation id="sideNavigation" visible="true" sideExpanded="true">
         <tnt:item>
             <tnt:NavigationList itemSelect="onSideNavigation">
 <!--                 <tnt:NavigationListItem key="NavToPlan" text="{i18n>sideNavigation.item.planVacation}"

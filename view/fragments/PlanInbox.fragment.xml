@@ -1,12 +1,16 @@
 <core:FragmentDefinition
         xmlns:core="sap.ui.core"
-        xmlns="sap.m">
+        xmlns="sap.m"
+        xmlns:html="http://www.w3.org/1999/xhtml">
 
-    <Table fixedLayout="false" class="sapUiMediumMarginTop" mode="MultiSelect"
+    <Table fixedLayout="false" class="sapUiMediumMarginTop responsive-table" mode="MultiSelect"
            items="{
-                path: 'oData>ToInbox'
+                path: 'oData>ToInbox',
+                parameters : {expand:'ToVacations'}
             }"
            rememberSelections="true"
+           growing="true"
+           growingThreshold="20"
            id="inboxTable">
         <headerToolbar>
             <OverflowToolbar>
@@ -72,7 +76,7 @@
                             text="{oData>EmployeeId}"/>
                     <Text   textAlign="Center"
                             text="{oData>ChperEname}"/>
-                    <ObjectNumber number="{oData>AbsRightSaldo}/{oData>AbsRightTotal}/{oData>AbsRightPlanned}"
+                    <ObjectNumber number="{path: 'oData>AbsRightSaldo', formatter: '.formatter.roundDays'}/{path: 'oData>AbsRightTotal', formatter: '.formatter.roundDays'}/{path: 'oData>AbsRightPlanned', formatter: '.formatter.roundDays'}"
                                   unit="{i18n>main.table.units}"/>
                     <CheckBox enabled="false" selected="{oData>HasAccess}" />
                     <ObjectStatus

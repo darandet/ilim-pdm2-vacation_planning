@@ -7,60 +7,35 @@ sap.ui.define([
     "sap/m/Button"
 ], function (Controller, JSONModel, $, Formatter, Dialog, Button ) {
 
-    /** Создаёт инстанцию контроллера для управляющей записи
-     * @class
-     */
 
     return Controller.extend("ilim.pdm2.vacation_planning.controller.MasterRecord", {
-        /**
-         * @namespace ilim.pdm2.vacation_planning.MasterRecord
-         */
 
         formatter: Formatter,
 
 
-        /**
-         * Called when a controller is instantiated and its View controls (if available) are already created.
-         * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
-         * @memberOf ilim.pdm2.vacation_planning.MasterRecord
-         */
         onInit: function() {
 
 
         },
 
-        /**
-         * Similar to onAfterRendering, but this hook is invoked before the controller's View is re-rendered
-         * (NOT before the first rendering! onInit() is used for that one!).
-         * @memberOf ilim.pdm2.vacation_planning.MasterRecord
-         */
-        //	onBeforeRendering: function() {
-        //
-        //	},
 
-        /**
-         * Called when the View has been rendered (so its HTML is part of the document). Post-rendering manipulations of the HTML could be done here.
-         * This hook is the same one that SAPUI5 controls get after being rendered.
-         * @memberOf ilim.pdm2.vacation_planning.MasterRecord
-         */
-        //	onAfterRendering: function() {
+        //  onBeforeRendering: function() {
         //
-        //	},
+        //  },
 
-        /**
-         * Called when the Controller is destroyed. Use this one to free resources and finalize activities.
-         * @memberOf ilim.pdm2.vacation_planning.MasterRecord
-         */
-        //	onExit: function() {
+
+        //  onAfterRendering: function() {
         //
-        //	}
+        //  },
 
-        /**
-         * Вызывается при нажатии на кнопку "Создать период". Метод проверяет наличие инстанции диалога.
-         * Если её нет, то она создётся и присваивается атрибуту createPeriodDialog
-         * @param oEvent
-         */
+
+        //  onExit: function() {
+        //
+        //  }
+
+
         onPeriodCreate: function (oEvent) {
+
             var that = this;
             if (!that._mRecordCreateDialog) {
 
@@ -107,7 +82,9 @@ sap.ui.define([
             that._mRecordCreateDialog.open();
         },
 
+
         onUpdateMasterRecord: function (oEvent) {
+
             var oButton = oEvent.getSource();
             var oDataModel = this.getModel("oData");
             var sPath = oButton.getParent().getParent().getBindingContextPath(); //Layout => Cell => Line
@@ -125,16 +102,14 @@ sap.ui.define([
 
         },
 
-        /**
-         * Обрабатывает событие при редактировании полей в ракурсе CreatePeriod.fragment.xml
-         * @param oEvent
-         * @memberOf ilim.pdm2.
-         */
+
         onRecordInput: function (oEvent) {
             //TODO добавить проверку на ввод. maxLength не работает с типом ввода Number
         },
 
+
         onDeleteMasterRecord: function (oEvent) {
+
             var oButton = oEvent.getSource();
             var oDataModel = this.getModel("oData");
             var sPath = oButton.getParent().getParent().getBindingContextPath(); //Layout => Cell => Line
@@ -144,11 +119,17 @@ sap.ui.define([
             this._updateMasterRecord(oMasterRecord, oDataModel, "delete")
         },
 
+
         onAllowRequests: function (oEvent) {
+
+            var oButton = oEvent.getSource();
+            var oDataModel = this.getModel("oData");
+            var sPath = oButton.getParent().getParent().getBindingContextPath(); //Layout => Cell => Line
+            var oMasterRecord = oDataModel.getObject(sPath);
 
             if (!this._AllowedRequestZonesDialog) {
 
-                var prefix = this.getView().createId("").replacte("--",""); //to use getView() on fragment elements
+                var prefix = this.getView().createId("").replace("--",""); //to use getView() on fragment elements
                 var oFormFragment = sap.ui.xmlfragment(prefix, "ilim.pdm2.vacation_planning.view.fragments.AllowedRequestZones", this);
 
                 this._AllowedRequestZonesDialog = new Dialog({
@@ -170,26 +151,24 @@ sap.ui.define([
                 this._AllowedRequestZonesDialog.setModel(oDialogModel, "allowedZones");
             }
 
-            var oButton = oEvent.getSource();
-            var oDataModel = this.getModel("oData");
-            var sPath = oButton.getParent().getParent().getBindingContextPath(); //Layout => Cell => Line
-
             this._AllowedRequestZonesDialog.bindElement({
                 path: sPath,
                 model: "oData"
             });
 
-            var oMasterRecord = oDataModel.getObject(sPath);
             this._AllowedRequestZonesDialog.getModel("allowedZones").setData({
                 PlanYear: oMasterRecord.PlanYear,
                 Bukrs: oMasterRecord.Bukrs,
                 PersonnelArea: "",
                 PersonnelAreaText: ""
             });
+
             this._AllowedRequestZonesDialog.open();
         },
 
+
         addAllowedZone: function () {
+
             var oComboBox = this.getView().byId("PersonnelAreaSelect");
             var oPersonnelAreasTable = this.getView().byId("PersonnelAreasTable");
             var oBindedData = this._AllowedRequestZonesDialog.getModel("allowedZones").getData();
@@ -203,7 +182,7 @@ sap.ui.define([
                     PlanYear: oBindedData.PlanYear,
                     Bukrs: oBindedData.Bukrs,
                     PersonnelArea: aKeys[i],
-                    PersonnelText: ""
+                    PersonnelAreaText: ""
                 };
                 oDataModel.create("/AllowedPersaActionsSet", oNewArea, {
                     groupId: "newPersonnelAreas"
@@ -218,7 +197,9 @@ sap.ui.define([
             })
         },
 
+
         _postMasterRecord: function () {
+
             var oData = this._mRecordCreateDialog.getModel("masterRecord").getData();
             var that = this;
 
@@ -243,6 +224,7 @@ sap.ui.define([
             });
 
         },
+
 
         _updateMasterRecord: function (oObject, oModel, action) {
 

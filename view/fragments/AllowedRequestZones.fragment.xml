@@ -16,14 +16,19 @@
             </OverflowToolbar>
         </headerToolbar>
         <columns>
-            <Column vAlign="Middle" hAlign="Center">
+            <Column vAlign="Middle" hAlign="Center" width="90%">
                 <Text text="{i18n>masterRecord.allowedZones.personnelArea}" />
+            </Column>
+            <Column vAlign="Middle" hAlign="Center" width="10%">
             </Column>
         </columns>
         <items>
             <ColumnListItem>
                 <cells>
                     <Text text="{oData>PersonnelAreaText}"/>
+                    <Button icon="sap-icon://delete"
+                            enabled="true"
+                            press="deleteAllowedZone"/>
                 </cells>
             </ColumnListItem>
         </items>

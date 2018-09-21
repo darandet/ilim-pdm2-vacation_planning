@@ -19,7 +19,7 @@
           <ViewSettingsItem text="{oData>StatusName}" key="{oData>PlanStatus}"/>
         </items>
       </ViewSettingsFilterItem>
-      <ViewSettingsFilterItem text="{i18n>main.table.hasAccessLong}" key="Access" multiSelect="false">
+      <ViewSettingsFilterItem text="{i18n>main.table.hasAccessLong}" key="Access">
         <items>
           <ViewSettingsItem text="{i18n>main.filter.hasAccess}" key="true"/>
           <ViewSettingsItem text="{i18n>main.filter.noAccess}" key="false"/>

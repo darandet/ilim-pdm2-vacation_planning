@@ -34,15 +34,24 @@ sap.ui.define([
             this.oManagerController = this.getOwnerComponent().oManagerController;
             this.iRowsToProcess = 1;
             this.iRowsProcessed = 0;
+            this.aItemsToHRCr   = [];
 
         },
 
         onShowSelected: function (oEvent) {
 
             var oList  = this.getView().byId("inboxTable");
-            var oModel = this.getModel("oData");
+            //var oModel = this.getModel("oData");
 
-            this.oManagerController.setSelectedEmployees(oList.getSelectedContextPaths());
+            var aItems = oList.getSelectedItems();
+            var aPaths = [];
+
+            for (var i=0; i < aItems.length; i++) {
+               aPaths.push(aItems[i].getBindingContextPath());
+            }
+
+            //this.oManagerController.setSelectedEmployees(oList.getSelectedContextPaths());
+            this.oManagerController.setSelectedEmployees(aPaths);
 
             this.getRouter().navTo("ApprovalDetails");
         },
@@ -51,14 +60,61 @@ sap.ui.define([
 
           var sPlanYear = this.oManagerController.getCurrentYear();
           var sSubord   = this.oManagerController.getOnlySubord();
-          var sUrl      = "/sap/opu/odata/sap/ZHR_PDM_VACATION_PLANNING_SRV/VacationPlanXLSSet?$filter=Btrtx eq '" +
+          var sEmplId   = this.oManagerController.getPEmployeeId();
+          var sEmplName = this.oManagerController.getPEmployeeNameUp();
+          var aStatus   = this.oManagerController.getPStatuses();
+          var aAccess   = this.oManagerController.getPAccess();
+          var aDepart   = this.oManagerController.getPDepartments();
+          var aManager  = this.oManagerController.getPManagers();
+          var sUrl      = "/sap/opu/odata/sap/ZHR_PDM_VACATION_PLANNING_SRV/VacationPlanXLSSet?$format=xlsx&$filter=(Btrtx eq '" +
                               sPlanYear +
                               "' and HasAccess eq '" +
                               sSubord +
-                              "'&$format=xlsx";
+                              "'";
+
+          if (sEmplId) {
+              sUrl += " and EmployeeId eq '" + sEmplId + "'";
+          }
+
+          if (sEmplName) {
+              sUrl += " and EmployeeName eq '" + sEmplName + "'";
+          }
+
+          if (aAccess.length === 1) {
+              if (aAccess[0] === true) {
+                  sUrl += " and PositionName eq '1'";
+              } else {
+                  sUrl += " and PositionName eq '2'";
+              }
+          }
+
+          sUrl += this._getFilterArrayUrl(aStatus,  'Status');
+          sUrl += this._getFilterArrayUrl(aDepart,  'OrganizationName');
+          sUrl += this._getFilterArrayUrl(aManager, 'ChperEname');
+          sUrl += ")";
 
           var encodeUrl = encodeURI(sUrl);
           sap.m.URLHelper.redirect(encodeUrl, true);
+
+        },
+
+        _getFilterArrayUrl: function (aFilter, fieldName) {
+
+          var ret = "";
+
+          if (aFilter.length > 0) {
+              if (aFilter.length === 1) {
+                  ret = " and " + fieldName + " eq '" + aFilter[0] + "'";
+              } else {
+                  ret = " and (" + fieldName + " eq '" + aFilter[0] + "'";
+                  for (var i=1; i < aFilter.length; i++) {
+                     ret += " or " + fieldName + " eq '" + aFilter[i] + "'";
+                  }
+                  ret += ")";
+              }
+          }
+
+          return ret;
 
         },
 
@@ -215,8 +271,8 @@ sap.ui.define([
             for (var i = 0; i < aItemsSelected.length; i++) {
                 var sCtxPath        = aItemsSelected[i].getBindingContext("oData").getPath();
                 var oCurrentCtxObj  = aItemsSelected[i].getModel("oData").getObject(sCtxPath);
-                if (( sOper === "APROV" && oCurrentCtxObj.CanApprove === true ) ||
-                    ( sOper === "REJEC" && oCurrentCtxObj.CanReject === true  )) {
+                if (( sOper === "APROV" && oCurrentCtxObj.CanApprove !== '' ) ||
+                    ( sOper === "REJEC" && oCurrentCtxObj.CanReject !== ''  )) {
                   aItemsToApprove.push(oCurrentCtxObj);
                 }
             }
@@ -444,16 +500,18 @@ sap.ui.define([
         },
 
         onShowPlanForm: function (oEvent) {
+
             var oSource         = oEvent.getSource();
             var sCtxPath        = oSource.getParent().getBindingContext("oData").getPath(); //Button -> Item
             var oCtxObject      = this.getModel("oData").getObject(sCtxPath);
+            var that            = this;
 
-            var that = this;
             if (!that.planCreationForm) {
-                var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
 
-                var prefix = this.getView().createId("").replace("--",""); //to use getView().byId() on fragment elements
-                var oPlanView = sap.ui.xmlfragment(prefix, "ilim.pdm2.vacation_planning.view.fragments.PlanForm", this);
+                var bCompact  = !!this.getView().$().closest(".sapUiSizeCompact").length;
+                var prefix    = this.getView().createId("").replace("--",""); //to use getView().byId() on fragment elements
+                var oPlanView = sap.ui.xmlfragment(prefix, "ilim.pdm2.vacation_planning.view.fragments.PlanFormDialog", this);
+
                 that.planCreationForm = new Dialog({
                     title: this.getResourceBundle().getText("vacation.footer.button.vacationPlan"),
                     contentWidth: "70%",
@@ -478,6 +536,7 @@ sap.ui.define([
                 if (bCompact) {
                     that.planCreationForm.addStyleClass("sapUiSizeCompact");
                 }
+
                 that.getView().addDependent(that.planCreationForm);
             }
 
@@ -487,7 +546,7 @@ sap.ui.define([
             this.planCreationForm.bindElement({
                 path: sPlanPath,
                 parameters: {
-                    expand: "ToVacations,ToHolidays"
+                    expand: "ToVacations,ToHolidays,ToAbsenceRight"
                 },
                 model: "oData"
             });
@@ -576,7 +635,7 @@ sap.ui.define([
                             });
 
                             oCommentModel.setProperty("/Comment", "");
-                            this.onBehalfCommentDialog.close();                            
+                            this.onBehalfCommentDialog.close();
 
                         }.bind(this)
                     }),
@@ -602,9 +661,18 @@ sap.ui.define([
                 var oTable;
                 this.iRowsProcessed++;
 
+                // Создание кадрового мероприятия
+                if (sType === "CRQ" && oContextObject.PlanStatus === "VP08" && Action === "APROV") {
+                    this.aItemsToHRCr.push(oContextObject);
+                }
+
                 if (this.iRowsProcessed >= this.iRowsToProcess) {
                     if (sType === "CRQ") {
-                        this._refreshTableBinding("confirmTable");
+                        if (this.aItemsToHRCr.length > 0) {
+                            this.createHRActions();
+                        } else {
+                            this._refreshTableBinding("confirmTable");
+                        }
                     } else if (sType === "TRQ") {
                         this._refreshTableBinding("transferTable");
                     } else {
@@ -671,6 +739,144 @@ sap.ui.define([
 
         },
 
+        createHRActions: function () {
+
+            var that        = this;
+            var oContextObj = {};
+
+            if ( this.aItemsToHRCr.length > 0 ) {
+                this.getView().setBusy(true);
+                oContextObj = this.aItemsToHRCr[0];
+            } else {
+                this.getView().setBusy(false);
+                return;
+            }
+
+            var fnHandleSuccess = function (oData, response) {
+
+                if ( this.aItemsToHRCr.length > 0 ) {
+                    this.aItemsToHRCr.splice(0, 1);
+                }
+
+                if ( this.aItemsToHRCr.length > 0 ) {
+                    this.createHRActions();
+                } else {
+                    this._refreshTableBinding("confirmTable");
+                    this.getView().setBusy(false);
+                }
+            }.bind(this);
+
+            var fnHandleError = function (oError) {
+
+                this._showErrorInBox(oError);
+
+                if ( this.aItemsToHRCr.length > 0 ) {
+                    this.aItemsToHRCr.splice(0, 1);
+                }
+
+                if ( this.aItemsToHRCr.length > 0 ) {
+                    this.createHRActions();
+                } else {
+                    this._refreshTableBinding("confirmTable", true);
+                    this.getView().setBusy(false);
+                }
+            }.bind(this);
+
+            if (!this.oHRActionDialog) {
+
+                var oHRAction = {
+                    HRBossId:    oContextObj.HrBossId,
+                    OrderDate:   this.formatter.dateToString(oContextObj.BeginDate),
+                    OrderNum:    "",
+                    HRBossName:  oContextObj.HrBossName,
+                    EmplName:    oContextObj.EmployeeName,
+                    Begda:       this.formatter.dateToString(oContextObj.BeginDate),
+                    Endda:       this.formatter.dateToString(oContextObj.EndDate),
+                    CreO:        true,
+                    CreG:        false,
+                    IncG:        false,
+                    EditDate:    true,
+                    StartDate:   this.formatter.dateToString(oContextObj.BeginDate),
+                    OrderRemark: oContextObj.RequestId
+                };
+
+                var oDialogFragment = sap.ui.xmlfragment("ilim.pdm2.vacation_planning.view.fragments.HRActionDialog", this);
+                var oHRActionModel  = new JSONModel(oHRAction);
+                var oDataModel      = this.getModel("oData");
+
+                this.oHRActionDialog = new Dialog({
+                    title: this.getResourceBundle().getText("common.hrActionDialog.Title"),
+                    draggable: true,
+                    content: oDialogFragment,
+                    type: "Message",
+                    endButton: new Button({
+                        text: this.getResourceBundle().getText("common.hrActionDialog.executeButton"),
+                        press: function () {
+                            var oHRActionModel  = that.oHRActionDialog.getModel("action");
+                            var sAction         = "CREO";
+
+                            if (oHRActionModel.getProperty("/CreO") === true ) {
+                                sAction = "CREO";
+                            } else {
+                                if (oHRActionModel.getProperty("/CreG") === true ) {
+                                    sAction = "CREG";
+                                } else {
+                                    sAction = "INCG";
+                                }
+                            }
+
+                            oDataModel.callFunction("/CreateHRActions", {
+                                method: "POST",
+                                urlParameters: {
+                                    Action:      sAction,
+                                    HRBossId:    oHRActionModel.getProperty("/HRBossId"),
+                                    OrderDate:   oHRActionModel.getProperty("/OrderDate"),
+                                    OrderNum:    oHRActionModel.getProperty("/OrderNum"),
+                                    OrderRemark: oHRActionModel.getProperty("/OrderRemark")
+                                },
+                                groupId: oContextObj.RequestId,
+                                success: fnHandleSuccess,
+                                error:   fnHandleError
+                            });
+
+                            oHRActionModel.setProperty("/OrderNum", "");
+                            oHRActionModel.setProperty("/EditDate", true);
+                            oHRActionModel.setProperty("/CreO", true);
+                            oHRActionModel.setProperty("/CreG", false);
+                            oHRActionModel.setProperty("/IncG", false);
+                            this.oHRActionDialog.close();
+
+                        }.bind(this)
+                    }),
+                    afterClose: function() {
+                        if (that.aItemsToHRCr.length <= 0) {
+                            that.oHRActionDialog.destroy();
+                            that.oHRActionDialog = undefined;
+                            that.getView().setBusy(false);
+                            that._refreshTableBinding("confirmTable", true);
+                        }
+                    }
+                });
+
+                this.oHRActionDialog.setModel(oHRActionModel, "action");
+                this.getView().addDependent(this.oHRActionDialog);
+            } else {
+
+                var oHRActionModel = this.oHRActionDialog.getModel("action");
+                oHRActionModel.setProperty("/HRBossId", oContextObj.HrBossId);
+                oHRActionModel.setProperty("/HRBossName", oContextObj.HrBossName);
+                oHRActionModel.setProperty("/EmplName", oContextObj.EmployeeName);
+                oHRActionModel.setProperty("/Begda", this.formatter.dateToString(oContextObj.BeginDate));
+                oHRActionModel.setProperty("/Endda", this.formatter.dateToString(oContextObj.EndDate));
+                oHRActionModel.setProperty("/OrderDate", this.formatter.dateToString(oContextObj.BeginDate));
+                oHRActionModel.setProperty("/StartDate", this.formatter.dateToString(oContextObj.BeginDate));
+                oHRActionModel.setProperty("/OrderRemark", oContextObj.RequestId);
+            }
+
+            jQuery.sap.syncStyleClass("sapUiSizeCompact", this.getView(), this.oHRActionDialog);
+            this.oHRActionDialog.open();
+        },
+
         _filterInboxByYear: function (sChannel, sEvent, oData) {
 
             var oSearchField = this.getView().byId("inboxEmployeeSearchField");
@@ -692,6 +898,18 @@ sap.ui.define([
 
             if (this.oManagerController.getSelectedEmployees()) {
                 this.getView().byId("inboxTable").setSelectedContextPaths(this.oManagerController.getSelectedEmployees());
+            }
+
+            switch (this.oManagerController.getCurrentTab()) {
+              case "plan":
+                this._refreshTableBinding("inboxTable", true);
+                break;
+              case "tran":
+                this._refreshTableBinding("transferTable", true);
+                break;
+              case "conf":
+                this._refreshTableBinding("confirmTable", true);
+                break;
             }
         },
 
@@ -733,12 +951,35 @@ sap.ui.define([
             }
 
         },
-          
-        _refreshTableBinding: function (sTableId) {
+
+        _refreshTableBinding: function (sTableId, bForce) {
             var oTable = this.getView().byId(sTableId);
             var oTableBinding = oTable.getBinding("items");
 
-            oTableBinding.refresh();
+            oTableBinding.refresh(bForce);
+        },
+
+        onHRActionChange: function (oEvent) {
+
+            if (this.oHRActionDialog) {
+
+                var oModel = this.oHRActionDialog.getModel("action");
+
+                if (oModel.getProperty("/CreO") !== true) {
+                    oModel.setProperty("/OrderNum", "");
+
+                    if (oModel.getProperty("/IncG") === true) {
+                        oModel.setProperty("/OrderDate", "");
+                        oModel.setProperty("/EditDate", false);
+                    } else {
+                        oModel.setProperty("/EditDate", true);
+                        oModel.setProperty("/OrderDate", oModel.getProperty("/StartDate"));
+                    }
+                } else {
+                    oModel.setProperty("/OrderDate", oModel.getProperty("/StartDate"));
+                    oModel.setProperty("/EditDate", true);
+                }
+            }
         }
 
     });

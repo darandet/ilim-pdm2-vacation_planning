@@ -27,39 +27,49 @@
                 <f:content>
                     <FlexBox 	direction="Row"
                                 alignItems="Center"
-                                justifyContent="End">
+                                justifyContent="SpaceBetween">
                         <items>
-                            <FlexBox 	direction="Column"
-                                        alignItems="End"
-                                        class="sapUiLargeMarginEnd">
+
+                            <Title text="{oData>Ename}" level="H1" titleStyle="H1"/>
+
+                            <FlexBox 	direction="Row"
+                                        alignItems="Center"
+                                        justifyContent="End">
                                 <items>
-                                    <NumericContent
-                                            value="{oData>ToAbsenceRight/AbsenceRightSaldo}"
-                                            scale="{i18n>vacation.header.numeric.scale}"
-                                            valueColor="Neutral"
-                                            indicator="None" state="Loaded"
-                                            withMargin="false"
-                                            busy="{screenState>/busy}"/>
-                                    <Label text = "{i18n>vacation.header.numeric.saldo} {
-                                                                                            path: 'oData>ToAbsenceRight/SaldoOnDate',
-                                                                                            type: 'sap.ui.model.type.Date',
-                                                                                            formatOptions: {
-                                                                                                style: 'short'
-                                                                                            }
-                                                                                        }"/>
-                                </items>
-                            </FlexBox>
-                            <FlexBox 	direction="Column"
-                                        alignItems="End">
-                                <items>
-                                    <NumericContent
-                                            value="{oData>ToAbsenceRight/AbsenceRight}"
-                                            scale="{i18n>vacation.header.numeric.scale}"
-                                            valueColor="Neutral"
-                                            indicator="None" state="Loaded"
-                                            withMargin="false"
-                                            busy="{screenState>/busy}"/>
-                                    <Label text = "{i18n>vacation.header.numeric.availableDays} {oData>PlanYear} {i18n>vacation.header.title.part2}"/>
+
+                                    <FlexBox 	direction="Column"
+                                                alignItems="End"
+                                                class="sapUiLargeMarginEnd">
+                                        <items>
+                                            <NumericContent
+                                                    value="{path: 'oData>ToAbsenceRight/AbsenceRightSaldo', formatter: '.formatter.roundDays'}"
+                                                    scale="{i18n>vacation.header.numeric.scale}"
+                                                    valueColor="Neutral"
+                                                    indicator="None" state="Loaded"
+                                                    withMargin="false"
+                                                    busy="{screenState>/busy}"/>
+                                            <Label text = "{i18n>vacation.header.numeric.saldo} {
+                                                                                                    path: 'oData>ToAbsenceRight/SaldoOnDate',
+                                                                                                    type: 'sap.ui.model.type.Date',
+                                                                                                    formatOptions: {
+                                                                                                        style: 'short'
+                                                                                                    }
+                                                                                                }"/>
+                                        </items>
+                                    </FlexBox>
+                                    <FlexBox 	direction="Column"
+                                                alignItems="End">
+                                        <items>
+                                            <NumericContent
+                                                    value="{path: 'oData>ToAbsenceRight/AbsenceRight', formatter: '.formatter.roundDays'}"
+                                                    scale="{i18n>vacation.header.numeric.scale}"
+                                                    valueColor="Neutral"
+                                                    indicator="None" state="Loaded"
+                                                    withMargin="false"
+                                                    busy="{screenState>/busy}"/>
+                                            <Label text = "{i18n>vacation.header.numeric.availableDays} {oData>PlanYear} {i18n>vacation.header.title.part2}"/>
+                                        </items>
+                                    </FlexBox>
                                 </items>
                             </FlexBox>
                         </items>

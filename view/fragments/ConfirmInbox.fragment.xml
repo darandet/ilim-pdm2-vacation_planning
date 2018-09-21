@@ -2,7 +2,7 @@
         xmlns:core="sap.ui.core"
         xmlns="sap.m">
 
-    <Table fixedLayout="false" class="sapUiMediumMarginTop" mode="MultiSelect"
+    <Table fixedLayout="false" class="sapUiMediumMarginTop responsive-table" mode="MultiSelect"
            items="{
                 path: 'oData>ToConfirmInbox'
             }"
